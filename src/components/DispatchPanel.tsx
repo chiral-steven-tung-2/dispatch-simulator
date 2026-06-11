@@ -1,0 +1,280 @@
+import { useMemo, useState, useEffect, useReducer } from "react";
+import { useDispatchStore, type DispatchRecord } from "../stores/dispatchStore";
+import { useIncidentStore } from "../stores/incidentStore";
+import { useUnitStore } from "../stores/unitStore";
+import { useStationStore } from "../stores/stationStore";
+import { haversineMeters, formatDistance, type LngLat } from "../utils/geo";
+import { remainingResolveMs, formatGameDuration } from "../utils/resolve";
+import type { Incident } from "../models";
+import { statusColor } from "./unitDisplay";
+import { colorForPhase } from "./movingUnitMarker";
+
+interface AvailableUnit {
+  id: string;
+  callsign: string;
+  type: string;
+  stationName: string;
+  distanceMeters: number;
+}
+
+export default function DispatchPanel() {
+  const selectedCallId = useDispatchStore((s) => s.selectedCallId);
+  const clearSelection = useDispatchStore((s) => s.clearSelection);
+  const dispatchUnits = useDispatchStore((s) => s.dispatchUnits);
+  const returnToQuarters = useDispatchStore((s) => s.returnToQuarters);
+  const dispatching = useDispatchStore((s) => s.dispatching);
+  const dispatches = useDispatchStore((s) => s.dispatches);
+
+  const incidents = useIncidentStore((s) => s.incidents);
+  const units = useUnitStore((s) => s.units);
+  const stations = useStationStore((s) => s.stations);
+
+  const call = incidents.find((i) => i.id === selectedCallId) ?? null;
+
+  // Units already working this call (en route or on scene).
+  const assigned = useMemo(
+    () =>
+      dispatches
+        .filter(
+          (d) =>
+            d.callId === selectedCallId &&
+            (d.phase === "enroute" || d.phase === "onScene")
+        )
+        .sort((a, b) => (a.phase === b.phase ? 0 : a.phase === "onScene" ? -1 : 1)),
+    [dispatches, selectedCallId]
+  );
+
+  const available = useMemo<AvailableUnit[]>(() => {
+    if (!call) {
+      return [];
+    }
+    const target: LngLat = [call.longitude, call.latitude];
+    const result: AvailableUnit[] = [];
+    for (const unit of units) {
+      if (unit.status !== "Available") {
+        continue;
+      }
+      const station = stations.find((s) => s.id === unit.stationId);
+      if (!station) {
+        continue;
+      }
+      result.push({
+        id: unit.id,
+        callsign: unit.callsign,
+        type: unit.type,
+        stationName: station.name,
+        distanceMeters: haversineMeters(
+          [station.longitude, station.latitude],
+          target
+        ),
+      });
+    }
+    return result.sort((a, b) => a.distanceMeters - b.distanceMeters);
+  }, [call, units, stations]);
+
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+
+  // Reset the selection whenever the active call changes.
+  useEffect(() => {
+    setSelected(new Set());
+  }, [selectedCallId]);
+
+  if (!call) {
+    return null;
+  }
+
+  const toggle = (unitId: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(unitId)) {
+        next.delete(unitId);
+      } else {
+        next.add(unitId);
+      }
+      return next;
+    });
+  };
+
+  const allSelected = available.length > 0 && selected.size === available.length;
+  const toggleAll = () =>
+    setSelected(allSelected ? new Set() : new Set(available.map((u) => u.id)));
+
+  const onDispatch = () => {
+    const toSend = units.filter((u) => selected.has(u.id));
+    void dispatchUnits(call, toSend);
+  };
+
+  return (
+    <div className="fixed inset-0 z-20 flex justify-start">
+      <div
+        className="absolute inset-0 bg-black/50"
+        onClick={clearSelection}
+        aria-hidden="true"
+      />
+
+      <aside className="relative flex h-full w-full max-w-md flex-col bg-slate-800 text-slate-100 shadow-xl">
+        <header className="border-b border-slate-700 px-5 py-4">
+          <div className="flex items-start justify-between">
+            <div>
+              <h2 className="text-lg font-bold">Dispatch to call</h2>
+              <p className="text-sm text-slate-300">{call.name}</p>
+              <p className="text-xs text-slate-400">Status: {call.status}</p>
+              <ResolveCountdown call={call} />
+            </div>
+            <button
+              onClick={clearSelection}
+              className="rounded px-2 py-1 text-slate-400 hover:bg-slate-700 hover:text-white"
+              aria-label="Close dispatch panel"
+            >
+              ✕
+            </button>
+          </div>
+        </header>
+
+        {assigned.length > 0 && (
+          <section className="border-b border-slate-700 px-5 py-3">
+            <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
+              Responding ({assigned.length})
+            </h3>
+            <ul className="space-y-1.5">
+              {assigned.map((d) => (
+                <AssignedRow
+                  key={d.id}
+                  record={d}
+                  busy={dispatching}
+                  onReturn={() => void returnToQuarters(d.id)}
+                />
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <div className="flex items-center justify-between border-b border-slate-700 px-5 py-2 text-xs text-slate-400">
+          <span>{available.length} available · sorted by distance to call</span>
+          {available.length > 0 && (
+            <button onClick={toggleAll} className="underline hover:text-white">
+              {allSelected ? "Clear all" : "Select all"}
+            </button>
+          )}
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-3">
+          {available.length === 0 ? (
+            <p className="p-4 text-sm italic text-slate-500">
+              No available units to dispatch.
+            </p>
+          ) : (
+            <ul className="space-y-1">
+              {available.map((unit) => {
+                const isSelected = selected.has(unit.id);
+                return (
+                  <li key={unit.id}>
+                    <label
+                      className={`flex cursor-pointer items-center gap-3 rounded-md border px-3 py-2 ${
+                        isSelected
+                          ? "border-amber-500 bg-amber-500/10"
+                          : "border-slate-700 hover:bg-slate-700/40"
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => toggle(unit.id)}
+                        className="h-4 w-4 accent-amber-500"
+                      />
+                      <span
+                        className="inline-block h-2.5 w-2.5 shrink-0 rounded-full"
+                        style={{ backgroundColor: statusColor("Available") }}
+                      />
+                      <span className="flex-1">
+                        <span className="font-medium">{unit.callsign}</span>
+                        <span className="text-slate-400"> · {unit.type}</span>
+                        <span className="block text-xs text-slate-500">
+                          {unit.stationName}
+                        </span>
+                      </span>
+                      <span className="text-sm tabular-nums text-slate-300">
+                        {formatDistance(unit.distanceMeters)}
+                      </span>
+                    </label>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+
+        <footer className="border-t border-slate-700 p-4">
+          <button
+            onClick={onDispatch}
+            disabled={selected.size === 0 || dispatching}
+            className="w-full rounded-md bg-amber-600 px-4 py-2.5 font-semibold text-white hover:bg-amber-500 disabled:cursor-not-allowed disabled:bg-slate-600 disabled:text-slate-400"
+          >
+            {dispatching
+              ? "Routing…"
+              : `Dispatch ${selected.size} unit${selected.size === 1 ? "" : "s"}`}
+          </button>
+        </footer>
+      </aside>
+    </div>
+  );
+}
+
+function ResolveCountdown({ call }: { call: Incident }) {
+  const [, tick] = useReducer((n: number) => n + 1, 0);
+  const resolving = call.resolveStartedAt != null && call.status !== "Resolved";
+
+  useEffect(() => {
+    if (!resolving) {
+      return;
+    }
+    const id = window.setInterval(tick, 250);
+    return () => window.clearInterval(id);
+  }, [resolving]);
+
+  if (call.resolveStartedAt == null || call.status === "Resolved") {
+    return null;
+  }
+  const simSpeed = useDispatchStore.getState().simSpeed;
+  const remaining = remainingResolveMs(call.resolveStartedAt, simSpeed);
+  return (
+    <p className="mt-1 text-xs font-semibold text-sky-400">
+      ⏱ Resolving in {formatGameDuration(remaining)}
+    </p>
+  );
+}
+
+function AssignedRow({
+  record,
+  busy,
+  onReturn,
+}: {
+  record: DispatchRecord;
+  busy: boolean;
+  onReturn: () => void;
+}) {
+  const onScene = record.phase === "onScene";
+  return (
+    <li className="flex items-center gap-2 rounded-md border border-slate-700 bg-slate-900/40 px-3 py-2 text-sm">
+      <span
+        className="inline-block h-2.5 w-2.5 shrink-0 rounded-full"
+        style={{ backgroundColor: colorForPhase(record.phase) }}
+        title={onScene ? "On scene" : "En route"}
+      />
+      <span className="flex-1">
+        <span className="font-medium">{record.callsign}</span>
+        <span className="text-slate-400"> · {record.type}</span>
+        <span className="block text-xs text-slate-500">
+          {onScene ? "On scene" : "En route"}
+        </span>
+      </span>
+      <button
+        onClick={onReturn}
+        disabled={busy}
+        className="rounded border border-slate-600 px-2 py-1 text-xs hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        {onScene ? "Return to quarters" : "Cancel"}
+      </button>
+    </li>
+  );
+}

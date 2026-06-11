@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(npm install 2>&1)",
+      "PowerShell(npx tsc -b 2>&1 | Select-Object -Last 30; \"EXIT=$LASTEXITCODE\")",
+      "PowerShell($env:NO_COLOR=1; npm run dev)",
+      "PowerShell(npx tsc -b 2>&1 | Select-Object -Last 30; \"FRONTEND EXIT=$LASTEXITCODE\")",
+      "PowerShell(\"deleted UnitMarker.tsx\")",
+      "PowerShell(npm run build 2>&1 | Select-Object -Last 20; \"BUILD EXIT=$LASTEXITCODE\")",
+      "PowerShell(npx tsc -b 2>&1 | Select-Object -Last 10; \"TSC EXIT=$LASTEXITCODE\")",
+      "PowerShell(npx tsc -b 2>&1 | Select-Object -Last 30; \"TSC EXIT=$LASTEXITCODE\")"
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+id,callsign,type,status,station_id
+fdny-engine-273,Engine 273,Engine,Available,FDNY-E273L129
+fdny-ladder-129,Ladder 129,Aerial Ladder,Available,FDNY-E273L129
+fdny-engine-274,Engine 274,Engine,Available,FDNY-E274B52
+fdny-htmu-274,HTMU 274,HazMat,Available,FDNY-E274B52
+fdny-battalion-52,Battalion 52,Battalion,Available,FDNY-E274B52
+fdny-engine-295,Engine 295,Engine,Available,FDNY-E295L144
+fdny-ladder-144,Ladder 144,Tower Ladder,Available,FDNY-E295L144
+fdny-engine-297,Engine 297,Engine,Available,FDNY-E297L130
+fdny-ladder-130,Ladder 130,Aerial Ladder,Available,FDNY-E297L130
+fdny-engine-299,Engine 299,Engine,Available,FDNY-E299L152
+fdny-ladder-152,Ladder 152,Tower Ladder,Available,FDNY-E299L152
+fdny-engine-324,Engine 324,Engine,Available,FDNY-E324D14
+fdny-satellite-4,Satellite 4,Satellite,Available,FDNY-E324D14
+fdny-division-14,Division 14,Division,Available,FDNY-E324D14
+fdny-squad-288,Squad 288,Squad,Available,FDNY-S288HM1
+fdny-hazmat-1,HazMat 1,HazMat,Available,FDNY-S288HM1
+fdny-engine-289,Engine 289,Engine,Available,FDNY-E289L138
+fdny-ladder-138,Ladder 138,Tower Ladder,Available,FDNY-E289L138
+fdny-engine-287,Engine 287,Engine,Available,FDNY-E287L136B46
+fdny-ladder-136,Ladder 136,Aerial Ladder,Available,FDNY-E287L136B46
+fdny-battalion-46,Battalion 46,Battalion,Available,FDNY-E287L136B46
+fdny-engine-292,Engine 292,Engine,Available,FDNY-E292R4
+fdny-rescue-4,Rescue 4,Rescue,Available,FDNY-E292R4
+fdny-engine-319,Engine 319,Engine,Available,FDNY-E319
+fdny-dsu,Decon Support Unit,Decon Support Unit,Available,FDNY-DSU
+fdny-engine-316,Engine 316,Engine,Available,FDNY-E316
+fdny-engine-307,Engine 307,Engine,Available,FDNY-E307L154
+fdny-ladder-154,Ladder 154,Aerial Ladder,Available,FDNY-E307L154
+fdny-engine-263,Engine 263,Engine,Available,FDNY-E263L117
+fdny-ladder-117,Ladder 117,Tower Ladder,Available,FDNY-E263L117
+fdny-engine-312,Engine 312,Engine,Available,FDNY-E312B49
+fdny-battalion-49,Battalion 49,Battalion,Available,FDNY-E312B49
+fdny-engine-262,Engine 262,Engine,Available,FDNY-E262
+fdny-imt,Incident Management Team,IMT Planning Vehicle,Available,FDNY-E262
+fdny-engine-325,Engine 325,Engine,Available,FDNY-E325L163
+fdny-ladder-163,Ladder 163,Tower Ladder,Available,FDNY-E325L163

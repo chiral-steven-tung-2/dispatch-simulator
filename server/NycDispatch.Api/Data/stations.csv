@@ -1,0 +1,76 @@
+id,name,latitude,longitude,borough,battalion,division
+FDNY-E273L129,Engine 273 / Ladder 129,40.75993549140286,-73.82639485457081,Queens,Battalion 52,Division 14
+FDNY-E274B52,Engine 274 / Battalion 52,40.76254768318656,-73.81274304265091,Queens,Battalion 52,Division 14
+FDNY-E295L144,Engine 295 / Ladder 144,40.78897525301164,-73.81600344410786,Queens,Battalion 52,Division 14
+FDNY-E297L130,Engine 297 / Ladder 130,40.784981273666716,-73.8475345902838,Queens,Battalion 52,Division 14
+FDNY-E299L152,Engine 299 / Ladder 152,40.73885479069611,-73.79012467632367,Queens,Battalion 52,Division 14
+FDNY-E324D14,Engine 324 / Division 14,40.73852344638286,-73.85123540959435,Queens,Battalion 46,Division 14
+FDNY-E289L138,Engine 289 / Ladder 138,40.74669166888528,-73.86440335262553,Queens,Battalion 46,Division 14
+FDNY-E287L136B46,Engine 287 / Ladder 136 / Battalion 46,40.737185452397696,-73.88000773728393,Queens,Battalion 46,Division 14
+FDNY-E292R4,Engine 292 / Rescue 4,40.7411538630777,-73.89646941577529,Queens,Battalion 46,Division 14
+FDNY-E319,Engine 319,40.713153722168414,-73.87359770892282,Queens,Battalion 46,Division 14
+FDNY-S288HM1,Squad 288 / HazMat 1,40.726111103969004,-73.89594616340361,Queens,Battalion 46,Division 14
+FDNY-DSU,Decon Support Unit,40.74809635278678,-73.85939412003987,Queens,Battalion 46,Division 14
+FDNY-E316,Engine 316,40.76329182130015,-73.86914597502842,Queens,Battalion 49,Division 14
+FDNY-E307L154,Engine 307 / Ladder 154,40.75682962161701,-73.88054850454559,Queens,Battalion 49,Division 14
+FDNY-E263L117,Engine 263 / Ladder 117,40.76949394859182,-73.90532934856526,Queens,Battalion 49,Division 14
+FDNY-E312B49,Engine 312 / Battalion 49,40.77463188456419,-73.90381367943166,Queens,Battalion 49,Division 14
+FDNY-E262,Engine 262,40.76865625729394,-73.92681034221978,Queens,Battalion 49,Division 14
+FDNY-E325L163,Engine 325 / Ladder 163,40.746669096624274,-73.90978311663591,Queens,Battalion 49,Division 14
+FDNY-E4L15,Engine 4 / Ladder 15,40.7036060971517,-74.0074942438640,Manhattan,Battalion 1,Division 1
+FDNY-E6,Engine 6,40.7100550255194,-74.0053488139879,Manhattan,Battalion 1,Division 1
+FDNY-E7L1B1,Engine 7 / Ladder 1 / Battalion 1,40.7154372523704,-74.0061347915253,Manhattan,Battalion 1,Division 1
+FDNY-E10L10,Engine 10 / Ladder 10,40.7099820798769,-74.0125487486596,Manhattan,Battalion 1,Division 1
+FDNY-E24L24B2,Engine 24 / Ladder 5 / Battalion 2,40.7280705772207,-74.0032797288083,Manhattan,Battalion 2,Division 1
+FDNY-E55,Engine 55,40.7199241779658,-73.9957372152706,Manhattan,Battalion 2,Division 1
+FDNY-L8,Ladder 8,40.7196596393775,-74.0066165303589,Manhattan,Battalion 2,Division 1
+FDNY-L20D1,Ladder 20 / Division 1,40.7230578599343,-73.9966853767946,Manhattan,Battalion 2,Division 1
+FDNY-S18,Squad 18,40.7345482577520,-74.0003939556984,Manhattan,Battalion 2,Division 1
+FDNY-E9L6,Engine 9 / Ladder 6 / Satellite 1,40.7153300695138,-73.9928739017849,Manhattan,Battalion 4,Division 1
+FDNY-E15L18B4,Engine 15 / Ladder 18 / Battalion 4,40.7165127376626,-73.9836577962425,Manhattan,Battalion 4,Division 1
+FDNY-E28L11,Engine 28 / Ladder 11 ,40.7218177874257,-73.9825997016034,Manhattan,Battalion 4,Division 1
+FDNY-E5,Engine 5,40.7315329233222,-73.9834020170836,Manhattan,Battalion 4,Division 1
+FDNY-L3B6,Ladder 3 / Battalion 6,40.7332031158731,-73.9894067058784,Manhattan,Battalion 6,Division 1
+FDNY-E14,Engine 14,40.7380795896122,-73.9909224209491,Manhattan,Battalion 6,Division 1
+FDNY-E33L9,Engine 33 / Ladder 9,40.7269299690578,-73.9925769050779,Manhattan,Battalion 6,Division 1
+FDNY-E1L24,Engine 1 / Ladder 24,40.7485595516948,-73.9909860869156,Manhattan,Battalion 7,Division 1
+FDNY-E3L12B7,Engine 3 / Ladder 12 / Battalion 7,40.7412758179356,-73.9967971495354,Manhattan,Battalion 7,Division 1
+FDNY-E26,Engine 26,40.7532353723696,-73.9902824442388,Manhattan,Battalion 7,Division 1
+FDNY-E34L21,Engine 34 / Ladder 21,40.7566359476822,-73.9964731263696,Manhattan,Battalion 7,Division 1
+FDNY-E8L2B8,Engine 8 / Ladder 2 / Battalion 8,40.7567908279361,-73.9709448091191,Manhattan,Battalion 8,Division 3
+FDNY-E16L7,Engine 16 / Ladder 7,40.7418066935564,-73.9788101879569,Manhattan,Battalion 8,Division 3
+FDNY-E21,Engine 21,40.7487790471570,-73.9739488767977,Manhattan,Battalion 8,Division 3
+FDNY-E65,Engine 65,40.7549756710129,-73.9819938462689,Manhattan,Battalion 8,Division 3
+FDNY-E23,Engine 23,40.7666501590635,-73.9804016447347,Manhattan,Battalion 9,Division 3
+FDNY-E40L35,Engine 40 / Ladder 35,40.7746109167545,-73.9842482168375,Manhattan,Battalion 9,Division 3
+FDNY-E54L4B9,Engine 54 / Ladder 4 / Battalion 9,40.7607780230273,-73.9869456394771,Manhattan,Battalion 9,Division 3
+FDNY-R1,Rescue 1,40.7608812182997,-73.9965180871122,Manhattan,Battalion 9,Division 3
+FDNY-E22L13B10,Engine 22 / Ladder 13 / Battalion 10,40.7786357780283,-73.9552703180347,Manhattan,Battalion 10,Division 3
+FDNY-E39L16,Engine 39 / Ladder 16,40.7670036171587,-73.9636489708816,Manhattan,Battalion 10,Division 3
+FDNY-E44,Engine 44,40.7714000265361,-73.9582107029697,Manhattan,Battalion 10,Division 3
+FDNY-E53L43,Engine 53 / Ladder 43,40.7888383624318,-73.9469099297800,Manhattan,Battalion 10,Division 3
+FDNY-E37L40,Engine 37 / Ladder 40,40.8119195614043,-73.9547911408196,Manhattan,Battalion 11,Division 3
+FDNY-E47,Engine 47,40.8049611539266,-73.9629175465573,Manhattan,Battalion 11,Division 3
+FDNY-E74,Engine 74,40.7848152553157,-73.9745043951986,Manhattan,Battalion 11,Division 3
+FDNY-E76L22B11,Engine 76 / Ladder 22 / Battalion 11,40.7962850116009,-73.9671666030921,Manhattan,Battalion 11,Division 3
+FDNY-L25D3,Ladder 25 / Division 3 / Collapse 1,40.7821785545473,-73.9798622680868,Manhattan,Battalion 11,Division 3
+FDNY-E35L14B12,Engine 35 / Ladder 14 / Battalion 12,40.8032687040495,-73.9364048086315,Manhattan,Battalion 12,Division 3
+FDNY-E58L26,Engine 58 / Ladder 26,40.7989988398568,-73.9474700660093,Manhattan,Battalion 12,Division 3
+FDNY-E91,Engine 91,40.7939367502052,-73.9407004592233,Manhattan,Battalion 12,Division 3
+FDNY-E64L47,Engine 64 / Ladder 47,40.8324546147342,-73.8509179102685,The Bronx,Battalion 3,Division 6
+FDNY-E94L48B3,Engine 94 / Ladder 48 / Battalion 3,40.8186768849550,-73.8877406392230,The Bronx,Battalion 3,Division 6
+FDNY-E96L54,Engine 96 / Ladder 54,40.8229425842949,-73.8693094221272,The Bronx,Battalion 3,Division 6
+FDNY-E60L17B14,Engine 60 / Ladder 17 / Battalion 14,40.8130303328090,-73.9222122750745,The Bronx,Battalion 14,Division 6
+FDNY-E71L55D6,Engine 71 / Ladder 55 / Division 6,40.8202876878087,-73.9157228698612,The Bronx,Battalion 14,Division 6
+FDNY-E83L29,Engine 83 / Ladder 29,40.8059328547741,-73.9157501618441,The Bronx,Battalion 14,Division 6
+FDNY-S41,Squad 41,40.8173658023597,-73.9200995193851,The Bronx,Battalion 14,Division 6
+FDNY-E59L30,Engine 59 / Ladder 30,40.8132498889840,-73.9425372049458,Manhattan,Battalion 16,Division 6
+FDNY-E69L28B16,Engine 69 / Ladder 28 / Battalion 16,40.8209848479202,-73.9417483112226,Manhattan,Battalion 16,Division 6
+FDNY-E80L23,Engine 80 / Ladder 23,40.8217653239858,-73.9509011688532,Manhattan,Battalion 16,Division 6
+FDNY-E46L27,Engine 46  / Ladder 27 / Collapse 3,40.8439683146935,-73.9002172752701,The Bronx,Battalion 17,Division 6
+FDNY-E68L49,Engine 68 / Ladder 49,40.8366921899961,-73.9269680259466,The Bronx,Battalion 17,Division 6
+FDNY-E92L44B17,Engine 92 / Ladder 44 / Battalion 17,40.8346150112897,-73.9134385301690,The Bronx,Battalion 17,Division 6
+FDNY-R3,Rescue 3,40.8412003194697,-73.9015327467281,The Bronx,Battalion 17,Division 6
+FDNY-E50L19B26,Engine 50 / Ladder 19 / Battalion 26,40.8297152308409,-73.9079544405548,The Bronx,Battalion 26,Division 6
+FDNY-E73L42,Engine 73 / Ladder 42,40.8152603466591,-73.9036329862245,The Bronx,Battalion 26,Division 6
+FDNY-E82L31,Engine 82 / Ladder 31,40.8284895934013,-73.8951502074936,The Bronx,Battalion 26,Division 6
