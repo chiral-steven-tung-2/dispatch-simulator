@@ -29,6 +29,7 @@ export default function DispatchLayer({ map }: DispatchLayerProps) {
   const dispatches = useDispatchStore((s) => s.dispatches);
   const showPaths = useDispatchStore((s) => s.showPaths);
   const markersRef = useRef<globalThis.Map<string, Marker>>(new globalThis.Map());
+  const draggableSetup = useRef<Set<string>>(new Set());
 
   // Add the route source + line layer once.
   useEffect(() => {
@@ -65,7 +66,8 @@ export default function DispatchLayer({ map }: DispatchLayerProps) {
     };
   }, [map]);
 
-  // Create markers for new dispatches; remove markers for completed ones.
+  // Create markers for new dispatches, remove completed ones, and keep on-scene
+  // markers parked (and draggable) at their spot within the perimeter.
   useEffect(() => {
     const markers = markersRef.current;
     const liveIds = new Set(dispatches.map((d) => d.id));
@@ -74,17 +76,46 @@ export default function DispatchLayer({ map }: DispatchLayerProps) {
       if (!liveIds.has(markerId)) {
         marker.remove();
         markers.delete(markerId);
+        draggableSetup.current.delete(markerId);
       }
     }
 
     for (const d of dispatches) {
-      if (!markers.has(d.id)) {
+      let marker = markers.get(d.id);
+      if (!marker) {
         const element = createMovingUnitElement(d.callsign);
         element.style.backgroundColor = colorForPhase(d.phase);
-        const marker = new Marker({ element })
+        marker = new Marker({ element })
           .setLngLat(d.route[0] ?? [0, 0])
           .addTo(map);
         markers.set(d.id, marker);
+      }
+
+      if (d.phase === "onScene") {
+        // Position at the parked spot and let the user drag it around. The pill
+        // is normally pointer-events:none, so enable interaction while parked.
+        const parked = d.parkPoint ?? d.route[d.route.length - 1] ?? [0, 0];
+        const el = marker.getElement();
+        marker.setLngLat(parked);
+        el.style.backgroundColor = colorForPhase(d.phase);
+        el.style.cursor = "grab";
+        el.style.pointerEvents = "auto";
+        if (!marker.isDraggable()) {
+          marker.setDraggable(true);
+        }
+        if (!draggableSetup.current.has(d.id)) {
+          draggableSetup.current.add(d.id);
+          const m = marker;
+          m.on("dragend", () => {
+            const { lng, lat } = m.getLngLat();
+            useDispatchStore.getState().moveUnit(d.id, [lng, lat]);
+          });
+        }
+      } else if (marker.isDraggable()) {
+        marker.setDraggable(false);
+        const el = marker.getElement();
+        el.style.cursor = "";
+        el.style.pointerEvents = "none";
       }
     }
   }, [map, dispatches]);
@@ -122,8 +153,7 @@ export default function DispatchLayer({ map }: DispatchLayerProps) {
         }
 
         if (d.phase === "onScene") {
-          marker.setLngLat(d.route[d.route.length - 1] ?? [0, 0]);
-          marker.getElement().style.backgroundColor = colorForPhase(d.phase);
+          // Parked + draggable; position is managed by the sync effect.
           continue;
         }
 

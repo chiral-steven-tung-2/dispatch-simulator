@@ -1,6 +1,6 @@
 # NYC Dispatch Simulator
 
-A single-player emergency dispatch game (inspired by Mission Chief), running in the
+A single-player emergency dispatch game running in the
 browser with a small C# backend as the source of truth for game data.
 
 ## Stack

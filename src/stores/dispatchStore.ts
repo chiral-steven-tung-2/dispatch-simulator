@@ -34,6 +34,8 @@ export interface DispatchRecord {
   durationMs: number;
   /** True if a straight-line fallback was used (routing failed). */
   fallback: boolean;
+  /** Where the unit parks on scene (within the call perimeter). */
+  parkPoint?: LngLat;
 }
 
 interface DispatchStore {
@@ -53,11 +55,20 @@ interface DispatchStore {
   returnToQuarters: (dispatchId: string) => Promise<void>;
   arriveHome: (dispatchId: string) => void;
   resolveCall: (callId: string) => void;
+  /** Reposition an on-scene unit within its call's perimeter. */
+  moveUnit: (dispatchId: string, point: LngLat) => void;
 }
 
 const MIN_LEG_MS = 1_000;
 // Real ms a resolved call lingers on the map before it is removed.
 const RESOLVED_LINGER_MS = 4_000;
+
+// On-scene parking layout. Earlier arrivals park closer to the scene; later
+// arrivals fan out behind them via a golden-angle spiral.
+const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
+const PARK_BASE_M = 6; // first-due distance from the call center
+const PARK_STEP_M = 5; // extra distance per later arrival
+const PARK_EDGE_MARGIN_M = 3; // keep parked units just inside the perimeter
 
 function legDurationMs(progression: RouteProgression): number {
   return Math.max(MIN_LEG_MS, progression.total * 1000);
@@ -120,7 +131,6 @@ export const useDispatchStore = create<DispatchStore>((set, get) => ({
 
     const stations = useStationStore.getState().stations;
     const center: LngLat = [call.longitude, call.latitude];
-    const radius = call.radiusMeters || 80;
 
     const routed = await Promise.all(
       units.map(async (unit) => {
@@ -129,10 +139,9 @@ export const useDispatchStore = create<DispatchStore>((set, get) => ({
           return null;
         }
         const from: LngLat = [station.longitude, station.latitude];
-        // Park each unit at its own spot within the response perimeter so they
-        // spread around the scene instead of stacking on the call dot.
-        const to = randomPointInCircle(center, radius);
-        const route = await fetchRoute(from, to);
+        // Route to the scene; the exact parking spot is assigned on arrival so
+        // first-due rigs end up closer than later arrivals.
+        const route = await fetchRoute(from, center);
         return { unit, route };
       })
     );
@@ -181,18 +190,52 @@ export const useDispatchStore = create<DispatchStore>((set, get) => ({
     if (!record || record.phase !== "enroute") {
       return;
     }
+
+    const incidentStore = useIncidentStore.getState();
+    const incident = incidentStore.incidents.find((i) => i.id === record.callId);
+
+    // Arrival order (1-based) among units already on scene for this call.
+    const order =
+      get().dispatches.filter(
+        (d) => d.callId === record.callId && d.phase === "onScene"
+      ).length + 1;
+
+    const center: LngLat = incident
+      ? [incident.longitude, incident.latitude]
+      : record.route[record.route.length - 1] ?? [0, 0];
+
+    // Grow the perimeter (start 20m, +2m per arrival, capped at the type max).
+    const maxRadius = incident?.maxRadiusMeters ?? START_CALL_RADIUS;
+    const newRadius = Math.min(
+      maxRadius,
+      START_CALL_RADIUS + CALL_RADIUS_STEP * order
+    );
+
+    // Park first-due near the center, later arrivals progressively further out,
+    // each at a distinct angle so they don't stack.
+    const parkDistance = Math.min(
+      newRadius - PARK_EDGE_MARGIN_M,
+      PARK_BASE_M + (order - 1) * PARK_STEP_M
+    );
+    const parkPoint = offsetPoint(
+      center,
+      Math.max(0, parkDistance),
+      (order - 1) * GOLDEN_ANGLE
+    );
+
     set((state) => ({
       dispatches: state.dispatches.map((d) =>
-        d.id === dispatchId ? { ...d, phase: "onScene" } : d
+        d.id === dispatchId ? { ...d, phase: "onScene", parkPoint } : d
       ),
     }));
     useUnitStore.getState().setUnitStatus(record.unitId, "On Scene");
 
-    // Start the on-scene work clock; the resolve ticker fires when it elapses.
-    const incidentStore = useIncidentStore.getState();
-    const incident = incidentStore.incidents.find((i) => i.id === record.callId);
-    if (incident && incident.status !== "Resolved" && incident.resolveStartedAt == null) {
-      incidentStore.startResolveTimer(record.callId);
+    if (incident) {
+      incidentStore.setCallRadius(record.callId, newRadius);
+      // Start the on-scene work clock; the resolve ticker fires when it elapses.
+      if (incident.status !== "Resolved" && incident.resolveStartedAt == null) {
+        incidentStore.startResolveTimer(record.callId);
+      }
     }
   },
 
@@ -289,5 +332,27 @@ export const useDispatchStore = create<DispatchStore>((set, get) => ({
       () => useIncidentStore.getState().removeIncident(callId),
       RESOLVED_LINGER_MS
     );
+  },
+
+  moveUnit: (dispatchId, point) => {
+    const record = get().dispatches.find((d) => d.id === dispatchId);
+    if (!record) {
+      return;
+    }
+    const incident = useIncidentStore
+      .getState()
+      .incidents.find((i) => i.id === record.callId);
+    const parkPoint = incident
+      ? clampToCircle(
+          point,
+          [incident.longitude, incident.latitude],
+          incident.radiusMeters
+        )
+      : point;
+    set((state) => ({
+      dispatches: state.dispatches.map((d) =>
+        d.id === dispatchId ? { ...d, parkPoint } : d
+      ),
+    }));
   },
 }));
