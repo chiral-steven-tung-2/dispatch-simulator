@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import type { Incident, Unit } from "../models";
-import { fetchRoute } from "../data/routing";
+import { fetchRoute, snapToRoad } from "../data/routing";
 import {
   buildProgressionFromSegments,
   pointAlong,
@@ -237,6 +237,19 @@ export const useDispatchStore = create<DispatchStore>((set, get) => ({
         incidentStore.startResolveTimer(record.callId);
       }
     }
+
+    // Snap the parked spot onto the nearest street (async), then update it.
+    void (async () => {
+      const snapped = await snapToRoad(parkPoint);
+      const current = get().dispatches.find((d) => d.id === dispatchId);
+      if (current?.phase === "onScene") {
+        set((state) => ({
+          dispatches: state.dispatches.map((d) =>
+            d.id === dispatchId ? { ...d, parkPoint: snapped } : d
+          ),
+        }));
+      }
+    })();
   },
 
   returnToQuarters: async (dispatchId) => {
@@ -342,17 +355,26 @@ export const useDispatchStore = create<DispatchStore>((set, get) => ({
     const incident = useIncidentStore
       .getState()
       .incidents.find((i) => i.id === record.callId);
-    const parkPoint = incident
-      ? clampToCircle(
-          point,
-          [incident.longitude, incident.latitude],
-          incident.radiusMeters
-        )
-      : point;
-    set((state) => ({
-      dispatches: state.dispatches.map((d) =>
-        d.id === dispatchId ? { ...d, parkPoint } : d
-      ),
-    }));
+    const center: LngLat | null = incident
+      ? [incident.longitude, incident.latitude]
+      : null;
+    const clamp = (p: LngLat): LngLat =>
+      center && incident ? clampToCircle(p, center, incident.radiusMeters) : p;
+
+    const setPark = (p: LngLat) =>
+      set((state) => ({
+        dispatches: state.dispatches.map((d) =>
+          d.id === dispatchId ? { ...d, parkPoint: p } : d
+        ),
+      }));
+
+    // Immediate clamp into the perimeter, then snap onto the nearest street.
+    setPark(clamp(point));
+    void (async () => {
+      const snapped = clamp(await snapToRoad(clamp(point)));
+      if (get().dispatches.some((d) => d.id === dispatchId)) {
+        setPark(snapped);
+      }
+    })();
   },
 }));

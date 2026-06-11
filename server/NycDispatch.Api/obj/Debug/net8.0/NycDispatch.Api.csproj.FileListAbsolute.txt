@@ -26,3 +26,4 @@ C:\MyDocuments\dispatch-game\server\NycDispatch.Api\obj\Debug\net8.0\ref\NycDisp
 C:\MyDocuments\dispatch-game\server\NycDispatch.Api\bin\Debug\net8.0\Data\calls.csv
 C:\MyDocuments\dispatch-game\server\NycDispatch.Api\bin\Debug\net8.0\Data\stations.csv
 C:\MyDocuments\dispatch-game\server\NycDispatch.Api\bin\Debug\net8.0\Data\vehicles.csv
+C:\MyDocuments\dispatch-game\server\NycDispatch.Api\obj\Debug\net8.0\NycDispatch.Api.sourcelink.json

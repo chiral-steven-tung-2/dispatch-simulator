@@ -1,6 +1,34 @@
 import { haversineMeters, type LngLat } from "../utils/geo";
 
 const OSRM_BASE = "https://router.project-osrm.org/route/v1/driving";
+const OSRM_NEAREST = "https://router.project-osrm.org/nearest/v1/driving";
+
+/**
+ * Snaps a point to the nearest drivable road, so parked units sit on the street
+ * rather than inside a block. Falls back to the original point on failure.
+ */
+export async function snapToRoad(point: LngLat): Promise<LngLat> {
+  try {
+    const response = await fetch(
+      `${OSRM_NEAREST}/${point[0]},${point[1]}?number=1`
+    );
+    if (!response.ok) {
+      throw new Error(`OSRM nearest responded ${response.status}`);
+    }
+    const data = await response.json();
+    const location = data?.waypoints?.[0]?.location;
+    if (
+      data?.code === "Ok" &&
+      Array.isArray(location) &&
+      location.length === 2
+    ) {
+      return [location[0], location[1]];
+    }
+    throw new Error("OSRM nearest returned no snap");
+  } catch {
+    return point;
+  }
+}
 
 export interface RouteResult {
   /** Street-following geometry as [lng, lat] coordinates. */
