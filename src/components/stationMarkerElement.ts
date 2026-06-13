@@ -22,7 +22,8 @@ interface Apparatus {
 // to "SOC" (Special Operations Command).
 const APPARATUS: Record<string, Apparatus> = {
   Engine: { tag: "E", color: "#dc2626" }, // red
-  "Aerial Ladder": { tag: "L", color: "#2563eb" }, // blue
+  "Rear Mount": { tag: "HL", color: "#2563eb" }, // blue
+  "Tractor Trailor": { tag: "TT", color: "#1d4ed8" }, // darker blue
   "Tower Ladder": { tag: "TL", color: "#1d4ed8" }, // darker blue
   HazMat: { tag: "HM", color: "#16a34a" }, // green
   Squad: { tag: "SQ", color: "#7c3aed" }, // purple
