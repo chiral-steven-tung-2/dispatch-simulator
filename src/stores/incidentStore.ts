@@ -9,6 +9,7 @@ type LoadStatus = "idle" | "loading" | "ready" | "error";
 interface IncidentStore {
   /** Live calls — generated at runtime, not loaded from the backend. */
   incidents: Incident[];
+  notifications: CallNotification[];
   /** Catalog of call types (with spawn weights) loaded from the backend. */
   callTypes: CallType[];
   status: LoadStatus;
@@ -18,6 +19,7 @@ interface IncidentStore {
   load: () => Promise<void>;
   spawnCall: () => void;
   toggleAutoSpawn: () => void;
+  dismissNotification: (notificationId: string) => void;
   setIncidentStatus: (incidentId: string, status: IncidentStatus) => void;
   removeIncident: (incidentId: string) => void;
   /** Set a call's current perimeter radius (grows as units arrive). */
@@ -30,8 +32,19 @@ interface IncidentStore {
   rebaseResolveTimers: (ratio: number) => void;
 }
 
+interface CallNotification {
+  id: string;
+  callId: string;
+  title: string;
+  status: IncidentStatus;
+  latitude: number;
+  longitude: number;
+  createdAt: number;
+}
+
 export const useIncidentStore = create<IncidentStore>((set, get) => ({
   incidents: [],
+  notifications: [],
   callTypes: [],
   status: "idle",
   error: null,
@@ -54,10 +67,27 @@ export const useIncidentStore = create<IncidentStore>((set, get) => ({
       return;
     }
     const call = makeRandomCall(callTypes, stations);
-    set((state) => ({ incidents: [...state.incidents, call] }));
+    const notification: CallNotification = {
+      id: `call-notification-${call.id}`,
+      callId: call.id,
+      title: call.name,
+      status: call.status,
+      latitude: call.latitude,
+      longitude: call.longitude,
+      createdAt: performance.now(),
+    };
+    set((state) => ({
+      incidents: [...state.incidents, call],
+      notifications: [notification, ...state.notifications].slice(0, 5),
+    }));
   },
 
   toggleAutoSpawn: () => set((state) => ({ autoSpawn: !state.autoSpawn })),
+
+  dismissNotification: (notificationId) =>
+    set((state) => ({
+      notifications: state.notifications.filter((n) => n.id !== notificationId),
+    })),
 
   setIncidentStatus: (incidentId, status) =>
     set((state) => ({
@@ -69,6 +99,7 @@ export const useIncidentStore = create<IncidentStore>((set, get) => ({
   removeIncident: (incidentId) =>
     set((state) => ({
       incidents: state.incidents.filter((i) => i.id !== incidentId),
+      notifications: state.notifications.filter((n) => n.callId !== incidentId),
     })),
 
   setCallRadius: (incidentId, radiusMeters) =>

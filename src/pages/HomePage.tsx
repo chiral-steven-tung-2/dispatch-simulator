@@ -2,6 +2,7 @@ import { useState } from "react";
 import MapView from "../components/MapView";
 import StationsPanel from "../components/StationsPanel";
 import DispatchPanel from "../components/DispatchPanel";
+import CallNotifications from "../components/CallNotifications";
 import { useDispatchData } from "../hooks/useDispatchData";
 import { useCallSpawner } from "../hooks/useCallSpawner";
 import { useResolveTicker } from "../hooks/useResolveTicker";
@@ -12,6 +13,8 @@ export default function HomePage() {
   const { loading, error } = useDispatchData();
   const [stationsOpen, setStationsOpen] = useState(false);
   const [legendOpen, setLegendOpen] = useState(false);
+  const [showFdnyStations, setShowFdnyStations] = useState(true);
+  const [showNypdStations, setShowNypdStations] = useState(true);
   const showPaths = useDispatchStore((s) => s.showPaths);
   const togglePaths = useDispatchStore((s) => s.togglePaths);
   const simSpeed = useDispatchStore((s) => s.simSpeed);
@@ -25,6 +28,7 @@ export default function HomePage() {
 
   return (
     <div className="flex h-full w-full flex-col bg-slate-900 text-slate-100">
+      <CallNotifications />
       <header className="flex items-center justify-between border-b border-slate-700 px-6 py-4">
         <div className="flex items-center gap-4">
           <h1 className="text-xl font-bold tracking-tight">
@@ -65,6 +69,24 @@ export default function HomePage() {
             Show paths
           </label>
           <StatusBadge loading={loading} error={error} />
+          <label className="flex cursor-pointer items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={showFdnyStations}
+              onChange={(e) => setShowFdnyStations(e.target.checked)}
+              className="h-4 w-4 accent-red-500"
+            />
+            FDNY stations
+          </label>
+          <label className="flex cursor-pointer items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={showNypdStations}
+              onChange={(e) => setShowNypdStations(e.target.checked)}
+              className="h-4 w-4 accent-blue-500"
+            />
+            NYPD precincts
+          </label>
           <button
             onClick={() => setLegendOpen(true)}
             className="rounded-md border border-slate-600 px-3 py-1.5 text-sm font-medium hover:bg-slate-700"
@@ -75,7 +97,10 @@ export default function HomePage() {
       </header>
 
       <main className="flex-1">
-        <MapView />
+        <MapView
+          showFdnyStations={showFdnyStations}
+          showNypdStations={showNypdStations}
+        />
       </main>
 
       <StationsPanel

@@ -40,6 +40,7 @@ export interface DispatchRecord {
 
 interface DispatchStore {
   selectedCallId: string | null;
+  focusToken: number;
   dispatches: DispatchRecord[];
   showPaths: boolean;
   dispatching: boolean;
@@ -47,6 +48,7 @@ interface DispatchStore {
   simSpeed: number;
 
   selectCall: (callId: string) => void;
+  focusCall: (callId: string) => void;
   clearSelection: () => void;
   togglePaths: () => void;
   setSimSpeed: (multiplier: number) => void;
@@ -99,12 +101,18 @@ function freeCallIfEmpty(callId: string, dispatches: DispatchRecord[]): void {
 
 export const useDispatchStore = create<DispatchStore>((set, get) => ({
   selectedCallId: null,
+  focusToken: 0,
   dispatches: [],
   showPaths: true,
   dispatching: false,
   simSpeed: 1,
 
   selectCall: (callId) => set({ selectedCallId: callId }),
+  focusCall: (callId) =>
+    set((state) => ({
+      selectedCallId: callId,
+      focusToken: state.focusToken + 1,
+    })),
   clearSelection: () => set({ selectedCallId: null }),
   togglePaths: () => set((state) => ({ showPaths: !state.showPaths })),
 

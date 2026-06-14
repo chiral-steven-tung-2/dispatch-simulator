@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { LngLatBounds } from "maplibre-gl";
 import { useMap } from "../hooks/useMap";
 import { useUnitsByStation } from "../hooks/useUnitsByStation";
+import { useDispatchStore } from "../stores/dispatchStore";
 import { useStationStore } from "../stores/stationStore";
 import { useNypdStationStore } from "../stores/nypdStationStore";
 import { useIncidentStore } from "../stores/incidentStore";
@@ -13,11 +14,21 @@ import DispatchLayer from "./DispatchLayer";
 import LandLayer from "./LandLayer";
 import CallAreaLayer from "./CallAreaLayer";
 
-export default function MapView() {
+interface MapViewProps {
+  showFdnyStations: boolean;
+  showNypdStations: boolean;
+}
+
+export default function MapView({
+  showFdnyStations,
+  showNypdStations,
+}: MapViewProps) {
   const { containerRef, map } = useMap();
   const stations = useStationStore((state) => state.stations);
   const nypdStations = useNypdStationStore((state) => state.stations);
   const incidents = useIncidentStore((state) => state.incidents);
+  const selectedCallId = useDispatchStore((state) => state.selectedCallId);
+  const focusToken = useDispatchStore((state) => state.focusToken);
   const unitsByStation = useUnitsByStation();
   const hasFitted = useRef(false);
 
@@ -44,6 +55,23 @@ export default function MapView() {
     hasFitted.current = true;
   }, [map, stations, nypdStations, incidents]);
 
+  // When a call is selected from a notification or marker, center the map on it.
+  useEffect(() => {
+    if (!map || !selectedCallId) {
+      return;
+    }
+    const incident = incidents.find((i) => i.id === selectedCallId);
+    if (!incident) {
+      return;
+    }
+    map.flyTo({
+      center: [incident.longitude, incident.latitude],
+      zoom: Math.max(map.getZoom(), 13),
+      essential: true,
+      duration: 700,
+    });
+  }, [map, incidents, selectedCallId, focusToken]);
+
   return (
     <div className="relative h-full w-full">
       <div ref={containerRef} className="h-full w-full" />
@@ -51,7 +79,7 @@ export default function MapView() {
       {map && <LandLayer map={map} />}
       {map && <CallAreaLayer map={map} />}
 
-      {map &&
+      {map && showFdnyStations &&
         stations.map((station) => (
           <StationMarker
             key={station.id}
@@ -61,7 +89,7 @@ export default function MapView() {
           />
         ))}
 
-      {map &&
+      {map && showNypdStations &&
         nypdStations.map((station) => (
           <NypdStationMarker key={station.id} map={map} station={station} />
         ))}

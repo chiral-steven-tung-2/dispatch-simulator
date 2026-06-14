@@ -45,7 +45,7 @@ function createCountdownBadge(): HTMLDivElement {
 }
 
 export default function IncidentMarker({ map, incident }: IncidentMarkerProps) {
-  const selectCall = useDispatchStore((s) => s.selectCall);
+  const focusCall = useDispatchStore((s) => s.focusCall);
   const badgeRef = useRef<HTMLDivElement | null>(null);
 
   // Create/replace the marker only on meaningful changes (not every countdown
@@ -60,7 +60,7 @@ export default function IncidentMarker({ map, incident }: IncidentMarkerProps) {
 
     const onClick = (event: MouseEvent) => {
       event.stopPropagation();
-      selectCall(incident.id);
+      focusCall(incident.id);
     };
     element.addEventListener("click", onClick);
 
@@ -81,7 +81,7 @@ export default function IncidentMarker({ map, incident }: IncidentMarkerProps) {
     incident.latitude,
     incident.longitude,
     incident.name,
-    selectCall,
+    focusCall,
   ]);
 
   // Live countdown: update the badge text on an interval, reading the latest
