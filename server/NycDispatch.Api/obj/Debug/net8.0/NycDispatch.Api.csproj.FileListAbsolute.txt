@@ -29,9 +29,6 @@ C:/MyDocuments/dispatch-game/server/NycDispatch.Api/bin/Debug/net8.0/Data/vehicl
 C:/MyDocuments/dispatch-game/server/NycDispatch.Api/obj/Debug/net8.0/NycDispatch.Api.sourcelink.json
 /Users/steventung/Desktop/dispatch-simulator/server/NycDispatch.Api/bin/Debug/net8.0/appsettings.Development.json
 /Users/steventung/Desktop/dispatch-simulator/server/NycDispatch.Api/bin/Debug/net8.0/appsettings.json
-/Users/steventung/Desktop/dispatch-simulator/server/NycDispatch.Api/bin/Debug/net8.0/Data/calls.csv
-/Users/steventung/Desktop/dispatch-simulator/server/NycDispatch.Api/bin/Debug/net8.0/Data/stations.csv
-/Users/steventung/Desktop/dispatch-simulator/server/NycDispatch.Api/bin/Debug/net8.0/Data/vehicles.csv
 /Users/steventung/Desktop/dispatch-simulator/server/NycDispatch.Api/bin/Debug/net8.0/NycDispatch.Api.staticwebassets.endpoints.json
 /Users/steventung/Desktop/dispatch-simulator/server/NycDispatch.Api/bin/Debug/net8.0/NycDispatch.Api
 /Users/steventung/Desktop/dispatch-simulator/server/NycDispatch.Api/bin/Debug/net8.0/NycDispatch.Api.deps.json
@@ -59,3 +56,7 @@ C:/MyDocuments/dispatch-game/server/NycDispatch.Api/obj/Debug/net8.0/NycDispatch
 /Users/steventung/Desktop/dispatch-simulator/server/NycDispatch.Api/obj/Debug/net8.0/NycDispatch.Api.pdb
 /Users/steventung/Desktop/dispatch-simulator/server/NycDispatch.Api/obj/Debug/net8.0/NycDispatch.Api.genruntimeconfig.cache
 /Users/steventung/Desktop/dispatch-simulator/server/NycDispatch.Api/obj/Debug/net8.0/ref/NycDispatch.Api.dll
+/Users/steventung/Desktop/dispatch-simulator/server/NycDispatch.Api/bin/Debug/net8.0/Data/fdny_stations.csv
+/Users/steventung/Desktop/dispatch-simulator/server/NycDispatch.Api/bin/Debug/net8.0/Data/fdny_calls.csv
+/Users/steventung/Desktop/dispatch-simulator/server/NycDispatch.Api/bin/Debug/net8.0/Data/fdny_vehicles.csv
+/Users/steventung/Desktop/dispatch-simulator/server/NycDispatch.Api/bin/Debug/net8.0/Data/nypd_stations.csv

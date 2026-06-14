@@ -30,6 +30,12 @@ app.MapGet("/api/stations/{id}", (string id, DispatchData data) =>
         ? Results.Ok(station)
         : Results.NotFound());
 
+app.MapGet("/api/nypd-stations", (DispatchData data) => Results.Ok(data.NypdStations));
+app.MapGet("/api/nypd-stations/{id}", (string id, DispatchData data) =>
+    data.NypdStations.FirstOrDefault(s => s.Id == id) is { } station
+        ? Results.Ok(station)
+        : Results.NotFound());
+
 // Vehicles
 app.MapGet("/api/vehicles", (DispatchData data) => Results.Ok(data.Vehicles));
 app.MapGet("/api/vehicles/{id}", (string id, DispatchData data) =>

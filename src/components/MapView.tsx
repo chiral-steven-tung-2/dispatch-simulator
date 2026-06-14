@@ -4,8 +4,10 @@ import { LngLatBounds } from "maplibre-gl";
 import { useMap } from "../hooks/useMap";
 import { useUnitsByStation } from "../hooks/useUnitsByStation";
 import { useStationStore } from "../stores/stationStore";
+import { useNypdStationStore } from "../stores/nypdStationStore";
 import { useIncidentStore } from "../stores/incidentStore";
 import StationMarker from "./StationMarker";
+import NypdStationMarker from "./NypdStationMarker";
 import IncidentMarker from "./IncidentMarker";
 import DispatchLayer from "./DispatchLayer";
 import LandLayer from "./LandLayer";
@@ -14,6 +16,7 @@ import CallAreaLayer from "./CallAreaLayer";
 export default function MapView() {
   const { containerRef, map } = useMap();
   const stations = useStationStore((state) => state.stations);
+  const nypdStations = useNypdStationStore((state) => state.stations);
   const incidents = useIncidentStore((state) => state.incidents);
   const unitsByStation = useUnitsByStation();
   const hasFitted = useRef(false);
@@ -27,6 +30,7 @@ export default function MapView() {
     }
     const points: [number, number][] = [
       ...stations.map((s): [number, number] => [s.longitude, s.latitude]),
+      ...nypdStations.map((s): [number, number] => [s.longitude, s.latitude]),
       ...incidents.map((i): [number, number] => [i.longitude, i.latitude]),
     ];
     if (points.length === 0) {
@@ -38,7 +42,7 @@ export default function MapView() {
     );
     map.fitBounds(bounds, { padding: 80, maxZoom: 13, duration: 0 });
     hasFitted.current = true;
-  }, [map, stations, incidents]);
+  }, [map, stations, nypdStations, incidents]);
 
   return (
     <div className="relative h-full w-full">
@@ -55,6 +59,11 @@ export default function MapView() {
             station={station}
             units={unitsByStation[station.id] ?? []}
           />
+        ))}
+
+      {map &&
+        nypdStations.map((station) => (
+          <NypdStationMarker key={station.id} map={map} station={station} />
         ))}
 
       {map &&

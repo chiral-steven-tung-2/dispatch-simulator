@@ -102,7 +102,7 @@ export const useDispatchStore = create<DispatchStore>((set, get) => ({
   dispatches: [],
   showPaths: true,
   dispatching: false,
-  simSpeed: 60,
+  simSpeed: 1,
 
   selectCall: (callId) => set({ selectedCallId: callId }),
   clearSelection: () => set({ selectedCallId: null }),

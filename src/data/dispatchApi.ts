@@ -1,4 +1,4 @@
-import type { Station, Unit, CallType } from "../models";
+import type { Station, NypdStation, Unit, CallType } from "../models";
 
 // Base URL of the C# backend. Override via VITE_API_BASE_URL if needed.
 const API_BASE_URL =
@@ -16,6 +16,9 @@ async function getJson<T>(path: string): Promise<T> {
 // so these map across directly.
 export const fetchStations = (): Promise<Station[]> =>
   getJson<Station[]>("/api/stations");
+
+export const fetchNypdStations = (): Promise<NypdStation[]> =>
+  getJson<NypdStation[]>("/api/nypd-stations");
 
 export const fetchUnits = (): Promise<Unit[]> =>
   getJson<Unit[]>("/api/vehicles");

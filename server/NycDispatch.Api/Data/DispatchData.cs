@@ -12,6 +12,7 @@ namespace NycDispatch.Api.Data;
 public class DispatchData
 {
     public IReadOnlyList<Station> Stations { get; }
+    public IReadOnlyList<NycDispatch.Api.Models.NypdStation> NypdStations { get; }
     public IReadOnlyList<Vehicle> Vehicles { get; }
     public IReadOnlyList<CallType> CallTypes { get; }
 
@@ -19,7 +20,7 @@ public class DispatchData
     {
         var dir = Path.Combine(env.ContentRootPath, "Data");
 
-        Stations = LoadCsv(Path.Combine(dir, "stations.csv"), row => new Station
+        Stations = LoadCsv(Path.Combine(dir, "fdny_stations.csv"), row => new Station
         {
             Id = row["id"],
             Name = row["name"],
@@ -30,7 +31,16 @@ public class DispatchData
             Division = row["division"],
         });
 
-        Vehicles = LoadCsv(Path.Combine(dir, "vehicles.csv"), row => new Vehicle
+        NypdStations = LoadCsv(Path.Combine(dir, "nypd_stations.csv"), row => new NycDispatch.Api.Models.NypdStation
+        {
+            Id = Slugify(row["name"]),
+            Name = row["name"],
+            Address = row["address"],
+            Latitude = ParseDouble(row["latitude"]),
+            Longitude = ParseDouble(row["longitude"]),
+        });
+
+        Vehicles = LoadCsv(Path.Combine(dir, "fdny_vehicles.csv"), row => new Vehicle
         {
             Id = row["id"],
             Callsign = row["callsign"],
@@ -39,7 +49,7 @@ public class DispatchData
             StationId = row["station_id"],
         });
 
-        CallTypes = LoadCsv(Path.Combine(dir, "calls.csv"), row => new CallType
+        CallTypes = LoadCsv(Path.Combine(dir, "fdny_calls.csv"), row => new CallType
         {
             Id = row["id"],
             Name = row["name"],
@@ -50,6 +60,28 @@ public class DispatchData
 
     private static double ParseDouble(string value) =>
         double.Parse(value.Trim(), CultureInfo.InvariantCulture);
+
+    private static string Slugify(string value)
+    {
+        var builder = new StringBuilder();
+        var previousDash = false;
+
+        foreach (var c in value.Trim().ToLowerInvariant())
+        {
+            if (char.IsLetterOrDigit(c))
+            {
+                builder.Append(c);
+                previousDash = false;
+            }
+            else if (!previousDash)
+            {
+                builder.Append('-');
+                previousDash = true;
+            }
+        }
+
+        return builder.ToString().Trim('-');
+    }
 
     /// <summary>
     /// Reads a CSV file (first row = headers) and maps each data row through the
