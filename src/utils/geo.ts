@@ -92,6 +92,91 @@ export function formatDistance(meters: number): string {
   return `${Math.round(meters)} m`;
 }
 
+/** True if `point` is inside the ring using the even-odd (ray casting) rule. */
+function ringContains(point: LngLat, ring: LngLat[]): boolean {
+  const [x, y] = point;
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i];
+    const [xj, yj] = ring[j];
+    if (
+      yi !== yj &&
+      y >= Math.min(yi, yj) &&
+      y < Math.max(yi, yj) &&
+      x < xi + ((y - yi) / (yj - yi)) * (xj - xi)
+    ) {
+      inside = !inside;
+    }
+  }
+  return inside;
+}
+
+/**
+ * True if `point` is inside `rings[0]` (the outer ring) and not inside any of
+ * `rings[1..]` (holes). Holes themselves use the even-odd rule, so this is
+ * equivalent to XOR-ing crossings across all rings.
+ */
+export function polygonContains(point: LngLat, rings: LngLat[][]): boolean {
+  let inside = false;
+  for (const ring of rings) {
+    if (ringContains(point, ring)) {
+      inside = !inside;
+    }
+  }
+  return inside;
+}
+
+/** True if `point` is inside any polygon of a MultiPolygon's coordinates. */
+export function multiPolygonContains(
+  point: LngLat,
+  polygons: LngLat[][][]
+): boolean {
+  return polygons.some((rings) => polygonContains(point, rings));
+}
+
+/** Bounding box `[minLng, minLat, maxLng, maxLat]` of a MultiPolygon's coordinates. */
+export function multiPolygonBounds(
+  polygons: LngLat[][][]
+): [number, number, number, number] {
+  let minLng = Infinity;
+  let minLat = Infinity;
+  let maxLng = -Infinity;
+  let maxLat = -Infinity;
+  for (const rings of polygons) {
+    for (const ring of rings) {
+      for (const [lng, lat] of ring) {
+        if (lng < minLng) minLng = lng;
+        if (lng > maxLng) maxLng = lng;
+        if (lat < minLat) minLat = lat;
+        if (lat > maxLat) maxLat = lat;
+      }
+    }
+  }
+  return [minLng, minLat, maxLng, maxLat];
+}
+
+/**
+ * A uniformly random point inside a MultiPolygon, via bounding-box rejection
+ * sampling. Falls back to the bounding-box center if no point is found within
+ * `maxAttempts` (e.g. for a degenerate/empty polygon).
+ */
+export function randomPointInPolygon(
+  polygons: LngLat[][][],
+  maxAttempts = 50
+): LngLat {
+  const [minLng, minLat, maxLng, maxLat] = multiPolygonBounds(polygons);
+  for (let i = 0; i < maxAttempts; i++) {
+    const candidate: LngLat = [
+      minLng + Math.random() * (maxLng - minLng),
+      minLat + Math.random() * (maxLat - minLat),
+    ];
+    if (multiPolygonContains(candidate, polygons)) {
+      return candidate;
+    }
+  }
+  return [(minLng + maxLng) / 2, (minLat + maxLat) / 2];
+}
+
 export interface RouteProgression {
   /** Cumulative distance (m) from the start to each coordinate. */
   cumulative: number[];

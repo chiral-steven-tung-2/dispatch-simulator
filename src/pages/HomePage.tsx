@@ -9,6 +9,7 @@ import { useDispatchData } from "../hooks/useDispatchData";
 import { useCallSpawner } from "../hooks/useCallSpawner";
 import { useResolveTicker } from "../hooks/useResolveTicker";
 import { useAutoDispatcher } from "../hooks/useAutoDispatcher";
+import { useNypdActivityTicker } from "../hooks/useNypdActivityTicker";
 import { useDispatchStore } from "../stores/dispatchStore";
 import { useIncidentStore } from "../stores/incidentStore";
 import { useSettingsStore } from "../stores/settingsStore";
@@ -24,11 +25,21 @@ export default function HomePage() {
   const showChiefQuarters = useSettingsStore((s) => s.showChiefQuarters);
   const showUnitIcons = useSettingsStore((s) => s.showUnitIcons);
   const showNotifications = useSettingsStore((s) => s.showNotifications);
+  const showPrecinctBoundaries = useSettingsStore((s) => s.showPrecinctBoundaries);
+  const showFireVehicles = useSettingsStore((s) => s.showFireVehicles);
+  const showPoliceVehicles = useSettingsStore((s) => s.showPoliceVehicles);
+  const patrolPercent = useSettingsStore((s) => s.patrolPercent);
+  const markerScale = useSettingsStore((s) => s.markerScale);
   const toggleFdnyStations = useSettingsStore((s) => s.toggleFdnyStations);
   const toggleNypdStations = useSettingsStore((s) => s.toggleNypdStations);
   const toggleChiefQuarters = useSettingsStore((s) => s.toggleChiefQuarters);
   const toggleUnitIcons = useSettingsStore((s) => s.toggleUnitIcons);
   const toggleNotifications = useSettingsStore((s) => s.toggleNotifications);
+  const togglePrecinctBoundaries = useSettingsStore((s) => s.togglePrecinctBoundaries);
+  const toggleFireVehicles = useSettingsStore((s) => s.toggleFireVehicles);
+  const togglePoliceVehicles = useSettingsStore((s) => s.togglePoliceVehicles);
+  const setPatrolPercent = useSettingsStore((s) => s.setPatrolPercent);
+  const setMarkerScale = useSettingsStore((s) => s.setMarkerScale);
   const showPaths = useDispatchStore((s) => s.showPaths);
   const togglePaths = useDispatchStore((s) => s.togglePaths);
   const autoDispatch = useDispatchStore((s) => s.autoDispatch);
@@ -45,6 +56,7 @@ export default function HomePage() {
   useCallSpawner();
   useResolveTicker();
   useAutoDispatcher();
+  useNypdActivityTicker();
 
   return (
     <div className="flex h-full w-full flex-col bg-slate-900 text-slate-100">
@@ -124,6 +136,16 @@ export default function HomePage() {
         onToggleChiefQuarters={toggleChiefQuarters}
         showUnitIcons={showUnitIcons}
         onToggleUnitIcons={toggleUnitIcons}
+        showPrecinctBoundaries={showPrecinctBoundaries}
+        onTogglePrecinctBoundaries={togglePrecinctBoundaries}
+        showFireVehicles={showFireVehicles}
+        onToggleFireVehicles={toggleFireVehicles}
+        showPoliceVehicles={showPoliceVehicles}
+        onTogglePoliceVehicles={togglePoliceVehicles}
+        patrolPercent={patrolPercent}
+        onPatrolPercentChange={setPatrolPercent}
+        markerScale={markerScale}
+        onMarkerScaleChange={setMarkerScale}
       />
       <DispatchPanel />
     </div>
@@ -300,6 +322,16 @@ function SettingsPanel({
   onToggleChiefQuarters,
   showUnitIcons,
   onToggleUnitIcons,
+  showPrecinctBoundaries,
+  onTogglePrecinctBoundaries,
+  showFireVehicles,
+  onToggleFireVehicles,
+  showPoliceVehicles,
+  onTogglePoliceVehicles,
+  patrolPercent,
+  onPatrolPercentChange,
+  markerScale,
+  onMarkerScaleChange,
 }: {
   open: boolean;
   onClose: () => void;
@@ -319,6 +351,16 @@ function SettingsPanel({
   onToggleChiefQuarters: () => void;
   showUnitIcons: boolean;
   onToggleUnitIcons: () => void;
+  showPrecinctBoundaries: boolean;
+  onTogglePrecinctBoundaries: () => void;
+  showFireVehicles: boolean;
+  onToggleFireVehicles: () => void;
+  showPoliceVehicles: boolean;
+  onTogglePoliceVehicles: () => void;
+  patrolPercent: number;
+  onPatrolPercentChange: (percent: number) => void;
+  markerScale: number;
+  onMarkerScaleChange: (scale: number) => void;
 }) {
   if (!open) {
     return null;
@@ -366,6 +408,25 @@ function SettingsPanel({
                   activeColor="green"
                 />
               </SettingRow>
+              <SettingRow
+                label="Patrol coverage"
+                hint="% of each precinct's fleet sent out on patrol"
+              >
+                <div className="flex items-center gap-2">
+                  <input
+                    type="range"
+                    min={0}
+                    max={100}
+                    step={5}
+                    value={patrolPercent}
+                    onChange={(e) => onPatrolPercentChange(Number(e.target.value))}
+                    className="w-28"
+                  />
+                  <span className="w-10 text-right text-xs text-slate-400">
+                    {patrolPercent}%
+                  </span>
+                </div>
+              </SettingRow>
             </SettingsSection>
 
             <SettingsSection title="Display">
@@ -387,6 +448,25 @@ function SettingsPanel({
                   label=""
                   activeColor="amber"
                 />
+              </SettingRow>
+              <SettingRow
+                label="Marker size"
+                hint="Scale of station and precinct icons"
+              >
+                <div className="flex items-center gap-2">
+                  <input
+                    type="range"
+                    min={0.5}
+                    max={2}
+                    step={0.1}
+                    value={markerScale}
+                    onChange={(e) => onMarkerScaleChange(Number(e.target.value))}
+                    className="w-28"
+                  />
+                  <span className="w-10 text-right text-xs text-slate-400">
+                    {markerScale.toFixed(1)}×
+                  </span>
+                </div>
               </SettingRow>
             </SettingsSection>
 
@@ -424,6 +504,17 @@ function SettingsPanel({
                 />
               </LegendRow>
               <LegendRow
+                icon={<PrecinctZoneGlyph />}
+                label="NYPD precinct boundaries"
+              >
+                <ToggleSwitch
+                  checked={showPrecinctBoundaries}
+                  onChange={onTogglePrecinctBoundaries}
+                  label="Show"
+                  activeColor="blue"
+                />
+              </LegendRow>
+              <LegendRow
                 icon={
                   <span className="flex items-center gap-1">
                     <ApparatusChip tag="E" color="#dc2626" />
@@ -437,6 +528,28 @@ function SettingsPanel({
                   onChange={onToggleUnitIcons}
                   label="Show"
                   activeColor="red"
+                />
+              </LegendRow>
+              <LegendRow
+                icon={<Dot color="#f59e0b" />}
+                label="FDNY vehicles (en route / relocating)"
+              >
+                <ToggleSwitch
+                  checked={showFireVehicles}
+                  onChange={onToggleFireVehicles}
+                  label="Show"
+                  activeColor="red"
+                />
+              </LegendRow>
+              <LegendRow
+                icon={<Dot color="#1d4ed8" />}
+                label="NYPD patrol cars"
+              >
+                <ToggleSwitch
+                  checked={showPoliceVehicles}
+                  onChange={onTogglePoliceVehicles}
+                  label="Show"
+                  activeColor="blue"
                 />
               </LegendRow>
             </LegendSection>
@@ -527,6 +640,21 @@ function ChiefBadge({ letter, color }: { letter: string; color: string }) {
     >
       {letter}
     </span>
+  );
+}
+
+function PrecinctZoneGlyph() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 32 32" aria-hidden="true">
+      <path
+        d="M4 6 L28 4 L26 26 L6 28 Z"
+        fill="#1e3a8a"
+        fillOpacity="0.15"
+        stroke="#1e3a8a"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
 

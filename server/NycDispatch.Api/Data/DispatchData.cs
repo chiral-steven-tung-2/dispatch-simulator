@@ -39,6 +39,7 @@ public class DispatchData
             Address = row["address"],
             Latitude = ParseDouble(row["latitude"]),
             Longitude = ParseDouble(row["longitude"]),
+            AssignedPatrolCars = ParseInt(row["assigned_patrol_cars"]),
         });
 
         Vehicles = LoadCsv(Path.Combine(dir, "fdny_vehicles.csv"), row => new Vehicle

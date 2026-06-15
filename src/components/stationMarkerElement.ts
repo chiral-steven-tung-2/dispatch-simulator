@@ -98,6 +98,8 @@ export function createStationElement(
   el.style.height = "30px";
   el.style.cursor = "pointer";
   el.style.filter = "drop-shadow(0 1px 2px rgba(0,0,0,0.55))";
+  el.style.transform = "scale(var(--marker-scale, 1))";
+  el.style.transformOrigin = "center";
   el.innerHTML = houseSvg(active ? ACTIVE_COLORS : EMPTY_COLORS);
 
   const chief = chiefLevelFor(units);

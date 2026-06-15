@@ -6,6 +6,7 @@ import {
 } from "maplibre-gl";
 import type { Feature, FeatureCollection, LineString } from "geojson";
 import { useRelocationStore } from "../stores/relocationStore";
+import { useSettingsStore } from "../stores/settingsStore";
 import { useDispatchStore } from "../stores/dispatchStore";
 import { pointAlong, remainingPath } from "../utils/geo";
 import { createMovingUnitElement } from "./movingUnitMarker";
@@ -98,6 +99,18 @@ export default function RelocationLayer({ map }: RelocationLayerProps) {
       );
     }
   }, [map, showPaths]);
+
+  // Show/hide fire vehicle markers when the toggle changes.
+  useEffect(() => {
+    const applyVisibility = () => {
+      const show = useSettingsStore.getState().showFireVehicles;
+      for (const marker of markersRef.current.values()) {
+        marker.getElement().style.display = show ? "" : "none";
+      }
+    };
+    applyVisibility();
+    return useSettingsStore.subscribe(applyVisibility);
+  }, []);
 
   // Animation loop: move markers every frame, redraw remaining paths, and fire
   // arrival transitions.

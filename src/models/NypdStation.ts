@@ -4,4 +4,5 @@ export interface NypdStation {
   address: string;
   latitude: number;
   longitude: number;
+  assignedPatrolCars: number;
 }

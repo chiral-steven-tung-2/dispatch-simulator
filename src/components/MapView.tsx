@@ -6,6 +6,7 @@ import { useUnitsByStation } from "../hooks/useUnitsByStation";
 import { useDispatchStore } from "../stores/dispatchStore";
 import { useStationStore } from "../stores/stationStore";
 import { useNypdStationStore } from "../stores/nypdStationStore";
+import { useSettingsStore } from "../stores/settingsStore";
 import { useIncidentStore } from "../stores/incidentStore";
 import { useUnitStore } from "../stores/unitStore";
 import { useRelocationStore } from "../stores/relocationStore";
@@ -16,6 +17,8 @@ import DispatchLayer from "./DispatchLayer";
 import RelocationLayer from "./RelocationLayer";
 import LandLayer from "./LandLayer";
 import CallAreaLayer from "./CallAreaLayer";
+import PrecinctLayer from "./PrecinctLayer";
+import PatrolLayer from "./PatrolLayer";
 
 interface MapViewProps {
   showFdnyStations: boolean;
@@ -31,6 +34,7 @@ export default function MapView({
   showUnitIcons,
 }: MapViewProps) {
   const { containerRef, map } = useMap();
+  const markerScale = useSettingsStore((s) => s.markerScale);
   const stations = useStationStore((state) => state.stations);
   const nypdStations = useNypdStationStore((state) => state.stations);
   const incidents = useIncidentStore((state) => state.incidents);
@@ -97,10 +101,16 @@ export default function MapView({
 
   return (
     <div className="relative h-full w-full">
-      <div ref={containerRef} className="h-full w-full" />
+      <div
+          ref={containerRef}
+          className="h-full w-full"
+          style={{ "--marker-scale": markerScale } as React.CSSProperties}
+        />
 
       {map && <LandLayer map={map} />}
       {map && <CallAreaLayer map={map} />}
+      {map && showNypdStations && <PrecinctLayer map={map} />}
+      {map && showNypdStations && <PatrolLayer map={map} />}
 
       {map && showFdnyStations &&
         stations.map((station) => (

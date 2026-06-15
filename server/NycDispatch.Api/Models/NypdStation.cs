@@ -7,4 +7,5 @@ public record NypdStation
     public required string Address { get; init; }
     public required double Latitude { get; init; }
     public required double Longitude { get; init; }
+    public required int AssignedPatrolCars { get; init; }
 }
