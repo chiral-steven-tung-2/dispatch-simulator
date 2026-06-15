@@ -46,4 +46,7 @@ app.MapGet("/api/vehicles/{id}", (string id, DispatchData data) =>
 // Call types (catalog used by the client to spawn random calls)
 app.MapGet("/api/call-types", (DispatchData data) => Results.Ok(data.CallTypes));
 
+// Mandatory-response assignments (staffing levels and escalation chain)
+app.MapGet("/api/assignments", (DispatchData data) => Results.Ok(data.Assignments));
+
 app.Run();

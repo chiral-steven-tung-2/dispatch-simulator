@@ -8,6 +8,7 @@ import type { Feature, FeatureCollection, Polygon } from "geojson";
 import { useIncidentStore } from "../stores/incidentStore";
 import { useDispatchStore } from "../stores/dispatchStore";
 import { circlePolygon } from "../utils/geo";
+import { GAME_CONFIG } from "../config/gameConfig";
 
 interface CallAreaLayerProps {
   map: MapLibreMap;
@@ -17,7 +18,7 @@ const SOURCE = "call-areas";
 const FILL_LAYER = "call-areas-fill";
 const LINE_DASHED = "call-areas-outline-dashed";
 const LINE_SOLID = "call-areas-outline-solid";
-const DEFAULT_RADIUS = 80;
+const DEFAULT_RADIUS = GAME_CONFIG.callArea.defaultRadiusMeters;
 
 const EMPTY: FeatureCollection<Polygon> = {
   type: "FeatureCollection",

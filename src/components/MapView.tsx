@@ -17,17 +17,22 @@ import CallAreaLayer from "./CallAreaLayer";
 interface MapViewProps {
   showFdnyStations: boolean;
   showNypdStations: boolean;
+  showChiefQuarters: boolean;
+  showUnitIcons: boolean;
 }
 
 export default function MapView({
   showFdnyStations,
   showNypdStations,
+  showChiefQuarters,
+  showUnitIcons,
 }: MapViewProps) {
   const { containerRef, map } = useMap();
   const stations = useStationStore((state) => state.stations);
   const nypdStations = useNypdStationStore((state) => state.stations);
   const incidents = useIncidentStore((state) => state.incidents);
   const selectedCallId = useDispatchStore((state) => state.selectedCallId);
+  const focusPoint = useDispatchStore((state) => state.focusPoint);
   const focusToken = useDispatchStore((state) => state.focusToken);
   const unitsByStation = useUnitsByStation();
   const hasFitted = useRef(false);
@@ -72,6 +77,19 @@ export default function MapView({
     });
   }, [map, incidents, selectedCallId, focusToken]);
 
+  // When a unit's quarters are searched from the navbar, center the map on it.
+  useEffect(() => {
+    if (!map || !focusPoint) {
+      return;
+    }
+    map.flyTo({
+      center: focusPoint,
+      zoom: Math.max(map.getZoom(), 15),
+      essential: true,
+      duration: 700,
+    });
+  }, [map, focusPoint, focusToken]);
+
   return (
     <div className="relative h-full w-full">
       <div ref={containerRef} className="h-full w-full" />
@@ -86,6 +104,8 @@ export default function MapView({
             map={map}
             station={station}
             units={unitsByStation[station.id] ?? []}
+            showChiefQuarters={showChiefQuarters}
+            showUnitIcons={showUnitIcons}
           />
         ))}
 

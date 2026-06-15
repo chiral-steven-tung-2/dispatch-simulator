@@ -71,7 +71,11 @@ const BADGE: Record<
  * badge for chief quarters, and a row of apparatus tags (E, HL, HM, …) for every
  * unit housed there.
  */
-export function createStationElement(units: Unit[]): HTMLDivElement {
+export function createStationElement(
+  units: Unit[],
+  showChiefQuarters = true,
+  showUnitIcons = true
+): HTMLDivElement {
   // NOTE: don't set `position` here — MapLibre applies `position: absolute` to
   // marker elements and positions them via a pixel transform. Overriding it (e.g.
   // with `relative`) makes markers drift out of place when zooming. The element
@@ -84,7 +88,7 @@ export function createStationElement(units: Unit[]): HTMLDivElement {
   el.innerHTML = HOUSE_SVG;
 
   const chief = chiefLevelFor(units);
-  if (chief !== "none") {
+  if (chief !== "none" && showChiefQuarters) {
     const { letter, color, title } = BADGE[chief];
     const badge = document.createElement("div");
     badge.textContent = letter;
@@ -105,7 +109,7 @@ export function createStationElement(units: Unit[]): HTMLDivElement {
     el.appendChild(badge);
   }
 
-  if (units.length > 0) {
+  if (units.length > 0 && showUnitIcons) {
     el.appendChild(buildTagRow(units));
   }
 

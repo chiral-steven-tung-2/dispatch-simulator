@@ -1,11 +1,10 @@
 import { useEffect } from "react";
 import { useIncidentStore } from "../stores/incidentStore";
 import { useDispatchStore } from "../stores/dispatchStore";
+import { GAME_CONFIG } from "../config/gameConfig";
 
-const TICK_MS = 1000;
-// Citywide, roughly one call every this many *game* seconds. Real-world spawn
-// rate scales with the sim-speed multiplier (faster sim = busier city).
-const GAME_SECONDS_PER_CALL = 120;
+const { tickMs: TICK_MS, gameSecondsPerCall: GAME_SECONDS_PER_CALL } =
+  GAME_CONFIG.spawner;
 
 /** Randomly spawns calls over time while auto-spawn is enabled, scaled by sim-speed. */
 export function useCallSpawner(): void {

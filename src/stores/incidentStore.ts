@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import type { CallType, Incident, IncidentStatus } from "../models";
-import { fetchCallTypes } from "../data/dispatchApi";
+import type { Assignment, CallType, Incident, IncidentStatus } from "../models";
+import { fetchAssignments, fetchCallTypes } from "../data/dispatchApi";
 import { makeRandomCall } from "../utils/spawn";
 import { useStationStore } from "./stationStore";
 
@@ -12,6 +12,8 @@ interface IncidentStore {
   notifications: CallNotification[];
   /** Catalog of call types (with spawn weights) loaded from the backend. */
   callTypes: CallType[];
+  /** Catalog of mandatory-response assignments and their escalation chain. */
+  assignments: Assignment[];
   status: LoadStatus;
   error: string | null;
   autoSpawn: boolean;
@@ -28,8 +30,14 @@ interface IncidentStore {
   startResolveTimer: (incidentId: string) => void;
   /** Stop a call's resolve countdown (e.g. its on-scene units were recalled). */
   clearResolveTimer: (incidentId: string) => void;
-  /** Keep resolve countdowns continuous across a sim-speed change. */
-  rebaseResolveTimers: (ratio: number) => void;
+  /** Switch a call to a new mandatory-response assignment and notify the dispatcher. */
+  upgradeAssignment: (incidentId: string, assignmentId: string) => void;
+  /** Record that the current assignment's required units are all on scene (or clear it). */
+  setAssignmentMet: (incidentId: string, met: boolean) => void;
+  /** Schedule (or clear) the next upgrade-probability roll. */
+  setNextUpgradeCheck: (incidentId: string, at: number | undefined) => void;
+  /** Keep resolve and upgrade-check countdowns continuous across a sim-speed change. */
+  rebaseTimers: (ratio: number) => void;
 }
 
 interface CallNotification {
@@ -37,6 +45,7 @@ interface CallNotification {
   callId: string;
   title: string;
   status: IncidentStatus;
+  kind: "new" | "upgrade";
   latitude: number;
   longitude: number;
   createdAt: number;
@@ -46,6 +55,7 @@ export const useIncidentStore = create<IncidentStore>((set, get) => ({
   incidents: [],
   notifications: [],
   callTypes: [],
+  assignments: [],
   status: "idle",
   error: null,
   autoSpawn: false,
@@ -53,8 +63,11 @@ export const useIncidentStore = create<IncidentStore>((set, get) => ({
   load: async () => {
     set({ status: "loading", error: null });
     try {
-      const callTypes = await fetchCallTypes();
-      set({ callTypes, status: "ready" });
+      const [callTypes, assignments] = await Promise.all([
+        fetchCallTypes(),
+        fetchAssignments(),
+      ]);
+      set({ callTypes, assignments, status: "ready" });
     } catch (err) {
       set({ status: "error", error: (err as Error).message });
     }
@@ -72,6 +85,7 @@ export const useIncidentStore = create<IncidentStore>((set, get) => ({
       callId: call.id,
       title: call.name,
       status: call.status,
+      kind: "new",
       latitude: call.latitude,
       longitude: call.longitude,
       createdAt: performance.now(),
@@ -125,15 +139,71 @@ export const useIncidentStore = create<IncidentStore>((set, get) => ({
       ),
     })),
 
-  rebaseResolveTimers: (ratio) =>
+  upgradeAssignment: (incidentId, assignmentId) => {
+    const state = get();
+    const incident = state.incidents.find((i) => i.id === incidentId);
+    const assignment = state.assignments.find((a) => a.id === assignmentId);
+    if (!incident || !assignment) {
+      return;
+    }
+    const notification: CallNotification = {
+      id: `call-upgrade-${incidentId}-${assignmentId}-${Math.random().toString(36).slice(2, 7)}`,
+      callId: incidentId,
+      title: `${incident.name} upgraded to ${assignment.name}`,
+      status: incident.status,
+      kind: "upgrade",
+      latitude: incident.latitude,
+      longitude: incident.longitude,
+      createdAt: performance.now(),
+    };
+    set((s) => ({
+      incidents: s.incidents.map((i) =>
+        i.id === incidentId
+          ? {
+              ...i,
+              assignmentId,
+              assignmentMetAt: undefined,
+              nextUpgradeCheckAt: undefined,
+              resolveStartedAt: undefined,
+            }
+          : i
+      ),
+      notifications: [notification, ...s.notifications].slice(0, 5),
+    }));
+  },
+
+  setAssignmentMet: (incidentId, met) =>
+    set((state) => ({
+      incidents: state.incidents.map((i) =>
+        i.id === incidentId
+          ? { ...i, assignmentMetAt: met ? performance.now() : undefined }
+          : i
+      ),
+    })),
+
+  setNextUpgradeCheck: (incidentId, at) =>
+    set((state) => ({
+      incidents: state.incidents.map((i) =>
+        i.id === incidentId ? { ...i, nextUpgradeCheckAt: at } : i
+      ),
+    })),
+
+  rebaseTimers: (ratio) =>
     set((state) => {
       const now = performance.now();
+      const rebase = (t: number) => now - (now - t) * ratio;
       return {
-        incidents: state.incidents.map((i) =>
-          i.resolveStartedAt == null
-            ? i
-            : { ...i, resolveStartedAt: now - (now - i.resolveStartedAt) * ratio }
-        ),
+        incidents: state.incidents.map((i) => ({
+          ...i,
+          resolveStartedAt:
+            i.resolveStartedAt == null ? i.resolveStartedAt : rebase(i.resolveStartedAt),
+          assignmentMetAt:
+            i.assignmentMetAt == null ? i.assignmentMetAt : rebase(i.assignmentMetAt),
+          nextUpgradeCheckAt:
+            i.nextUpgradeCheckAt == null
+              ? i.nextUpgradeCheckAt
+              : rebase(i.nextUpgradeCheckAt),
+        })),
       };
     }),
 }));

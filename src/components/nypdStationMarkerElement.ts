@@ -1,6 +1,5 @@
 import type { NypdStation } from "../models";
 
-const POLICE_BLUE = "#1d4ed8";
 const POLICE_NAVY = "#1e3a8a";
 
 const POLICE_SVG = `

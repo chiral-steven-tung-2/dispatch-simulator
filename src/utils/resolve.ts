@@ -1,5 +1,4 @@
-/** Game-time an on-scene crew works a call before it auto-resolves (ms). */
-export const ON_SCENE_WORK_GAME_MS = 180_000; // 3:00 of game time
+import { GAME_CONFIG } from "../config/gameConfig";
 
 /**
  * Remaining game-time (ms) before a call resolves, given when on-scene work
@@ -11,7 +10,7 @@ export function remainingResolveMs(
   now: number = performance.now()
 ): number {
   const elapsedGame = (now - resolveStartedAt) * simSpeed;
-  return Math.max(0, ON_SCENE_WORK_GAME_MS - elapsedGame);
+  return Math.max(0, GAME_CONFIG.resolve.onSceneWorkGameMs - elapsedGame);
 }
 
 /** Formats a game-time duration in ms as M:SS. */

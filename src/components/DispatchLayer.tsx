@@ -8,6 +8,7 @@ import type { Feature, FeatureCollection, LineString } from "geojson";
 import { useDispatchStore } from "../stores/dispatchStore";
 import { pointAlong, remainingPath } from "../utils/geo";
 import { createMovingUnitElement, colorForPhase } from "./movingUnitMarker";
+import { GAME_CONFIG } from "../config/gameConfig";
 
 interface DispatchLayerProps {
   map: MapLibreMap;
@@ -18,7 +19,7 @@ const ROUTE_LAYER = "dispatch-routes-line";
 
 // How often (ms) to rebuild the path geometry. Markers move every frame; lines
 // refresh a few times a second, which is plenty and avoids needless setData churn.
-const LINE_UPDATE_INTERVAL = 120;
+const LINE_UPDATE_INTERVAL = GAME_CONFIG.map.routeLineUpdateIntervalMs;
 
 const EMPTY_FC: FeatureCollection<LineString> = {
   type: "FeatureCollection",
@@ -154,6 +155,16 @@ export default function DispatchLayer({ map }: DispatchLayerProps) {
 
         if (d.phase === "onScene") {
           // Parked + draggable; position is managed by the sync effect.
+          continue;
+        }
+
+        if (d.phase === "dispatched") {
+          // Turnout: the unit is still at quarters, getting ready to roll.
+          marker.getElement().style.backgroundColor = colorForPhase(d.phase);
+          const elapsedGameMs = (now - d.startedAt) * simSpeed;
+          if (elapsedGameMs >= d.turnoutMs) {
+            store.getState().beginEnroute(d.id);
+          }
           continue;
         }
 

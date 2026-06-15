@@ -12,4 +12,6 @@ public record CallType
     public required double Weight { get; init; }
     /// <summary>Response perimeter radius in meters around the call.</summary>
     public required double Radius { get; init; }
+    /// <summary>Id of the mandatory-response assignment this call type starts at.</summary>
+    public required string AssignmentId { get; init; }
 }

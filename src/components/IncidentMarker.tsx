@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Marker, type Map as MapLibreMap } from "maplibre-gl";
 import type { Incident, IncidentStatus } from "../models";
-import { createCircleElement } from "./markerElement";
+import { createIncidentElement } from "./markerElement";
 import { useDispatchStore } from "../stores/dispatchStore";
 import { useIncidentStore } from "../stores/incidentStore";
 import { remainingResolveMs, formatGameDuration } from "../utils/resolve";
@@ -22,6 +22,11 @@ function incidentColor(status: IncidentStatus): string {
     default:
       return "#dc2626";
   }
+}
+
+/** True for call types that represent an active fire (shown with a flame marker). */
+function isFireCall(name: string): boolean {
+  return name.toLowerCase().includes("fire");
 }
 
 function createCountdownBadge(): HTMLDivElement {
@@ -51,7 +56,11 @@ export default function IncidentMarker({ map, incident }: IncidentMarkerProps) {
   // Create/replace the marker only on meaningful changes (not every countdown
   // tick). resolveStartedAt is intentionally excluded from the deps.
   useEffect(() => {
-    const element = createCircleElement(incidentColor(incident.status), 18);
+    const element = createIncidentElement(
+      incidentColor(incident.status),
+      20,
+      isFireCall(incident.name)
+    );
     element.title = `${incident.name} — ${incident.status} (click to dispatch)`;
 
     const badge = createCountdownBadge();

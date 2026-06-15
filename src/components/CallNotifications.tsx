@@ -24,8 +24,12 @@ export default function CallNotifications() {
         >
           <div className="flex items-start justify-between gap-3">
             <div>
-              <div className="text-xs font-semibold uppercase tracking-wide text-sky-400">
-                New call
+              <div
+                className={`text-xs font-semibold uppercase tracking-wide ${
+                  notification.kind === "upgrade" ? "text-amber-400" : "text-sky-400"
+                }`}
+              >
+                {notification.kind === "upgrade" ? "Call upgraded" : "New call"}
               </div>
               <div className="mt-1 text-sm font-bold text-slate-50">
                 {notification.title}

@@ -15,4 +15,14 @@ export interface Incident {
    * countdown; undefined until a unit is working the call.
    */
   resolveStartedAt?: number;
+  /** Id of the current mandatory-response assignment (e.g. "standard", "all_hands"). */
+  assignmentId: string;
+  /**
+   * performance.now() timestamp when every unit required by the current
+   * assignment was confirmed on scene. Gates the resolve countdown and
+   * upgrade rolls; undefined until staffing is met.
+   */
+  assignmentMetAt?: number;
+  /** performance.now() timestamp of the next upgrade-probability roll. */
+  nextUpgradeCheckAt?: number;
 }

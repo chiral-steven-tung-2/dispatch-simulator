@@ -1,13 +1,22 @@
 import { useMemo, useState, useEffect, useReducer } from "react";
-import { useDispatchStore, type DispatchRecord } from "../stores/dispatchStore";
+import {
+  useDispatchStore,
+  type DispatchRecord,
+  remainingArrivalMs,
+} from "../stores/dispatchStore";
 import { useIncidentStore } from "../stores/incidentStore";
 import { useUnitStore } from "../stores/unitStore";
 import { useStationStore } from "../stores/stationStore";
 import { haversineMeters, formatDistance, type LngLat } from "../utils/geo";
 import { remainingResolveMs, formatGameDuration } from "../utils/resolve";
-import type { Incident } from "../models";
+import {
+  countOnSceneByCategory,
+  CATEGORY_LABELS,
+  REQUIREMENT_KEYS,
+} from "../utils/assignment";
+import type { Assignment, Incident } from "../models";
 import { statusColor } from "./unitDisplay";
-import { colorForPhase } from "./movingUnitMarker";
+import { colorForPhase, phaseLabel } from "./movingUnitMarker";
 
 interface AvailableUnit {
   id: string;
@@ -24,21 +33,37 @@ export default function DispatchPanel() {
   const returnToQuarters = useDispatchStore((s) => s.returnToQuarters);
   const dispatching = useDispatchStore((s) => s.dispatching);
   const dispatches = useDispatchStore((s) => s.dispatches);
+  const simSpeed = useDispatchStore((s) => s.simSpeed);
 
   const incidents = useIncidentStore((s) => s.incidents);
   const units = useUnitStore((s) => s.units);
   const stations = useStationStore((s) => s.stations);
 
-  const call = incidents.find((i) => i.id === selectedCallId) ?? null;
+  // Re-render once a second so responding-unit ETAs stay live.
+  const [, tick] = useReducer((n: number) => n + 1, 0);
+  useEffect(() => {
+    if (!selectedCallId) {
+      return;
+    }
+    const id = window.setInterval(tick, 1000);
+    return () => window.clearInterval(id);
+  }, [selectedCallId]);
 
-  // Units already working this call (en route or on scene).
+  const assignments = useIncidentStore((s) => s.assignments);
+
+  const call = incidents.find((i) => i.id === selectedCallId) ?? null;
+  const assignment = call
+    ? assignments.find((a) => a.id === call.assignmentId)
+    : null;
+
+  // Units already working this call (dispatched, en route, or on scene).
   const assigned = useMemo(
     () =>
       dispatches
         .filter(
           (d) =>
             d.callId === selectedCallId &&
-            (d.phase === "enroute" || d.phase === "onScene")
+            (d.phase === "dispatched" || d.phase === "enroute" || d.phase === "onScene")
         )
         .sort((a, b) => (a.phase === b.phase ? 0 : a.phase === "onScene" ? -1 : 1)),
     [dispatches, selectedCallId]
@@ -73,11 +98,37 @@ export default function DispatchPanel() {
   }, [call, units, stations]);
 
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [unitSearch, setUnitSearch] = useState("");
+  const [typeFilter, setTypeFilter] = useState<string | null>(null);
 
-  // Reset the selection whenever the active call changes.
+  // Reset the selection and filters whenever the active call changes.
   useEffect(() => {
     setSelected(new Set());
+    setUnitSearch("");
+    setTypeFilter(null);
   }, [selectedCallId]);
+
+  const availableTypes = useMemo(() => {
+    const types = new Set(available.map((u) => u.type));
+    return [...types].sort();
+  }, [available]);
+
+  const filteredAvailable = useMemo(() => {
+    const query = unitSearch.trim().toLowerCase();
+    return available.filter((unit) => {
+      if (typeFilter && unit.type !== typeFilter) {
+        return false;
+      }
+      if (!query) {
+        return true;
+      }
+      return (
+        unit.callsign.toLowerCase().includes(query) ||
+        unit.type.toLowerCase().includes(query) ||
+        unit.stationName.toLowerCase().includes(query)
+      );
+    });
+  }, [available, unitSearch, typeFilter]);
 
   if (!call) {
     return null;
@@ -95,9 +146,20 @@ export default function DispatchPanel() {
     });
   };
 
-  const allSelected = available.length > 0 && selected.size === available.length;
+  const allSelected =
+    filteredAvailable.length > 0 &&
+    filteredAvailable.every((u) => selected.has(u.id));
   const toggleAll = () =>
-    setSelected(allSelected ? new Set() : new Set(available.map((u) => u.id)));
+    setSelected((prev) => {
+      if (allSelected) {
+        const next = new Set(prev);
+        for (const u of filteredAvailable) {
+          next.delete(u.id);
+        }
+        return next;
+      }
+      return new Set([...prev, ...filteredAvailable.map((u) => u.id)]);
+    });
 
   const onDispatch = () => {
     const toSend = units.filter((u) => selected.has(u.id));
@@ -119,6 +181,19 @@ export default function DispatchPanel() {
               <h2 className="text-lg font-bold">Dispatch to call</h2>
               <p className="text-sm text-slate-300">{call.name}</p>
               <p className="text-xs text-slate-400">Status: {call.status}</p>
+              {assignment && (
+                <p className="text-xs font-medium text-amber-400">
+                  Assignment: {assignment.name}
+                  {call.assignmentMetAt == null && call.status === "Active" && (
+                    <span className="ml-1 text-slate-400">
+                      · awaiting full assignment
+                    </span>
+                  )}
+                </p>
+              )}
+              {assignment && (
+                <AssignmentStaffing assignment={assignment} units={assigned} />
+              )}
               <ResolveCountdown call={call} />
             </div>
             <button
@@ -132,7 +207,7 @@ export default function DispatchPanel() {
         </header>
 
         {assigned.length > 0 && (
-          <section className="border-b border-slate-700 px-5 py-3">
+          <section className="max-h-48 shrink-0 overflow-y-auto border-b border-slate-700 px-5 py-3">
             <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
               Responding ({assigned.length})
             </h3>
@@ -141,6 +216,7 @@ export default function DispatchPanel() {
                 <AssignedRow
                   key={d.id}
                   record={d}
+                  simSpeed={simSpeed}
                   busy={dispatching}
                   onReturn={() => void returnToQuarters(d.id)}
                 />
@@ -149,9 +225,50 @@ export default function DispatchPanel() {
           </section>
         )}
 
+        <div className="border-b border-slate-700 px-5 py-2">
+          <input
+            type="text"
+            value={unitSearch}
+            onChange={(e) => setUnitSearch(e.target.value)}
+            placeholder="Search units by callsign, type, or station…"
+            className="w-full rounded-md border border-slate-600 bg-slate-900 px-3 py-1.5 text-sm placeholder:text-slate-500 focus:border-amber-500 focus:outline-none"
+          />
+          {availableTypes.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              <button
+                onClick={() => setTypeFilter(null)}
+                className={`rounded-full border px-2.5 py-1 text-xs font-medium ${
+                  typeFilter === null
+                    ? "border-amber-500 bg-amber-500/10 text-amber-400"
+                    : "border-slate-600 text-slate-300 hover:bg-slate-700"
+                }`}
+              >
+                All
+              </button>
+              {availableTypes.map((type) => (
+                <button
+                  key={type}
+                  onClick={() =>
+                    setTypeFilter((prev) => (prev === type ? null : type))
+                  }
+                  className={`rounded-full border px-2.5 py-1 text-xs font-medium ${
+                    typeFilter === type
+                      ? "border-amber-500 bg-amber-500/10 text-amber-400"
+                      : "border-slate-600 text-slate-300 hover:bg-slate-700"
+                  }`}
+                >
+                  {type}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
         <div className="flex items-center justify-between border-b border-slate-700 px-5 py-2 text-xs text-slate-400">
-          <span>{available.length} available · sorted by distance to call</span>
-          {available.length > 0 && (
+          <span>
+            {filteredAvailable.length} available · sorted by distance to call
+          </span>
+          {filteredAvailable.length > 0 && (
             <button onClick={toggleAll} className="underline hover:text-white">
               {allSelected ? "Clear all" : "Select all"}
             </button>
@@ -159,13 +276,15 @@ export default function DispatchPanel() {
         </div>
 
         <div className="flex-1 overflow-y-auto p-3">
-          {available.length === 0 ? (
+          {filteredAvailable.length === 0 ? (
             <p className="p-4 text-sm italic text-slate-500">
-              No available units to dispatch.
+              {available.length === 0
+                ? "No available units to dispatch."
+                : "No units match your search."}
             </p>
           ) : (
             <ul className="space-y-1">
-              {available.map((unit) => {
+              {filteredAvailable.map((unit) => {
                 const isSelected = selected.has(unit.id);
                 return (
                   <li key={unit.id}>
@@ -220,6 +339,38 @@ export default function DispatchPanel() {
   );
 }
 
+/** Shows on-scene unit counts vs. the current assignment's requirements, e.g. "1/2 Engines". */
+function AssignmentStaffing({
+  assignment,
+  units,
+}: {
+  assignment: Assignment;
+  units: DispatchRecord[];
+}) {
+  const onScene = units.filter((u) => u.phase === "onScene");
+  const counts = countOnSceneByCategory(onScene);
+  const requirements = REQUIREMENT_KEYS.filter((key) => assignment[key] > 0);
+
+  if (requirements.length === 0) {
+    return null;
+  }
+
+  return (
+    <p className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5 text-xs text-slate-400">
+      {requirements.map((key) => {
+        const have = counts[key] ?? 0;
+        const need = assignment[key];
+        const met = have >= need;
+        return (
+          <span key={key} className={met ? "text-emerald-400" : "text-slate-400"}>
+            {have}/{need} {CATEGORY_LABELS[key]}
+          </span>
+        );
+      })}
+    </p>
+  );
+}
+
 function ResolveCountdown({ call }: { call: Incident }) {
   const [, tick] = useReducer((n: number) => n + 1, 0);
   const resolving = call.resolveStartedAt != null && call.status !== "Resolved";
@@ -246,27 +397,30 @@ function ResolveCountdown({ call }: { call: Incident }) {
 
 function AssignedRow({
   record,
+  simSpeed,
   busy,
   onReturn,
 }: {
   record: DispatchRecord;
+  simSpeed: number;
   busy: boolean;
   onReturn: () => void;
 }) {
   const onScene = record.phase === "onScene";
+  const label = phaseLabel(record.phase);
+  const arrival = formatArrival(record, simSpeed);
   return (
     <li className="flex items-center gap-2 rounded-md border border-slate-700 bg-slate-900/40 px-3 py-2 text-sm">
       <span
         className="inline-block h-2.5 w-2.5 shrink-0 rounded-full"
         style={{ backgroundColor: colorForPhase(record.phase) }}
-        title={onScene ? "On scene" : "En route"}
+        title={label}
       />
       <span className="flex-1">
         <span className="font-medium">{record.callsign}</span>
         <span className="text-slate-400"> · {record.type}</span>
-        <span className="block text-xs text-slate-500">
-          {onScene ? "On scene" : "En route"}
-        </span>
+        <span className="block text-xs text-slate-500">{label}</span>
+        <span className="block text-xs text-slate-400">{arrival}</span>
       </span>
       <button
         onClick={onReturn}
@@ -277,4 +431,12 @@ function AssignedRow({
       </button>
     </li>
   );
+}
+
+function formatArrival(record: DispatchRecord, simSpeed: number): string {
+  const remaining = remainingArrivalMs(record, simSpeed);
+  if (remaining == null) {
+    return "";
+  }
+  return remaining <= 0 ? "On scene" : `Arrives in ${formatGameDuration(remaining)}`;
 }

@@ -1,11 +1,14 @@
 import type { DispatchPhase } from "../stores/dispatchStore";
 
+export const DISPATCHED_COLOR = "#facc15"; // yellow (turning out)
 export const EN_ROUTE_COLOR = "#f59e0b"; // amber
 export const ON_SCENE_COLOR = "#dc2626"; // red
 export const RETURNING_COLOR = "#0ea5e9"; // sky
 
 export function colorForPhase(phase: DispatchPhase): string {
   switch (phase) {
+    case "dispatched":
+      return DISPATCHED_COLOR;
     case "enroute":
       return EN_ROUTE_COLOR;
     case "onScene":
@@ -14,6 +17,22 @@ export function colorForPhase(phase: DispatchPhase): string {
       return RETURNING_COLOR;
     default:
       return EN_ROUTE_COLOR;
+  }
+}
+
+/** Human-readable label for a unit's current dispatch phase. */
+export function phaseLabel(phase: DispatchPhase): string {
+  switch (phase) {
+    case "dispatched":
+      return "Dispatched · turning out";
+    case "enroute":
+      return "En route";
+    case "onScene":
+      return "On scene";
+    case "returning":
+      return "Returning to quarters";
+    default:
+      return "En route";
   }
 }
 

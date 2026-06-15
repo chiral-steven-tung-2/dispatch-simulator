@@ -1,7 +1,7 @@
 import type { CallType, Station } from "../models";
 import type { LngLat } from "./geo";
 import { randomLandPoint } from "../data/nycLand";
-import { START_CALL_RADIUS } from "./callArea";
+import { GAME_CONFIG } from "../config/gameConfig";
 
 /** Picks an item using its `weight` as relative probability. */
 export function pickWeighted<T extends { weight: number }>(items: T[]): T {
@@ -40,7 +40,8 @@ export function makeRandomCall(callTypes: CallType[], stations: Station[]) {
     latitude,
     longitude,
     status: "Waiting" as const,
-    radiusMeters: START_CALL_RADIUS,
+    radiusMeters: GAME_CONFIG.callArea.startRadiusMeters,
     maxRadiusMeters: type.radius,
+    assignmentId: type.assignmentId,
   };
 }

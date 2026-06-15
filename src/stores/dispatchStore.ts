@@ -9,12 +9,16 @@ import {
   type LngLat,
   type RouteProgression,
 } from "../utils/geo";
-import { START_CALL_RADIUS, CALL_RADIUS_STEP } from "../utils/callArea";
+import { GAME_CONFIG, randomTurnoutMs } from "../config/gameConfig";
 import { useStationStore } from "./stationStore";
 import { useUnitStore } from "./unitStore";
 import { useIncidentStore } from "./incidentStore";
+import { isAssignmentStaffed, upgradeCheckDelayMs } from "../utils/assignment";
 
-export type DispatchPhase = "enroute" | "onScene" | "returning";
+const START_CALL_RADIUS = GAME_CONFIG.callArea.startRadiusMeters;
+const CALL_RADIUS_STEP = GAME_CONFIG.callArea.radiusStepMeters;
+
+export type DispatchPhase = "dispatched" | "enroute" | "onScene" | "returning";
 
 export interface DispatchRecord {
   id: string;
@@ -36,44 +40,81 @@ export interface DispatchRecord {
   fallback: boolean;
   /** Where the unit parks on scene (within the call perimeter). */
   parkPoint?: LngLat;
+  /** Game-time (ms) the unit spends leaving quarters before it starts driving. */
+  turnoutMs: number;
 }
 
 interface DispatchStore {
   selectedCallId: string | null;
+  /** Map point to fly to that isn't tied to a call (e.g. a unit's quarters). */
+  focusPoint: LngLat | null;
   focusToken: number;
   dispatches: DispatchRecord[];
   showPaths: boolean;
   dispatching: boolean;
+  /** When true, calls are automatically dispatched units to meet their assignment requirements. */
+  autoDispatch: boolean;
   /** Simulation speed multiplier (1 = real time). */
   simSpeed: number;
 
   selectCall: (callId: string) => void;
   focusCall: (callId: string) => void;
+  /** Centers the map on an arbitrary point without selecting a call. */
+  focusLocation: (point: LngLat) => void;
   clearSelection: () => void;
   togglePaths: () => void;
+  toggleAutoDispatch: () => void;
   setSimSpeed: (multiplier: number) => void;
   dispatchUnits: (call: Incident, units: Unit[]) => Promise<void>;
+  /** Transitions a unit from "dispatched" (turnout) to "enroute" (driving). */
+  beginEnroute: (dispatchId: string) => void;
   markArrived: (dispatchId: string) => void;
   returnToQuarters: (dispatchId: string) => Promise<void>;
   arriveHome: (dispatchId: string) => void;
   resolveCall: (callId: string) => void;
   /** Reposition an on-scene unit within its call's perimeter. */
   moveUnit: (dispatchId: string, point: LngLat) => void;
+  /**
+   * Checks whether a call's current assignment is fully staffed by on-scene
+   * units and updates the resolve timer / upgrade scheduling accordingly.
+   */
+  evaluateAssignment: (callId: string) => void;
 }
 
-const MIN_LEG_MS = 1_000;
+const MIN_LEG_MS = GAME_CONFIG.dispatch.minLegMs;
 // Real ms a resolved call lingers on the map before it is removed.
-const RESOLVED_LINGER_MS = 4_000;
+const RESOLVED_LINGER_MS = GAME_CONFIG.dispatch.resolvedLingerMs;
 
 // On-scene parking layout. Earlier arrivals park closer to the scene; later
 // arrivals fan out behind them via a golden-angle spiral.
 const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
-const PARK_BASE_M = 6; // first-due distance from the call center
-const PARK_STEP_M = 5; // extra distance per later arrival
-const PARK_EDGE_MARGIN_M = 3; // keep parked units just inside the perimeter
+const PARK_BASE_M = GAME_CONFIG.dispatch.parkBaseMeters; // first-due distance from the call center
+const PARK_STEP_M = GAME_CONFIG.dispatch.parkStepMeters; // extra distance per later arrival
+const PARK_EDGE_MARGIN_M = GAME_CONFIG.dispatch.parkEdgeMarginMeters; // keep parked units just inside the perimeter
 
 function legDurationMs(progression: RouteProgression): number {
   return Math.max(MIN_LEG_MS, progression.total * 1000);
+}
+
+/** Remaining game-time (ms) until a unit reaches the call, or null if not responding. */
+export function remainingArrivalMs(
+  record: DispatchRecord,
+  simSpeed: number,
+  now: number = performance.now()
+): number | null {
+  if (record.phase === "returning") {
+    return null;
+  }
+  if (record.phase === "onScene") {
+    return 0;
+  }
+
+  const elapsedGame = (now - record.startedAt) * simSpeed;
+  if (record.phase === "dispatched") {
+    return Math.max(0, record.turnoutMs - elapsedGame) + record.durationMs;
+  }
+
+  return Math.max(0, record.durationMs - elapsedGame);
 }
 
 /** Fraction (0..1) of the current leg a record has completed, in game time. */
@@ -82,10 +123,12 @@ function legFraction(record: DispatchRecord, simSpeed: number): number {
   return Math.min(1, Math.max(0, elapsed / record.durationMs));
 }
 
-/** Sets an Active call back to Waiting if no units are en route or on scene. */
+/** Sets an Active call back to Waiting if no units are dispatched, en route, or on scene. */
 function freeCallIfEmpty(callId: string, dispatches: DispatchRecord[]): void {
   const stillAssigned = dispatches.some(
-    (d) => d.callId === callId && (d.phase === "enroute" || d.phase === "onScene")
+    (d) =>
+      d.callId === callId &&
+      (d.phase === "dispatched" || d.phase === "enroute" || d.phase === "onScene")
   );
   if (stillAssigned) {
     return;
@@ -101,20 +144,31 @@ function freeCallIfEmpty(callId: string, dispatches: DispatchRecord[]): void {
 
 export const useDispatchStore = create<DispatchStore>((set, get) => ({
   selectedCallId: null,
+  focusPoint: null,
   focusToken: 0,
   dispatches: [],
   showPaths: true,
   dispatching: false,
+  autoDispatch: false,
   simSpeed: 1,
 
   selectCall: (callId) => set({ selectedCallId: callId }),
   focusCall: (callId) =>
     set((state) => ({
       selectedCallId: callId,
+      focusPoint: null,
       focusToken: state.focusToken + 1,
     })),
-  clearSelection: () => set({ selectedCallId: null }),
+  focusLocation: (point) =>
+    set((state) => ({
+      selectedCallId: null,
+      focusPoint: point,
+      focusToken: state.focusToken + 1,
+    })),
+  clearSelection: () => set({ selectedCallId: null, focusPoint: null }),
   togglePaths: () => set((state) => ({ showPaths: !state.showPaths })),
+  toggleAutoDispatch: () =>
+    set((state) => ({ autoDispatch: !state.autoDispatch })),
 
   // Rebase each active leg's start time (and call resolve timers) so on-screen
   // positions and countdowns stay continuous across the speed change.
@@ -128,7 +182,7 @@ export const useDispatchStore = create<DispatchStore>((set, get) => ({
         startedAt: now - (now - d.startedAt) * ratio,
       })),
     }));
-    useIncidentStore.getState().rebaseResolveTimers(ratio);
+    useIncidentStore.getState().rebaseTimers(ratio);
   },
 
   dispatchUnits: async (call, units) => {
@@ -171,13 +225,14 @@ export const useDispatchStore = create<DispatchStore>((set, get) => ({
         type: unit.type,
         callId: call.id,
         stationId: unit.stationId,
-        phase: "enroute",
+        phase: "dispatched",
         route: route.coordinates,
         progression,
         distanceMeters: route.distanceMeters,
         startedAt,
         durationMs: legDurationMs(progression),
         fallback: route.fallback,
+        turnoutMs: randomTurnoutMs(),
       });
       setUnitStatus(unit.id, "En Route");
     }
@@ -190,6 +245,17 @@ export const useDispatchStore = create<DispatchStore>((set, get) => ({
         ...records,
       ],
       dispatching: false,
+    }));
+  },
+
+  // Turnout time has elapsed; the unit pulls out of quarters and starts driving.
+  beginEnroute: (dispatchId) => {
+    set((state) => ({
+      dispatches: state.dispatches.map((d) =>
+        d.id === dispatchId && d.phase === "dispatched"
+          ? { ...d, phase: "enroute" as DispatchPhase, startedAt: performance.now() }
+          : d
+      ),
     }));
   },
 
@@ -240,11 +306,10 @@ export const useDispatchStore = create<DispatchStore>((set, get) => ({
 
     if (incident) {
       incidentStore.setCallRadius(record.callId, newRadius);
-      // Start the on-scene work clock; the resolve ticker fires when it elapses.
-      if (incident.status !== "Resolved" && incident.resolveStartedAt == null) {
-        incidentStore.startResolveTimer(record.callId);
-      }
     }
+    // Re-check staffing now that another unit is on scene; this starts the
+    // resolve clock once the current assignment's requirements are met.
+    get().evaluateAssignment(record.callId);
 
     // Snap the parked spot onto the nearest street (async), then update it.
     void (async () => {
@@ -266,8 +331,10 @@ export const useDispatchStore = create<DispatchStore>((set, get) => ({
       return;
     }
 
-    // Current position of the unit along its present leg.
-    const fraction = legFraction(record, get().simSpeed);
+    // Current position of the unit along its present leg. A unit still in
+    // turnout (dispatched) hasn't moved from quarters yet.
+    const fraction =
+      record.phase === "dispatched" ? 0 : legFraction(record, get().simSpeed);
     const from = pointAlong(record.route, record.progression, fraction);
 
     const station = useStationStore
@@ -300,15 +367,11 @@ export const useDispatchStore = create<DispatchStore>((set, get) => ({
           : d
       );
       freeCallIfEmpty(record.callId, dispatches);
-      // If nobody is on scene anymore, stop the resolve countdown.
-      const onSceneRemaining = dispatches.some(
-        (d) => d.callId === record.callId && d.phase === "onScene"
-      );
-      if (!onSceneRemaining) {
-        useIncidentStore.getState().clearResolveTimer(record.callId);
-      }
       return { dispatches, dispatching: false };
     });
+    // Re-check staffing now that this unit has left the scene; pauses the
+    // resolve clock if the current assignment is no longer fully staffed.
+    get().evaluateAssignment(record.callId);
   },
 
   arriveHome: (dispatchId) => {
@@ -384,5 +447,40 @@ export const useDispatchStore = create<DispatchStore>((set, get) => ({
         setPark(snapped);
       }
     })();
+  },
+
+  evaluateAssignment: (callId) => {
+    const incidentStore = useIncidentStore.getState();
+    const incident = incidentStore.incidents.find((i) => i.id === callId);
+    if (!incident || incident.status === "Resolved") {
+      return;
+    }
+    const assignment = incidentStore.assignments.find(
+      (a) => a.id === incident.assignmentId
+    );
+    if (!assignment) {
+      return;
+    }
+    const onSceneUnits = get().dispatches.filter(
+      (d) => d.callId === callId && d.phase === "onScene"
+    );
+    const staffed = isAssignmentStaffed(assignment, onSceneUnits);
+
+    if (staffed && incident.assignmentMetAt == null) {
+      incidentStore.setAssignmentMet(callId, true);
+      if (incident.resolveStartedAt == null) {
+        incidentStore.startResolveTimer(callId);
+      }
+      if (assignment.upgradeTo && assignment.upgradeProbability > 0) {
+        incidentStore.setNextUpgradeCheck(
+          callId,
+          performance.now() + upgradeCheckDelayMs(get().simSpeed)
+        );
+      }
+    } else if (!staffed && incident.assignmentMetAt != null) {
+      incidentStore.setAssignmentMet(callId, false);
+      incidentStore.clearResolveTimer(callId);
+      incidentStore.setNextUpgradeCheck(callId, undefined);
+    }
   },
 }));

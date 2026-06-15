@@ -13,3 +13,24 @@ export function createCircleElement(color: string, size = 16): HTMLDivElement {
   el.style.cursor = "pointer";
   return el;
 }
+
+/**
+ * Creates a status-colored circle marker for an incident. Fire-related calls
+ * show a flame glyph on top of the status color so they stand out on the map.
+ */
+export function createIncidentElement(
+  color: string,
+  size = 18,
+  isFire = false
+): HTMLDivElement {
+  const el = createCircleElement(color, size);
+  if (isFire) {
+    el.style.display = "flex";
+    el.style.alignItems = "center";
+    el.style.justifyContent = "center";
+    el.style.fontSize = `${Math.round(size * 0.75)}px`;
+    el.style.lineHeight = "1";
+    el.textContent = "🔥";
+  }
+  return el;
+}

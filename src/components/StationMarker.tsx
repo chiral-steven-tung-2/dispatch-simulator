@@ -8,12 +8,20 @@ interface StationMarkerProps {
   map: MapLibreMap;
   station: Station;
   units: Unit[];
+  showChiefQuarters?: boolean;
+  showUnitIcons?: boolean;
 }
 
-export default function StationMarker({ map, station, units }: StationMarkerProps) {
+export default function StationMarker({
+  map,
+  station,
+  units,
+  showChiefQuarters = true,
+  showUnitIcons = true,
+}: StationMarkerProps) {
   useEffect(() => {
     const chief = chiefLevelFor(units);
-    const element = createStationElement(units);
+    const element = createStationElement(units, showChiefQuarters, showUnitIcons);
     element.title =
       chief === "division"
         ? `${station.name} — Division HQ`
@@ -34,7 +42,7 @@ export default function StationMarker({ map, station, units }: StationMarkerProp
       marker.remove();
       popup.remove();
     };
-  }, [map, station, units]);
+  }, [map, station, units, showChiefQuarters, showUnitIcons]);
 
   return null;
 }

@@ -15,6 +15,7 @@ public class DispatchData
     public IReadOnlyList<NycDispatch.Api.Models.NypdStation> NypdStations { get; }
     public IReadOnlyList<Vehicle> Vehicles { get; }
     public IReadOnlyList<CallType> CallTypes { get; }
+    public IReadOnlyList<Assignment> Assignments { get; }
 
     public DispatchData(IWebHostEnvironment env)
     {
@@ -55,11 +56,42 @@ public class DispatchData
             Name = row["name"],
             Weight = ParseDouble(row["weight"]),
             Radius = ParseDouble(row["radius"]),
+            AssignmentId = row["assignment_id"],
+        });
+
+        Assignments = LoadCsv(Path.Combine(dir, "fdny_assignments.csv"), row => new Assignment
+        {
+            Id = row["assignment_id"],
+            Name = row["name"],
+            UpgradeProbability = ParseDouble(row["upgrade_probability"]),
+            UpgradeTo = ParseUpgradeTo(row["upgrade_to"]),
+            Engines = ParseInt(row["engines"]),
+            Trucks = ParseInt(row["trucks"]),
+            Rescues = ParseInt(row["rescues"]),
+            Squads = ParseInt(row["squads"]),
+            Battalions = ParseInt(row["battalions"]),
+            Divisions = ParseInt(row["divisions"]),
+            Rac = ParseInt(row["rac"]),
+            Satellite = ParseInt(row["satellite"]),
+            Tsu = ParseInt(row["tsu"]),
+            Hazmat = ParseInt(row["hazmat"]),
         });
     }
 
     private static double ParseDouble(string value) =>
         double.Parse(value.Trim(), CultureInfo.InvariantCulture);
+
+    private static int ParseInt(string value) =>
+        int.Parse(value.Trim(), CultureInfo.InvariantCulture);
+
+    /// <summary>The CSV uses "None" or an empty cell to mark the top of the escalation chain.</summary>
+    private static string? ParseUpgradeTo(string value)
+    {
+        var trimmed = value.Trim();
+        return trimmed.Length == 0 || trimmed.Equals("None", StringComparison.OrdinalIgnoreCase)
+            ? null
+            : trimmed;
+    }
 
     private static string Slugify(string value)
     {
