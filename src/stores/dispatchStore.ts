@@ -11,6 +11,7 @@ import {
   type RouteProgression,
 } from "../utils/geo";
 import { GAME_CONFIG, randomTurnoutMs } from "../config/gameConfig";
+import { garageCapacity, garageOccupancy } from "../utils/garage";
 import { useStationStore } from "./stationStore";
 import { useUnitStore } from "./unitStore";
 import { useIncidentStore } from "./incidentStore";
@@ -418,9 +419,23 @@ export const useDispatchStore = create<DispatchStore>()(
       record.phase === "dispatched" ? 0 : legFraction(record, get().simSpeed);
     const from = pointAlong(record.route, record.progression, fraction);
 
+    // A unit that was covering another station (not its own home) may find
+    // that station's home unit has since returned, filling its bay. In that
+    // case head straight back to its own quarters instead.
+    let returnStationId = record.stationId;
+    const unit = useUnitStore.getState().units.find((u) => u.id === record.unitId);
+    if (unit && unit.stationId !== record.stationId) {
+      const units = useUnitStore.getState().units;
+      const capacity = garageCapacity(record.stationId, units)[record.type] ?? 0;
+      const occupied = garageOccupancy(record.stationId, units)[record.type] ?? 0;
+      if (occupied >= capacity) {
+        returnStationId = unit.stationId;
+      }
+    }
+
     const station = useStationStore
       .getState()
-      .stations.find((s) => s.id === record.stationId);
+      .stations.find((s) => s.id === returnStationId);
     if (!station) {
       return;
     }
@@ -438,6 +453,7 @@ export const useDispatchStore = create<DispatchStore>()(
           ? {
               ...d,
               phase: "returning" as DispatchPhase,
+              stationId: returnStationId,
               route: route.coordinates,
               progression,
               distanceMeters: route.distanceMeters,

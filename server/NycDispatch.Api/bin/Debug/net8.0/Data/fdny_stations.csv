@@ -14,9 +14,9 @@ FDNY-E28L11,Engine 28 / Ladder 11 ,222 East 2 Street,Manhattan,10009,40.72187900
 FDNY-E5,Engine 5,340 East 14 Street,Manhattan,10003,40.7314940000000,-73.9834070000000,Battalion 4,Division 1
 FDNY-L3B6,Ladder 3 / Battalion 6,108 East 13 Street,Manhattan,10003,40.7330930000000,-73.9894430000000,Battalion 6,Division 1
 FDNY-E14,Engine 14,14 East 18 Street,Manhattan,10003,40.7379480000000,-73.9910350000000,Battalion 6,Division 1
-FDNY-E33L9,Engine 33 / Ladder 9,42 Great Jones Street,Manhattan,10012,40.7269860000000,-73.9925260000000,Battalion 6,Division 1
+FDNY-E33L9,Engine 33 / Ladder 9 / Purple-K 33,42 Great Jones Street,Manhattan,10012,40.7269860000000,-73.9925260000000,Battalion 6,Division 1
 FDNY-E1L24,Engine 1 / Ladder 24,142 West 31 Street,Manhattan,10001,40.7484740000000,-73.9911880000000,Battalion 7,Division 1
-FDNY-E3L12B7,Engine 3 / Ladder 12 / Battalion 7,150 West 19 Street,Manhattan,10011,40.7411960000000,-73.9968680000000,Battalion 7,Division 1
+FDNY-E3L12B7,Engine 3 / Ladder 12 / Battalion 7 / High Rise 1,150 West 19 Street,Manhattan,10011,40.7411960000000,-73.9968680000000,Battalion 7,Division 1
 FDNY-E26,Engine 26,220 West 37 Street,Manhattan,10018,40.7531070000000,-73.9903760000000,Battalion 7,Division 1
 FDNY-E34L21,Engine 34 / Ladder 21,440 West 38th Street,Manhattan,10018,40.7565930000000,-73.9964710000000,Battalion 7,Division 1
 FDNY-E8L2B8,Engine 8 / Ladder 2 / Battalion 8,165 East 51 Street,Manhattan,10022,40.7568910000000,-73.9708050000000,Battalion 8,Division 3
@@ -28,17 +28,17 @@ FDNY-E40L35,Engine 40 / Ladder 35,131 Amsterdam Avenue,Manhattan,10023,40.774562
 FDNY-E54L4B9,Engine 54 / Ladder 4 / Battalion 9,782 Eighth Avenue,Manhattan,10036,40.7607200000000,-73.9867930000000,Battalion 9,Division 3
 FDNY-R1,Rescue 1,530 West 43 Street,Manhattan,10036,40.7607270000000,-73.9966160000000,Battalion 9,Division 3
 FDNY-E22L13B10,Engine 22 / Ladder 13 / Battalion 10,159 East 85 Street,Manhattan,10028,40.7786220000000,-73.9553110000000,Battalion 10,Division 3
-FDNY-E39L16,Engine 39 / Ladder 16,157 E 67th St,Manhattan,10065,40.7670620000000,-73.9636120000000,Battalion 10,Division 3
+FDNY-E39L16,Engine 39 / Ladder 16 / High Rise 2,157 E 67th St,Manhattan,10065,40.7670620000000,-73.9636120000000,Battalion 10,Division 3
 FDNY-E44,Engine 44 / HTMU 44,221 East 75 Street,Manhattan,10021,40.7714540000000,-73.9581540000000,Battalion 10,Division 3
 FDNY-E53L43,Engine 53 / Ladder 43,1836 Third Avenue,Manhattan,10029,40.7889230000000,-73.9469850000000,Battalion 10,Division 3
 FDNY-E37L40,Engine 37 / Ladder 40,415 West 125 Street,Manhattan,10027,40.8119210000000,-73.9546000000000,Battalion 11,Division 3
 FDNY-E47,Engine 47,500 West 113 Street,Manhattan,10025,40.8049460000000,-73.9629320000000,Battalion 11,Division 3
 FDNY-E74,Engine 74,120 West 83 Street,Manhattan,10024,40.7846970000000,-73.9746020000000,Battalion 11,Division 3
-FDNY-E76L22B11,Engine 76 / Ladder 22 / Battalion 11,145 West 100th St.,Manhattan,10025,40.7964490000000,-73.9672610000000,Battalion 11,Division 3
+FDNY-E76L22B11,Engine 76 / Ladder 22 / Battalion 11 / Thawing Apparatus 76,145 West 100th St.,Manhattan,10025,40.7964490000000,-73.9672610000000,Battalion 11,Division 3
 FDNY-L25D3,Ladder 25 / Division 3 / Collapse 1,207 West 77th Street,Manhattan,10024,40.7822300000000,-73.9798410000000,Battalion 11,Division 3
 FDNY-E35L14B12,Engine 35 / Ladder 14 / Battalion 12,2282 Third Avenue,Manhattan,10035,40.8032970000000,-73.9365220000000,Battalion 12,Division 3
 FDNY-E58L26,Engine 58 / Ladder 26,1367 Fifth Avenue,Manhattan,10029,40.7989130000000,-73.9473330000000,Battalion 12,Division 3
-FDNY-E91,Engine 91,242 East 111 Street,Manhattan,10029,40.7938430000000,-73.9407910000000,Battalion 12,Division 3
+FDNY-E91,Engine 91 / RAC 1,242 East 111 Street,Manhattan,10029,40.7938430000000,-73.9407910000000,Battalion 12,Division 3
 FDNY-E64L47,Engine 64 / Ladder 47,1214 Castle Hill Ave.,Bronx,10462,40.8324370000000,-73.8508760000000,Battalion 3,Division 6
 FDNY-E94L48B3,Engine 94 / Ladder 48 / Battalion 3,1226 Seneca Ave.,Bronx,10474,40.8185810000000,-73.8877780000000,Battalion 3,Division 6
 FDNY-E96L54,Engine 96 / Ladder 54,1689 Story Ave.,Bronx,10473,40.8229860000000,-73.8693570000000,Battalion 3,Division 6
@@ -49,21 +49,21 @@ FDNY-S41,Squad 41,330 East 150th Street,Bronx,10451,40.8173230000000,-73.9201300
 FDNY-E59L30,Engine 59 / Ladder 30,111 West 133 Street,Manhattan,10030,40.8133320000000,-73.9424500000000,Battalion 16,Division 6
 FDNY-E69L28B16,Engine 69 / Ladder 28 / Battalion 16,248 West 143 Street,Manhattan,10030,40.8208470000000,-73.9418210000000,Battalion 16,Division 6
 FDNY-E80L23,Engine 80 / Ladder 23,503 West 139 Street,Manhattan,10031,40.8219480000000,-73.9507620000000,Battalion 16,Division 6
-FDNY-E46L27,Engine 46  / Ladder 27 / Collapse 3,460 Cross Bronx Expressway,Bronx,10457,40.8439190000000,-73.9001600000000,Battalion 17,Division 6
+FDNY-E46L27,Engine 46  / Ladder 27,460 Cross Bronx Expressway,Bronx,10457,40.8439190000000,-73.9001600000000,Battalion 17,Division 6
 FDNY-E68L49,Engine 68 / Ladder 49,1160 Ogden Ave.,Bronx,10452,40.8366590000000,-73.9269190000000,Battalion 17,Division 6
 FDNY-E92L44B17,Engine 92 / Ladder 44 / Battalion 17,1259 Morris Ave.,Bronx,10456,40.8346790000000,-73.9136250000000,Battalion 17,Division 6
-FDNY-R3,Rescue 3,1655 Washington Ave,Bronx,10457,40.8412250000000,-73.9015070000000,Battalion 17,Division 6
+FDNY-R3,Rescue 3 / Collapse 3 / RAC 3,1655 Washington Ave,Bronx,10457,40.8412250000000,-73.9015070000000,Battalion 17,Division 6
 FDNY-E50L19B26,Engine 50 / Ladder 19 / Battalion 26,1155 Washington Ave.,Bronx,10456,40.8297100000000,-73.9081180000000,Battalion 26,Division 6
 FDNY-E73L42,Engine 73 / Ladder 42,655 Prospect Ave.,Bronx,10455,40.8152740000000,-73.9037850000000,Battalion 26,Division 6
 FDNY-E82L31,Engine 82 / Ladder 31,1215 Intervale Ave.,Bronx,10459,40.8285320000000,-73.8952590000000,Battalion 26,Division 6
 FDNY-E67,Engine 67,518 West 170 Street,Manhattan,10032,40.8412790000000,-73.9371950000000,Battalion 13,Division 7
-FDNY-E84L34,Engine 84 / Ladder 34,513 West 161 Street,Manhattan,10032,40.8359180000000,-73.9409590000000,Battalion 13,Division 7
-FDNY-E93L45B13,Engine 93 / Ladder 45 / Battalion 13,515 West 181 Street,Manhattan,10033,40.8487220000000,-73.9316620000000,Battalion 13,Division 7
+FDNY-E84L34,Engine 84 / Ladder 34 / Purple-K 84,513 West 161 Street,Manhattan,10032,40.8359180000000,-73.9409590000000,Battalion 13,Division 7
+FDNY-E93L45B13,Engine 93 / Ladder 45 / Battalion 13 / MCP 2,515 West 181 Street,Manhattan,10033,40.8487220000000,-73.9316620000000,Battalion 13,Division 7
 FDNY-E95L36,Engine 95 / Ladder 36,29 Vermilyea Avenue,Manhattan,10034,40.8648970000000,-73.9251540000000,Battalion 13,Division 7
 FDNY-E38L51,Engine 38 / Ladder 51,3446 Eastchester Road,Bronx,10469,40.8779840000000,-73.8465130000000,Battalion 15,Division 7
 FDNY-E63L39B15,Engine 63 / Ladder 39 / Battalion 15,755 East 233 Street,Bronx,10466,40.8930280000000,-73.8553100000000,Battalion 15,Division 7
 FDNY-E66L61,Engine 66 / Ladder 61,21 Asch Loop,Bronx,10475,40.8697250000000,-73.8311970000000,Battalion 15,Division 7
-FDNY-E97,Engine 97,1454 Astor Ave.,Bronx,10469,40.8593470000000,-73.8441620000000,Battalion 15,Division 7
+FDNY-E97,Engine 97 / Thawing Apparatus 97 / Brush 8,1454 Astor Ave.,Bronx,10469,40.8593470000000,-73.8441620000000,Battalion 15,Division 7
 FDNY-E45L58B18,Engine 45 / Ladder 58 / Battalion 18,925 East Tremont Ave.,Bronx,10460,40.8418770000000,-73.8835080000000,Battalion 18,Division 7
 FDNY-E48L56D7,Engine 48 / Ladder 56 / Division 7,2417 Webster Ave.,Bronx,10458,40.8593180000000,-73.8939920000000,Battalion 18,Division 7
 FDNY-E88L38,Engine 88 / Ladder 38,2225 Belmont Ave.,Bronx,10457,40.8519070000000,-73.8878370000000,Battalion 18,Division 7
@@ -84,28 +84,28 @@ FDNY-E153L77,Engine 153 / Ladder 77,74 Broad Street,Staten Island,10304,40.62503
 FDNY-E155L78,Engine 155 / Ladder 78,14 Brighton Avenue,Staten Island,10301,40.6375470000000,-74.0876940000000,Battalion 21,Division 8
 FDNY-E159,Engine 159 / Satellite 5,1592 Richmond Road,Staten Island,10304,40.5907140000000,-74.1006080000000,Battalion 21,Division 8
 FDNY-E160R5D8,Engine 160 / Rescue 5 / Collapse 5 / TSU 2 / Division 8,1850 Clove Road,Staten Island,10304,40.6073200000000,-74.0892420000000,Battalion 21,Division 8
-FDNY-E161L81,Engine 161 / Ladder 81,278 McClean Avenue,Staten Island,10305,40.5967630000000,-74.0698790000000,Battalion 21,Division 8
-FDNY-S8,Squad 8,3730 Victory Boulevard,Staten Island,10314,40.5979300000000,-74.1805320000000,Battalion 22,Division 8
-FDNY-E156,Engine 156,412 Broadway,Staten Island,10310,40.6309850000000,-74.1167190000000,Battalion 22,Division 8
+FDNY-E161L81,Engine 161 / Ladder 81 / Brush 5,278 McClean Avenue,Staten Island,10305,40.5967630000000,-74.0698790000000,Battalion 21,Division 8
+FDNY-S8,Squad 8 / Brush 4,3730 Victory Boulevard,Staten Island,10314,40.5979300000000,-74.1805320000000,Battalion 22,Division 8
+FDNY-E156,Engine 156 / Brush 3,412 Broadway,Staten Island,10310,40.6309850000000,-74.1167190000000,Battalion 22,Division 8
 FDNY-E157L80,Engine 157 / Ladder 80,1573 Castleton Avenue,Staten Island,10302,40.6361910000000,-74.1353940000000,Battalion 22,Division 8
 FDNY-E158,Engine 158,65 Harbor Road,Staten Island,10303,40.6352650000000,-74.1600520000000,Battalion 22,Division 8
-FDNY-E163L83,Engine 163 / Ladder 83,875 Jewett Avenue,Staten Island,10314,40.6152470000000,-74.1308150000000,Battalion 22,Division 8
-FDNY-E166L86,Engine 166 / Ladder 86,1400 Richmond Avenue,Staten Island,10314,40.6142640000000,-74.1581720000000,Battalion 22,Division 8
+FDNY-E163L83,Engine 163 / Ladder 83 / Purple-K 163,875 Jewett Avenue,Staten Island,10314,40.6152470000000,-74.1308150000000,Battalion 22,Division 8
+FDNY-E166L86,Engine 166 / Ladder 86 / Brush 2,1400 Richmond Avenue,Staten Island,10314,40.6142640000000,-74.1581720000000,Battalion 22,Division 8
 FDNY-L79B22,Ladder 79 / Battalion 22,1189 Castleton Avenue,Staten Island,10310,40.6343840000000,-74.1220390000000,Battalion 22,Division 8
-FDNY-E151L76,Engine 151 / Ladder 76,7219 Amboy Road,Staten Island,10307,40.5127390000000,-74.2389500000000,Battalion 23,Division 8
+FDNY-E151L76,Engine 151 / Ladder 76 / Thawing Apparatus 151,7219 Amboy Road,Staten Island,10307,40.5127390000000,-74.2389500000000,Battalion 23,Division 8
 FDNY-E162L82B23,Engine 162 / Ladder 82 / Battalion 23,256 Nelson Ave.,Staten Island,10308,40.5431040000000,-74.1474050000000,Battalion 23,Division 8
-FDNY-E164L84,Engine 164 / Ladder 84,1560 Drumgoole Road West,Staten Island,10312,40.5354180000000,-74.1960590000000,Battalion 23,Division 8
+FDNY-E164L84,Engine 164 / Ladder 84 / Brush 1,1560 Drumgoole Road West,Staten Island,10312,40.5354180000000,-74.1960590000000,Battalion 23,Division 8
 FDNY-E165L85,Engine 165 / Ladder 85 / HTMU 165,3067 Richmond Road,Staten Island,10306,40.5760770000000,-74.1237140000000,Battalion 23,Division 8
 FDNY-E167L87,Engine 167 / Ladder 87,345 Annadale Road,Staten Island,10312,40.5541910000000,-74.1754790000000,Battalion 23,Division 8
 FDNY-E168,Engine 168,1100 Rossville Ave,Staten Island,10309,40.5539420000000,-74.2130830000000,Battalion 23,Division 8
 FDNY-E201L114B40,Engine 201 / Ladder 114 / Battalion 40,5113 4th Avenue,Brooklyn,11220,40.6454050000000,-74.0131800000000,Battalion 40,Division 8
-FDNY-E228,Engine 228,436 39th St,Brooklyn,11232,40.6518140000000,-74.0053270000000,Battalion 40,Division 8
+FDNY-E228,Engine 228 / Purple-K 228,436 39th St,Brooklyn,11232,40.6518140000000,-74.0053270000000,Battalion 40,Division 8
 FDNY-E241L109,Engine 241 / Ladder 109,6630 3rd Avenue,Brooklyn,11220,40.6381570000000,-74.0251610000000,Battalion 40,Division 8
 FDNY-E247,Engine 247,1336 60th Street,Brooklyn,11219,40.6280200000000,-73.9977750000000,Battalion 40,Division 8
 FDNY-E242,Engine 242 / RAC 5,9219 5th Ave.,Brooklyn,11209,40.6173890000000,-74.0295200000000,Battalion 42,Division 8
 FDNY-E243L168B42,Engine 243 / Ladder 168 / Battalion 42,8653 18th Ave.,Brooklyn,11214,40.6060370000000,-74.0034950000000,Battalion 42,Division 8
 FDNY-E284L149,Engine 284 / Ladder 149 / Satellite 3,1157 79th St.,Brooklyn,11228,40.6199550000000,-74.0125370000000,Battalion 42,Division 8
-FDNY-E330L172,Engine 330 / Ladder 172,2312 65th Street,Brooklyn,11204,40.6121270000000,-73.9791530000000,Battalion 42,Division 8
+FDNY-E330L172,Engine 330 / Ladder 172 / Thawing Apparatus 330,2312 65th Street,Brooklyn,11204,40.6121270000000,-73.9791530000000,Battalion 42,Division 8
 FDNY-E245L161B43,Engine 245 / Ladder 161 / Battalion 43,2929 W. 8th Street,Brooklyn,11224,40.5767350000000,-73.9761600000000,Battalion 43,Division 8
 FDNY-E246L169,Engine 246 / Ladder 169,2732 E. 11th Street,Brooklyn,11235,40.5842750000000,-73.9594130000000,Battalion 43,Division 8
 FDNY-E253,Engine 253,2429 86th Street,Brooklyn,11214,40.5989570000000,-73.9885180000000,Battalion 43,Division 8
@@ -113,19 +113,19 @@ FDNY-E318L166,Engine 318 / Ladder 166,2510 Neptune Ave.,Brooklyn,11224,40.577760
 FDNY-E206,Engine 206,1201 Grand Street,Brooklyn,11211,40.7153010000000,-73.9281590000000,Battalion 28,Division 11
 FDNY-E218,Engine 218,650 Hart Street,Brooklyn,11221,40.6983120000000,-73.9265900000000,Battalion 28,Division 11
 FDNY-E237,Engine 237,43 Morgan Ave.,Brooklyn,11237,40.7053120000000,-73.9319320000000,Battalion 28,Division 11
-FDNY-E238L106,Engine 238 / Ladder 106 / Foam 1,205 Greenpoint Ave.,Brooklyn,11222,40.7307470000000,-73.9511440000000,Battalion 28,Division 11
+FDNY-E238L106,Engine 238 / Ladder 106,205 Greenpoint Ave.,Brooklyn,11222,40.7307470000000,-73.9511440000000,Battalion 28,Division 11
 FDNY-E271L124B28,Engine 271 / Ladder 124 / Battalion 28,392 Himrod Street,Brooklyn,11237,40.7036300000000,-73.9160200000000,Battalion 28,Division 11
 FDNY-E207L110B31D11,Engine 207 / Ladder 110 / Satellite 6 / Battalion 31 / Division 11,172 Tillary Street,Brooklyn,11201,40.6954500000000,-73.9828430000000,Battalion 31,Division 11
 FDNY-E210,Engine 210,160 Carlton Ave.,Brooklyn,11205,40.6927990000000,-73.9730060000000,Battalion 31,Division 11
 FDNY-E211L119,Engine 211 / Ladder 119,26 Hooper Street,Brooklyn,11249,40.7013790000000,-73.9622890000000,Battalion 31,Division 11
-FDNY-E226,Engine 226,409 State Street,Brooklyn,11217,40.6870700000000,-73.9827680000000,Battalion 31,Division 11
+FDNY-E226,Engine 226 / Thawing Apparatus 266,409 State Street,Brooklyn,11217,40.6870700000000,-73.9827680000000,Battalion 31,Division 11
 FDNY-E202L101B32,Engine 202 / Ladder 101 / Battalion 32,31 Richards Street,Brooklyn,11231,40.6803860000000,-74.0064380000000,Battalion 32,Division 11
 FDNY-E205L118,Engine 205 / Ladder 118,74 Middagh Street,Brooklyn,11201,40.7000290000000,-73.9922730000000,Battalion 32,Division 11
 FDNY-E224,Engine 224,274 Hicks Street,Brooklyn,11201,40.6930720000000,-73.9970800000000,Battalion 32,Division 11
 FDNY-E279L131,Engine 279 / Ladder 131,252 Lorraine St.,Brooklyn,11231,40.6721180000000,-73.9996660000000,Battalion 32,Division 11
 FDNY-E216L108B35,Engine 216 / Ladder 108 / Battalion 35,187 Union Ave.,Brooklyn,11211,40.7062360000000,-73.9506200000000,Battalion 35,Division 11
 FDNY-E221L104,Engine 221 / Ladder 104,161 South 2nd Street,Brooklyn,11211,40.7131750000000,-73.9611130000000,Battalion 35,Division 11
-FDNY-E229L146,Engine 229 / Ladder 146,75 Richardson Street,Brooklyn,11211,40.7186190000000,-73.9490240000000,Battalion 35,Division 11
+FDNY-E229L146,Engine 229 / Ladder 146 / Purple-K 229,75 Richardson Street,Brooklyn,11211,40.7186190000000,-73.9490240000000,Battalion 35,Division 11
 FDNY-E220L122,Engine 220 / Ladder 122,530 11th Street,Brooklyn,11215,40.6649500000000,-73.9814520000000,Battaion 48,Division 11
 FDNY-E239,Engine 239,395 4th Ave.,Brooklyn,11215,40.6717820000000,-73.9872390000000,Battaion 48,Division 11
 FDNY-E240B48,Engine 240 / Battalion 48,1307 Prospect Ave.,Brooklyn,11218,40.6511750000000,-73.9755740000000,Battaion 48,Division 11
@@ -155,7 +155,7 @@ FDNY-E314,Engine 314,142-04 Brookville Blvd.,Queens,11422,40.6640340000000,-73.7
 FDNY-E317L165B54,Engine 317 / Ladder 165 / Battalion 54,117-11 196th Street,Queens,11412,40.6931220000000,-73.7556490000000,Battalion 54,Division 13
 FDNY-E264E328L134,Engine 264 / Engine 328 / Ladder 134,"16-15, 16-17, 16-19 Central Ave.",Queens,11691,40.6048190000000,-73.7521300000000,Battalion 47,Division 13
 FDNY-E265L121B47,Engine 265 / Ladder 121 / Battalion 47,48-06 Rockaway Beach Blvd,Queens,11691,40.5935390000000,-73.7791640000000,Battalion 47,Division 13
-FDNY-E266,Engine 266,92-20 Rockaway Beach Blvd.,Queens,11693,40.5862830000000,-73.8162380000000,Battalion 47,Division 13
+FDNY-E266,Engine 266 / Brush 7,92-20 Rockaway Beach Blvd.,Queens,11693,40.5862830000000,-73.8162380000000,Battalion 47,Division 13
 FDNY-E268L137,Engine 268 / Ladder 137,257 Beach 116th Street,Queens,11694,40.5807470000000,-73.8380550000000,Battalion 47,Division 13
 FDNY-E329,Engine 329,402 B. 169 Street,Queens,11695,40.5660090000000,-73.8815260000000,Battalion 47,Division 13
 FDNY-E258L115,Engine 258 / Ladder 115,10-40 47th Ave.,Queens,11101,40.7449860000000,-73.9517550000000,Battalion 45,Division 14
@@ -186,11 +186,11 @@ FDNY-E304L162,Engine 304 / Ladder 162,218-44 97th Avenue,Queens,11429,40.7169070
 FDNY-E306,Engine 306,40-18 214th Place,Queens,11361,40.7639440000000,-73.7696780000000,Battalion 53,Division 14
 FDNY-E313L164,Engine 313 / Ladder 164,44-01 244th Street,Queens,11363,40.7667700000000,-73.7423280000000,Battalion 53,Division 14
 FDNY-E320L167,Engine 320 / Ladder 167,36-18 Francis Lewis Blvd.,Queens,11358,40.7633110000000,-73.7869970000000,Battalion 53,Division 14
-FDNY-E326L160B53,Engine 326 / Ladder 160 / Battalion 53,64-04 Springfield Blvd.,Queens,11364,40.7470050000000,-73.7559700000000,Battalion 53,Division 14
+FDNY-E326L160B53,Engine 326 / Ladder 160 / Battalion 53 / Purple-K 326,64-04 Springfield Blvd.,Queens,11364,40.7470050000000,-73.7559700000000,Battalion 53,Division 14
 FDNY-E254L153,Engine 254 / Ladder 153,901 Avenue U,Brooklyn,11223,40.5984960000000,-73.9620080000000,Battalion 33,Division 15
 FDNY-E276L156B33,Engine 276 / Ladder 156 / Battalion 33,1635 E. 14th Street,Brooklyn,11229,40.6093650000000,-73.9591310000000,Battalion 33,Division 15
 FDNY-E309L159,Engine 309 / Ladder 159,1851 E. 48 Street,Brooklyn,11234,40.6152560000000,-73.9281690000000,Battalion 33,Division 15
-FDNY-E321,Engine 321,2165 Gerritsen Ave.,Brooklyn,11229,40.6022670000000,-73.9351880000000,Battalion 33,Division 15
+FDNY-E321,Engine 321 / Brush 6,2165 Gerritsen Ave.,Brooklyn,11229,40.6022670000000,-73.9351880000000,Battalion 33,Division 15
 FDNY-E214L111,Engine 214 / Ladder 111,495 Hancock Street,Brooklyn,11233,40.6844100000000,-73.9357710000000,Battalion 37,Division 15
 FDNY-E222B37,Engine 222 / Battalion 37,32 Ralph Ave.,Brooklyn,11221,40.6895910000000,-73.9244330000000,Battalion 37,Division 15
 FDNY-E277L112,Engine 277 / Ladder 112,582 Knickerbocker Ave.,Brooklyn,11221,40.6963970000000,-73.9146590000000,Battalion 37,Division 15
@@ -208,9 +208,11 @@ FDNY-E255L157,Engine 255 / Ladder 157,1367 Rogers Ave.,Brooklyn,11210,40.6364440
 FDNY-E281L147,Engine 281 / Ladder 147,1210 Cortelyou Road,Brooklyn,11218,40.6400240000000,-73.9666690000000,Battalion 41,Division 15
 FDNY-E227,Engine 227,423 Ralph Ave.,Brooklyn,11233,40.6747810000000,-73.9217280000000,Battalion 44,Division 15
 FDNY-E231L120B44,Engine 231 / Ladder 120 / Battalion 44,107 Watkins Street,Brooklyn,11212,40.6705700000000,-73.9078910000000,Battalion 44,Division 15
-FDNY-E233L176,Engine 233 / Ladder 176 / FC / MCP,25 Rockaway Ave.,Brooklyn,11233,40.6827120000000,-73.9113960000000,Battalion 44,Division 15
-FDNY-E332L175,Engine 332 / Ladder 175,165 Bradford st.,Brooklyn,11207,40.6754710000000,-73.8926950000000,Battalion 44,Division 15
+FDNY-E233L176,Engine 233 / Ladder 176 / FC / MCP 1,25 Rockaway Ave.,Brooklyn,11233,40.6827120000000,-73.9113960000000,Battalion 44,Division 15
+FDNY-E332L175,Engine 332 / Ladder 175 / RAC 2,165 Bradford st.,Brooklyn,11207,40.6754710000000,-73.8926950000000,Battalion 44,Division 15
 FDNY-E257L170B58,Engine 257 / Ladder 170 / Battalion 58,1361 Rockaway Parkway,Brooklyn,11236,40.6466110000000,-73.9035690000000,Battalion 58,Division 15
 FDNY-E283D15,Engine 283 / Division 15,885 Howard Ave.,Brooklyn,11212,40.6609660000000,-73.9179520000000,Battalion 58,Division 15
 FDNY-E310L174,Engine 310 / Ladder 174,5105 Snyder Ave.,Brooklyn,11203,40.6503550000000,-73.9288880000000,Battalion 58,Division 15
 FDNY-E323,Engine 323,6405 Avenue N,Brooklyn,11234,40.6201330000000,-73.9158590000000,Battalion 58,Division 15
+FDNY-SOC,TSU 1 / Rescue Battalion / RAC 4,750 Main Street,Manhattan,10044,40.7665192095393,-73.9449021376552,Rescue,Division 3
+FDNY-Randall,Mask Service Unit / HazMat Battalion,9 Reilly Blvd,Manhattan,10035,40.7916297558710,-73.9187488117407,HazMat,Division 3

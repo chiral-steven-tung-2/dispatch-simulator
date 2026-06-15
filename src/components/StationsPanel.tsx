@@ -291,6 +291,7 @@ function StationCard({
   const relocations = useRelocationStore((s) => s.relocations);
   const relocateUnit = useRelocationStore((s) => s.relocateUnit);
   const sendUnitHome = useRelocationStore((s) => s.sendUnitHome);
+  const cancelRelocationFully = useRelocationStore((s) => s.cancelRelocationFully);
   const [relocatingUnitId, setRelocatingUnitId] = useState<string | null>(null);
 
   const slots = garageSlots(station.id, allUnits);
@@ -370,6 +371,14 @@ function StationCard({
                         Recall
                       </button>
                     )}
+                  {unit.status === "Relocating" && relocation && (
+                    <button
+                      onClick={() => void cancelRelocationFully(unit.id)}
+                      className="rounded border border-slate-600 px-1.5 py-0.5 text-[11px] hover:bg-slate-700"
+                    >
+                      Cancel
+                    </button>
+                  )}
                 </div>
 
                 {isPicking && (
@@ -409,6 +418,12 @@ function StationCard({
                 <span className="ml-auto text-xs text-slate-400">
                   Inbound from {stationName(r.fromStationId)}
                 </span>
+                <button
+                  onClick={() => void cancelRelocationFully(r.unitId)}
+                  className="rounded border border-slate-600 px-1.5 py-0.5 text-[11px] hover:bg-slate-700"
+                >
+                  Cancel
+                </button>
               </li>
             ))}
             {visitingUnits.map((unit) => (

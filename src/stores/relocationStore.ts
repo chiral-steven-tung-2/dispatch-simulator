@@ -11,6 +11,7 @@ import { garageCapacity, garageOccupancy } from "../utils/garage";
 import { GAME_CONFIG } from "../config/gameConfig";
 import { useStationStore } from "./stationStore";
 import { useUnitStore } from "./unitStore";
+import { useDispatchStore } from "./dispatchStore";
 
 const MIN_LEG_MS = GAME_CONFIG.dispatch.minLegMs;
 
@@ -55,6 +56,9 @@ interface RelocationStore {
   arriveRelocation: (id: string) => void;
   /** Drops an in-flight relocation (e.g. the unit is being dispatched to a call). */
   cancelRelocation: (unitId: string) => void;
+  /** Cancels an in-flight relocation by turning the unit around: it drives
+   *  back to the station it departed from (rather than teleporting there). */
+  cancelRelocationFully: (unitId: string) => Promise<void>;
   sendUnitHome: (unit: Unit) => Promise<void>;
   /**
    * If `type` is over its garage capacity at `stationId`, sends a guest unit
@@ -139,6 +143,47 @@ export const useRelocationStore = create<RelocationStore>((set, get) => ({
     }));
   },
 
+  cancelRelocationFully: async (unitId) => {
+    const record = get().relocations.find((r) => r.unitId === unitId);
+    if (!record) {
+      return;
+    }
+
+    const simSpeed = useDispatchStore.getState().simSpeed;
+    const from = relocationCurrentPoint(record, simSpeed);
+    const origin = useStationStore
+      .getState()
+      .stations.find((s) => s.id === record.fromStationId);
+    if (!origin) {
+      set((state) => ({
+        relocations: state.relocations.filter((r) => r.unitId !== unitId),
+      }));
+      useUnitStore.getState().setUnitStatus(unitId, "Available");
+      return;
+    }
+
+    const route = await fetchRoute(from, [origin.longitude, origin.latitude]);
+    const progression = buildProgressionFromSegments(route.segmentDurations);
+
+    set((state) => ({
+      relocations: state.relocations.map((r) =>
+        r.id === record.id
+          ? {
+              ...r,
+              fromStationId: record.toStationId,
+              toStationId: record.fromStationId,
+              route: route.coordinates,
+              progression,
+              distanceMeters: route.distanceMeters,
+              startedAt: performance.now(),
+              durationMs: legDurationMs(progression),
+              fallback: route.fallback,
+            }
+          : r
+      ),
+    }));
+  },
+
   sendUnitHome: async (unit) => {
     if (unit.currentStationId === unit.stationId) {
       return;
@@ -150,6 +195,18 @@ export const useRelocationStore = create<RelocationStore>((set, get) => ({
     const units = useUnitStore.getState().units;
     const capacity = garageCapacity(stationId, units)[type] ?? 0;
     const occupied = garageOccupancy(stationId, units)[type] ?? 0;
+
+    // Cancel any in-flight relocations heading here that no longer have a bay
+    // to land in now that occupancy has changed (e.g. the home unit just
+    // pulled back into quarters before the covering unit arrived).
+    const incoming = get().relocations.filter(
+      (r) => r.toStationId === stationId && r.type === type
+    );
+    const openSlots = Math.max(0, capacity - occupied);
+    for (const r of incoming.slice(openSlots)) {
+      void get().cancelRelocationFully(r.unitId);
+    }
+
     if (occupied <= capacity) {
       return;
     }

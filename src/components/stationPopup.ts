@@ -128,9 +128,14 @@ export function buildStationPopupContent(
 
   // Units permanently quartered here.
   const homeUnits = units;
-  // Guest units physically garaged here while their home station is covered.
+  // Guest units physically garaged here (or mid-drive into the garage) while
+  // their home station is covered. Units returning to their own home are
+  // covered by the "Units quartered" list above instead.
   const visitingUnits = allUnits.filter(
-    (u) => u.stationId !== station.id && u.currentStationId === station.id
+    (u) =>
+      u.stationId !== station.id &&
+      (u.currentStationId === station.id ||
+        relocations.some((r) => r.unitId === u.id && r.toStationId === station.id))
   );
 
   const heading = document.createElement("div");
@@ -245,6 +250,13 @@ function buildUnitItem(
     button.textContent = "Recall";
     button.addEventListener("click", () => {
       void useRelocationStore.getState().sendUnitHome(unit);
+    });
+  } else if (unit.status === "Relocating" && relocation) {
+    // Unit mid-drive (relocating out or returning home) → cancel the trip.
+    button = document.createElement("button");
+    button.textContent = "Cancel";
+    button.addEventListener("click", () => {
+      void useRelocationStore.getState().cancelRelocationFully(unit.id);
     });
   }
 
