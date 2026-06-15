@@ -7,10 +7,13 @@ import { useDispatchStore } from "../stores/dispatchStore";
 import { useStationStore } from "../stores/stationStore";
 import { useNypdStationStore } from "../stores/nypdStationStore";
 import { useIncidentStore } from "../stores/incidentStore";
+import { useUnitStore } from "../stores/unitStore";
+import { useRelocationStore } from "../stores/relocationStore";
 import StationMarker from "./StationMarker";
 import NypdStationMarker from "./NypdStationMarker";
 import IncidentMarker from "./IncidentMarker";
 import DispatchLayer from "./DispatchLayer";
+import RelocationLayer from "./RelocationLayer";
 import LandLayer from "./LandLayer";
 import CallAreaLayer from "./CallAreaLayer";
 
@@ -35,6 +38,8 @@ export default function MapView({
   const focusPoint = useDispatchStore((state) => state.focusPoint);
   const focusToken = useDispatchStore((state) => state.focusToken);
   const unitsByStation = useUnitsByStation();
+  const allUnits = useUnitStore((s) => s.units);
+  const relocations = useRelocationStore((s) => s.relocations);
   const hasFitted = useRef(false);
 
   // Fit the viewport to all markers once, when the map and data first become
@@ -104,6 +109,9 @@ export default function MapView({
             map={map}
             station={station}
             units={unitsByStation[station.id] ?? []}
+            allUnits={allUnits}
+            allStations={stations}
+            relocations={relocations}
             showChiefQuarters={showChiefQuarters}
             showUnitIcons={showUnitIcons}
           />
@@ -120,6 +128,7 @@ export default function MapView({
         ))}
 
       {map && <DispatchLayer map={map} />}
+      {map && <RelocationLayer map={map} />}
     </div>
   );
 }

@@ -1,8 +1,12 @@
 import { useEffect } from "react";
-import { useDispatchStore } from "../stores/dispatchStore";
+import {
+  useDispatchStore,
+  dispatchableOrigin,
+} from "../stores/dispatchStore";
 import { useIncidentStore } from "../stores/incidentStore";
 import { useUnitStore } from "../stores/unitStore";
 import { useStationStore } from "../stores/stationStore";
+import { useRelocationStore } from "../stores/relocationStore";
 import { haversineMeters, type LngLat } from "../utils/geo";
 import {
   REQUIREMENT_KEYS,
@@ -31,6 +35,8 @@ export function useAutoDispatcher(): void {
       const incidentStore = useIncidentStore.getState();
       const units = useUnitStore.getState().units;
       const stations = useStationStore.getState().stations;
+      const relocations = useRelocationStore.getState().relocations;
+      const simSpeed = dispatchStore.simSpeed;
 
       for (const incident of incidentStore.incidents) {
         if (incident.status === "Resolved") {
@@ -64,20 +70,28 @@ export function useAutoDispatcher(): void {
           const candidates = units
             .filter(
               (u) =>
-                u.status === "Available" &&
                 UNIT_TYPE_CATEGORY[u.type] === key &&
                 !toDispatch.some((picked) => picked.id === u.id)
             )
             .map((u) => {
-              const station = stations.find((s) => s.id === u.stationId);
-              const distance = station
-                ? haversineMeters(
-                    [station.longitude, station.latitude],
-                    target
-                  )
-                : Infinity;
-              return { unit: u, distance };
+              // Includes idle units plus those relocating or returning home;
+              // null means the unit is busy working a call.
+              const from = dispatchableOrigin(
+                u,
+                dispatchStore.dispatches,
+                relocations,
+                stations,
+                simSpeed
+              );
+              return { unit: u, from };
             })
+            .filter(
+              (c): c is { unit: Unit; from: LngLat } => c.from !== null
+            )
+            .map((c) => ({
+              unit: c.unit,
+              distance: haversineMeters(c.from, target),
+            }))
             .sort((a, b) => a.distance - b.distance);
 
           for (const { unit } of candidates) {

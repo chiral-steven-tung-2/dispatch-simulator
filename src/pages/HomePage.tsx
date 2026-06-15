@@ -11,17 +11,24 @@ import { useResolveTicker } from "../hooks/useResolveTicker";
 import { useAutoDispatcher } from "../hooks/useAutoDispatcher";
 import { useDispatchStore } from "../stores/dispatchStore";
 import { useIncidentStore } from "../stores/incidentStore";
+import { useSettingsStore } from "../stores/settingsStore";
 import { GAME_CONFIG } from "../config/gameConfig";
 
 export default function HomePage() {
   const { loading, error } = useDispatchData();
   const [stationsOpen, setStationsOpen] = useState(false);
   const [callsOpen, setCallsOpen] = useState(false);
-  const [legendOpen, setLegendOpen] = useState(false);
-  const [showFdnyStations, setShowFdnyStations] = useState(true);
-  const [showNypdStations, setShowNypdStations] = useState(true);
-  const [showChiefQuarters, setShowChiefQuarters] = useState(true);
-  const [showUnitIcons, setShowUnitIcons] = useState(true);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const showFdnyStations = useSettingsStore((s) => s.showFdnyStations);
+  const showNypdStations = useSettingsStore((s) => s.showNypdStations);
+  const showChiefQuarters = useSettingsStore((s) => s.showChiefQuarters);
+  const showUnitIcons = useSettingsStore((s) => s.showUnitIcons);
+  const showNotifications = useSettingsStore((s) => s.showNotifications);
+  const toggleFdnyStations = useSettingsStore((s) => s.toggleFdnyStations);
+  const toggleNypdStations = useSettingsStore((s) => s.toggleNypdStations);
+  const toggleChiefQuarters = useSettingsStore((s) => s.toggleChiefQuarters);
+  const toggleUnitIcons = useSettingsStore((s) => s.toggleUnitIcons);
+  const toggleNotifications = useSettingsStore((s) => s.toggleNotifications);
   const showPaths = useDispatchStore((s) => s.showPaths);
   const togglePaths = useDispatchStore((s) => s.togglePaths);
   const autoDispatch = useDispatchStore((s) => s.autoDispatch);
@@ -41,7 +48,7 @@ export default function HomePage() {
 
   return (
     <div className="flex h-full w-full flex-col bg-slate-900 text-slate-100">
-      <CallNotifications />
+      {showNotifications && <CallNotifications />}
       <header className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-700 bg-slate-900/95 px-6 py-3 shadow-sm">
         <div className="flex items-center gap-3">
           <h1 className="text-xl font-bold tracking-tight">
@@ -68,36 +75,18 @@ export default function HomePage() {
           >
             + Spawn call
           </button>
-          <ToggleSwitch
-            checked={autoSpawn}
-            onChange={toggleAutoSpawn}
-            label="Auto calls"
-            activeColor="red"
-          />
-          <ToggleSwitch
-            checked={autoDispatch}
-            onChange={toggleAutoDispatch}
-            label="Auto-dispatch"
-            activeColor="green"
-          />
         </div>
         <div className="flex items-center gap-3">
           <UnitSearch />
           <Divider />
           <SimSpeedControl value={simSpeed} onChange={setSimSpeed} />
-          <ToggleSwitch
-            checked={showPaths}
-            onChange={togglePaths}
-            label="Show paths"
-            activeColor="amber"
-          />
           <Divider />
           <StatusBadge loading={loading} error={error} />
           <button
-            onClick={() => setLegendOpen(true)}
-            className="rounded-md border border-slate-600 px-3 py-1.5 text-sm font-medium hover:bg-slate-700"
+            onClick={() => setSettingsOpen(true)}
+            className="flex items-center gap-1.5 rounded-md border border-slate-600 px-3 py-1.5 text-sm font-medium hover:bg-slate-700"
           >
-            Legend
+            <GearGlyph /> Settings
           </button>
         </div>
       </header>
@@ -116,17 +105,25 @@ export default function HomePage() {
         onClose={() => setStationsOpen(false)}
       />
       <CallsPanel open={callsOpen} onClose={() => setCallsOpen(false)} />
-      <LegendPanel
-        open={legendOpen}
-        onClose={() => setLegendOpen(false)}
+      <SettingsPanel
+        open={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+        autoSpawn={autoSpawn}
+        onToggleAutoSpawn={toggleAutoSpawn}
+        autoDispatch={autoDispatch}
+        onToggleAutoDispatch={toggleAutoDispatch}
+        showNotifications={showNotifications}
+        onToggleNotifications={toggleNotifications}
+        showPaths={showPaths}
+        onTogglePaths={togglePaths}
         showFdnyStations={showFdnyStations}
-        onToggleFdnyStations={() => setShowFdnyStations((v) => !v)}
+        onToggleFdnyStations={toggleFdnyStations}
         showNypdStations={showNypdStations}
-        onToggleNypdStations={() => setShowNypdStations((v) => !v)}
+        onToggleNypdStations={toggleNypdStations}
         showChiefQuarters={showChiefQuarters}
-        onToggleChiefQuarters={() => setShowChiefQuarters((v) => !v)}
+        onToggleChiefQuarters={toggleChiefQuarters}
         showUnitIcons={showUnitIcons}
-        onToggleUnitIcons={() => setShowUnitIcons((v) => !v)}
+        onToggleUnitIcons={toggleUnitIcons}
       />
       <DispatchPanel />
     </div>
@@ -174,8 +171,66 @@ function ToggleSwitch({
         />
         <span className="absolute left-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform peer-checked:translate-x-4" />
       </span>
-      {label}
+      {label && <span>{label}</span>}
     </label>
+  );
+}
+
+/** A titled group of settings rows in the Settings panel. */
+function SettingsSection({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section>
+      <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
+        {title}
+      </h3>
+      <div className="space-y-2">{children}</div>
+    </section>
+  );
+}
+
+/** A labeled setting row with an optional hint and a trailing control. */
+function SettingRow({
+  label,
+  hint,
+  children,
+}: {
+  label: string;
+  hint?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex items-center gap-3 rounded-lg border border-slate-700 bg-slate-900/50 px-3 py-2.5 text-sm">
+      <span className="flex-1">
+        <span className="font-medium">{label}</span>
+        {hint && <span className="block text-xs text-slate-400">{hint}</span>}
+      </span>
+      {children}
+    </div>
+  );
+}
+
+function GearGlyph() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+    </svg>
   );
 }
 
@@ -226,9 +281,17 @@ function StatusBadge({
   return <span className="text-sm text-emerald-400">● Connected</span>;
 }
 
-function LegendPanel({
+function SettingsPanel({
   open,
   onClose,
+  autoSpawn,
+  onToggleAutoSpawn,
+  autoDispatch,
+  onToggleAutoDispatch,
+  showNotifications,
+  onToggleNotifications,
+  showPaths,
+  onTogglePaths,
   showFdnyStations,
   onToggleFdnyStations,
   showNypdStations,
@@ -240,6 +303,14 @@ function LegendPanel({
 }: {
   open: boolean;
   onClose: () => void;
+  autoSpawn: boolean;
+  onToggleAutoSpawn: () => void;
+  autoDispatch: boolean;
+  onToggleAutoDispatch: () => void;
+  showNotifications: boolean;
+  onToggleNotifications: () => void;
+  showPaths: boolean;
+  onTogglePaths: () => void;
   showFdnyStations: boolean;
   onToggleFdnyStations: () => void;
   showNypdStations: boolean;
@@ -263,11 +334,11 @@ function LegendPanel({
 
       <aside className="relative flex h-full w-full max-w-md flex-col bg-slate-800 text-slate-100 shadow-xl">
         <header className="flex items-center justify-between border-b border-slate-700 px-5 py-4">
-          <h2 className="text-lg font-bold">Map legend</h2>
+          <h2 className="text-lg font-bold">Settings</h2>
           <button
             onClick={onClose}
             className="rounded px-2 py-1 text-slate-400 hover:bg-slate-700 hover:text-white"
-            aria-label="Close legend panel"
+            aria-label="Close settings panel"
           >
             ✕
           </button>
@@ -275,6 +346,50 @@ function LegendPanel({
 
         <div className="flex-1 overflow-y-auto p-5">
           <div className="space-y-6">
+            <SettingsSection title="Simulation">
+              <SettingRow label="Auto calls" hint="Spawn new calls automatically">
+                <ToggleSwitch
+                  checked={autoSpawn}
+                  onChange={onToggleAutoSpawn}
+                  label=""
+                  activeColor="red"
+                />
+              </SettingRow>
+              <SettingRow
+                label="Auto-dispatch"
+                hint="Send nearest units to staff calls"
+              >
+                <ToggleSwitch
+                  checked={autoDispatch}
+                  onChange={onToggleAutoDispatch}
+                  label=""
+                  activeColor="green"
+                />
+              </SettingRow>
+            </SettingsSection>
+
+            <SettingsSection title="Display">
+              <SettingRow
+                label="Call notifications"
+                hint="Show pop-up toasts for new calls"
+              >
+                <ToggleSwitch
+                  checked={showNotifications}
+                  onChange={onToggleNotifications}
+                  label=""
+                  activeColor="blue"
+                />
+              </SettingRow>
+              <SettingRow label="Unit paths" hint="Draw routes for moving units">
+                <ToggleSwitch
+                  checked={showPaths}
+                  onChange={onTogglePaths}
+                  label=""
+                  activeColor="amber"
+                />
+              </SettingRow>
+            </SettingsSection>
+
             <LegendSection title="Map layers">
               <LegendRow icon={<FireHouseGlyph />} label="FDNY fire house">
                 <ToggleSwitch

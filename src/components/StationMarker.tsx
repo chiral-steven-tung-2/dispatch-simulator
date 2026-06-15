@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Marker, Popup, type Map as MapLibreMap } from "maplibre-gl";
 import type { Station, Unit } from "../models";
+import type { RelocationRecord } from "../stores/relocationStore";
 import { buildStationPopupContent } from "./stationPopup";
 import { chiefLevelFor, createStationElement } from "./stationMarkerElement";
 
@@ -8,6 +9,9 @@ interface StationMarkerProps {
   map: MapLibreMap;
   station: Station;
   units: Unit[];
+  allUnits: Unit[];
+  allStations: Station[];
+  relocations: RelocationRecord[];
   showChiefQuarters?: boolean;
   showUnitIcons?: boolean;
 }
@@ -16,12 +20,26 @@ export default function StationMarker({
   map,
   station,
   units,
+  allUnits,
+  allStations,
+  relocations,
   showChiefQuarters = true,
   showUnitIcons = true,
 }: StationMarkerProps) {
   useEffect(() => {
     const chief = chiefLevelFor(units);
-    const element = createStationElement(units, showChiefQuarters, showUnitIcons);
+    // The house shows "active" (red) while any unit is actually parked here —
+    // its own rigs or a guest covering it. Units out on a call or relocating
+    // don't count; an empty house is grayed.
+    const hasUnitPresent = allUnits.some(
+      (u) => u.currentStationId === station.id && u.status === "Available"
+    );
+    const element = createStationElement(
+      units,
+      showChiefQuarters,
+      showUnitIcons,
+      hasUnitPresent
+    );
     element.title =
       chief === "division"
         ? `${station.name} — Division HQ`
@@ -29,8 +47,8 @@ export default function StationMarker({
         ? `${station.name} — Battalion HQ`
         : station.name;
 
-    const popup = new Popup({ offset: 16, closeButton: true }).setDOMContent(
-      buildStationPopupContent(station, units)
+    const popup = new Popup({ offset: 16, closeButton: true, maxWidth: "288px" }).setDOMContent(
+      buildStationPopupContent(station, units, allUnits, allStations, relocations)
     );
 
     const marker = new Marker({ element })
@@ -42,7 +60,7 @@ export default function StationMarker({
       marker.remove();
       popup.remove();
     };
-  }, [map, station, units, showChiefQuarters, showUnitIcons]);
+  }, [map, station, units, allUnits, allStations, relocations, showChiefQuarters, showUnitIcons]);
 
   return null;
 }

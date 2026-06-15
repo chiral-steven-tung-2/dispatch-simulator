@@ -41,22 +41,34 @@ export function apparatusFor(type: string): Apparatus {
   return APPARATUS[type] ?? SOC;
 }
 
-const FIRE_RED = "#dc2626";
-const ROOF_RED = "#991b1b";
+// Fire-house glyph colors: red when at least one unit is in quarters, slate-gray
+// when the house is empty.
+const ACTIVE_COLORS = { roof: "#991b1b", body: "#dc2626", door: "#fee2e2" };
+const EMPTY_COLORS = { roof: "#475569", body: "#64748b", door: "#e2e8f0" };
 
-// Static red fire-house glyph: gabled roof, engine-bay door, white cross emblem.
-const HOUSE_SVG = `
+/** Fire-house glyph: gabled roof, engine-bay door, white cross emblem. */
+function houseSvg({
+  roof,
+  body,
+  door,
+}: {
+  roof: string;
+  body: string;
+  door: string;
+}): string {
+  return `
 <svg width="30" height="30" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
   <g stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round">
-    <path d="M3 14 L16 4 L29 14 Z" fill="${ROOF_RED}"/>
-    <rect x="6" y="14" width="20" height="14" fill="${FIRE_RED}"/>
+    <path d="M3 14 L16 4 L29 14 Z" fill="${roof}"/>
+    <rect x="6" y="14" width="20" height="14" fill="${body}"/>
   </g>
-  <rect x="11" y="18" width="10" height="10" fill="#fee2e2" stroke="#ffffff" stroke-width="1"/>
-  <line x1="11" y1="21.3" x2="21" y2="21.3" stroke="${FIRE_RED}" stroke-width="0.9"/>
-  <line x1="11" y1="24.6" x2="21" y2="24.6" stroke="${FIRE_RED}" stroke-width="0.9"/>
+  <rect x="11" y="18" width="10" height="10" fill="${door}" stroke="#ffffff" stroke-width="1"/>
+  <line x1="11" y1="21.3" x2="21" y2="21.3" stroke="${body}" stroke-width="0.9"/>
+  <line x1="11" y1="24.6" x2="21" y2="24.6" stroke="${body}" stroke-width="0.9"/>
   <rect x="15.1" y="8" width="1.8" height="5" fill="#ffffff"/>
   <rect x="13.6" y="9.6" width="4.8" height="1.8" fill="#ffffff"/>
 </svg>`;
+}
 
 const BADGE: Record<
   Exclude<ChiefLevel, "none">,
@@ -74,7 +86,8 @@ const BADGE: Record<
 export function createStationElement(
   units: Unit[],
   showChiefQuarters = true,
-  showUnitIcons = true
+  showUnitIcons = true,
+  active = true
 ): HTMLDivElement {
   // NOTE: don't set `position` here — MapLibre applies `position: absolute` to
   // marker elements and positions them via a pixel transform. Overriding it (e.g.
@@ -85,7 +98,7 @@ export function createStationElement(
   el.style.height = "30px";
   el.style.cursor = "pointer";
   el.style.filter = "drop-shadow(0 1px 2px rgba(0,0,0,0.55))";
-  el.innerHTML = HOUSE_SVG;
+  el.innerHTML = houseSvg(active ? ACTIVE_COLORS : EMPTY_COLORS);
 
   const chief = chiefLevelFor(units);
   if (chief !== "none" && showChiefQuarters) {

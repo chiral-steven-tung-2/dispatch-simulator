@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import type { Assignment, CallType, Incident, IncidentStatus } from "../models";
 import { fetchAssignments, fetchCallTypes } from "../data/dispatchApi";
 import { makeRandomCall } from "../utils/spawn";
@@ -51,7 +52,9 @@ interface CallNotification {
   createdAt: number;
 }
 
-export const useIncidentStore = create<IncidentStore>((set, get) => ({
+export const useIncidentStore = create<IncidentStore>()(
+  persist(
+    (set, get) => ({
   incidents: [],
   notifications: [],
   callTypes: [],
@@ -206,4 +209,10 @@ export const useIncidentStore = create<IncidentStore>((set, get) => ({
         })),
       };
     }),
-}));
+    }),
+    {
+      name: "nyc-dispatch:incidents",
+      partialize: (state) => ({ autoSpawn: state.autoSpawn }),
+    }
+  )
+);

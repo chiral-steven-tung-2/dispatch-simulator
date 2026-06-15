@@ -3,7 +3,12 @@ import {
   useDispatchStore,
   type DispatchRecord,
   remainingArrivalMs,
+  dispatchCurrentPoint,
 } from "../stores/dispatchStore";
+import {
+  useRelocationStore,
+  relocationCurrentPoint,
+} from "../stores/relocationStore";
 import { useIncidentStore } from "../stores/incidentStore";
 import { useUnitStore } from "../stores/unitStore";
 import { useStationStore } from "../stores/stationStore";
@@ -22,7 +27,10 @@ interface AvailableUnit {
   id: string;
   callsign: string;
   type: string;
-  stationName: string;
+  /** Where the unit is now: its quarters, or its current movement. */
+  locationLabel: string;
+  /** Status dot color reflecting how the unit is currently moving (if at all). */
+  dotColor: string;
   distanceMeters: number;
 }
 
@@ -38,6 +46,7 @@ export default function DispatchPanel() {
   const incidents = useIncidentStore((s) => s.incidents);
   const units = useUnitStore((s) => s.units);
   const stations = useStationStore((s) => s.stations);
+  const relocations = useRelocationStore((s) => s.relocations);
 
   // Re-render once a second so responding-unit ETAs stay live.
   const [, tick] = useReducer((n: number) => n + 1, 0);
@@ -74,28 +83,54 @@ export default function DispatchPanel() {
       return [];
     }
     const target: LngLat = [call.longitude, call.latitude];
+    const stationName = (id: string) =>
+      stations.find((s) => s.id === id)?.name ?? id;
     const result: AvailableUnit[] = [];
     for (const unit of units) {
-      if (unit.status !== "Available") {
+      const dispatch = dispatches.find((d) => d.unitId === unit.id);
+      // A unit actively working a call (turnout, en route, or on scene) is busy.
+      if (dispatch && dispatch.phase !== "returning") {
         continue;
       }
-      const station = stations.find((s) => s.id === unit.stationId);
-      if (!station) {
-        continue;
+
+      let from: LngLat;
+      let locationLabel: string;
+      let dotColor: string;
+
+      if (dispatch && dispatch.phase === "returning") {
+        from = dispatchCurrentPoint(dispatch, simSpeed);
+        locationLabel = "Returning to quarters";
+        dotColor = colorForPhase("returning");
+      } else {
+        const relocation = relocations.find((r) => r.unitId === unit.id);
+        if (relocation) {
+          from = relocationCurrentPoint(relocation, simSpeed);
+          locationLabel = `Relocating → ${stationName(relocation.toStationId)}`;
+          dotColor = statusColor("Relocating");
+        } else if (unit.status === "Available") {
+          const station = stations.find((s) => s.id === unit.currentStationId);
+          if (!station) {
+            continue;
+          }
+          from = [station.longitude, station.latitude];
+          locationLabel = station.name;
+          dotColor = statusColor("Available");
+        } else {
+          continue;
+        }
       }
+
       result.push({
         id: unit.id,
         callsign: unit.callsign,
         type: unit.type,
-        stationName: station.name,
-        distanceMeters: haversineMeters(
-          [station.longitude, station.latitude],
-          target
-        ),
+        locationLabel,
+        dotColor,
+        distanceMeters: haversineMeters(from, target),
       });
     }
     return result.sort((a, b) => a.distanceMeters - b.distanceMeters);
-  }, [call, units, stations]);
+  }, [call, units, stations, dispatches, relocations, simSpeed]);
 
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [unitSearch, setUnitSearch] = useState("");
@@ -125,7 +160,7 @@ export default function DispatchPanel() {
       return (
         unit.callsign.toLowerCase().includes(query) ||
         unit.type.toLowerCase().includes(query) ||
-        unit.stationName.toLowerCase().includes(query)
+        unit.locationLabel.toLowerCase().includes(query)
       );
     });
   }, [available, unitSearch, typeFilter]);
@@ -303,13 +338,13 @@ export default function DispatchPanel() {
                       />
                       <span
                         className="inline-block h-2.5 w-2.5 shrink-0 rounded-full"
-                        style={{ backgroundColor: statusColor("Available") }}
+                        style={{ backgroundColor: unit.dotColor }}
                       />
                       <span className="flex-1">
                         <span className="font-medium">{unit.callsign}</span>
                         <span className="text-slate-400"> · {unit.type}</span>
                         <span className="block text-xs text-slate-500">
-                          {unit.stationName}
+                          {unit.locationLabel}
                         </span>
                       </span>
                       <span className="text-sm tabular-nums text-slate-300">

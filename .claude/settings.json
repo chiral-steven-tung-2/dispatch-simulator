@@ -1,7 +1,15 @@
 {
   "permissions": {
     "allow": [
-      "PowerShell(npx tsc -b 2>&1 | Select-Object -Last 20; \"TSC EXIT=$LASTEXITCODE\")"
+      "PowerShell(npx tsc -b 2>&1 | Select-Object -Last 20; \"TSC EXIT=$LASTEXITCODE\")",
+      "Skill(run)",
+      "Skill(run:*)",
+      "Read(//c/Program Files \\(x86\\)/Microsoft/Edge/Application//**)",
+      "Read(//c/Program Files/Google/Chrome/**)",
+      "Bash(npm ls *)",
+      "Read(//c//**)",
+      "Bash(find / -maxdepth 8 -iname \"*chrome*.exe\" 2>/dev/null | head -5; find / -maxdepth 8 -ipath \"*ms-playwright*\" 2>/dev/null | head -10)",
+      "Bash(npm install *)"
     ]
   }
 }

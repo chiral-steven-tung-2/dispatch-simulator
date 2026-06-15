@@ -9,6 +9,8 @@ export function statusColor(status: UnitStatus): string {
       return "#f59e0b"; // amber
     case "On Scene":
       return "#dc2626"; // red
+    case "Relocating":
+      return "#8b5cf6"; // violet
     default:
       return "#64748b"; // slate
   }

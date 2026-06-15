@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import type { Incident, Unit } from "../models";
+import { persist } from "zustand/middleware";
+import type { Incident, Station, Unit } from "../models";
 import { fetchRoute, snapToRoad } from "../data/routing";
 import {
   buildProgressionFromSegments,
@@ -13,6 +14,11 @@ import { GAME_CONFIG, randomTurnoutMs } from "../config/gameConfig";
 import { useStationStore } from "./stationStore";
 import { useUnitStore } from "./unitStore";
 import { useIncidentStore } from "./incidentStore";
+import {
+  useRelocationStore,
+  relocationCurrentPoint,
+  type RelocationRecord,
+} from "./relocationStore";
 import { isAssignmentStaffed, upgradeCheckDelayMs } from "../utils/assignment";
 
 const START_CALL_RADIUS = GAME_CONFIG.callArea.startRadiusMeters;
@@ -123,6 +129,45 @@ function legFraction(record: DispatchRecord, simSpeed: number): number {
   return Math.min(1, Math.max(0, elapsed / record.durationMs));
 }
 
+/** The geographic point a moving dispatch record has reached along its leg now. */
+export function dispatchCurrentPoint(
+  record: DispatchRecord,
+  simSpeed: number
+): LngLat {
+  const fraction = record.phase === "dispatched" ? 0 : legFraction(record, simSpeed);
+  return pointAlong(record.route, record.progression, fraction);
+}
+
+/**
+ * Where a unit would respond from if dispatched right now, or null if it's
+ * unavailable (busy working a call). Idle units roll from their quarters; units
+ * relocating or returning to quarters respond from their current road position.
+ */
+export function dispatchableOrigin(
+  unit: Unit,
+  dispatches: DispatchRecord[],
+  relocations: RelocationRecord[],
+  stations: Station[],
+  simSpeed: number
+): LngLat | null {
+  const dispatch = dispatches.find((d) => d.unitId === unit.id);
+  if (dispatch) {
+    // Committed to a call (turnout / en route / on scene) → not dispatchable.
+    return dispatch.phase === "returning"
+      ? dispatchCurrentPoint(dispatch, simSpeed)
+      : null;
+  }
+  const relocation = relocations.find((r) => r.unitId === unit.id);
+  if (relocation) {
+    return relocationCurrentPoint(relocation, simSpeed);
+  }
+  if (unit.status === "Available") {
+    const station = stations.find((s) => s.id === unit.currentStationId);
+    return station ? [station.longitude, station.latitude] : null;
+  }
+  return null;
+}
+
 /** Sets an Active call back to Waiting if no units are dispatched, en route, or on scene. */
 function freeCallIfEmpty(callId: string, dispatches: DispatchRecord[]): void {
   const stillAssigned = dispatches.some(
@@ -142,7 +187,9 @@ function freeCallIfEmpty(callId: string, dispatches: DispatchRecord[]): void {
   }
 }
 
-export const useDispatchStore = create<DispatchStore>((set, get) => ({
+export const useDispatchStore = create<DispatchStore>()(
+  persist(
+    (set, get) => ({
   selectedCallId: null,
   focusPoint: null,
   focusToken: 0,
@@ -183,6 +230,7 @@ export const useDispatchStore = create<DispatchStore>((set, get) => ({
       })),
     }));
     useIncidentStore.getState().rebaseTimers(ratio);
+    useRelocationStore.getState().rebaseTimers(ratio);
   },
 
   dispatchUnits: async (call, units) => {
@@ -193,18 +241,49 @@ export const useDispatchStore = create<DispatchStore>((set, get) => ({
 
     const stations = useStationStore.getState().stations;
     const center: LngLat = [call.longitude, call.latitude];
+    const simSpeed = get().simSpeed;
+    const relocationState = useRelocationStore.getState();
+    const existingDispatches = get().dispatches;
 
     const routed = await Promise.all(
       units.map(async (unit) => {
-        const station = stations.find((s) => s.id === unit.stationId);
-        if (!station) {
-          return null;
+        // A unit that's already on the road (relocating, or returning to
+        // quarters) responds from its current position; an idle unit rolls
+        // out of its quarters. Units returning return to their home station;
+        // relocating units fall back to the station they left.
+        const returning = existingDispatches.find(
+          (d) => d.unitId === unit.id && d.phase === "returning"
+        );
+        const relocation = relocationState.relocations.find(
+          (r) => r.unitId === unit.id
+        );
+
+        let from: LngLat;
+        let returnStationId: string;
+        let moving: boolean;
+
+        if (returning) {
+          from = dispatchCurrentPoint(returning, simSpeed);
+          returnStationId = returning.stationId;
+          moving = true;
+        } else if (relocation) {
+          from = relocationCurrentPoint(relocation, simSpeed);
+          returnStationId = relocation.fromStationId;
+          moving = true;
+        } else {
+          const station = stations.find((s) => s.id === unit.currentStationId);
+          if (!station) {
+            return null;
+          }
+          from = [station.longitude, station.latitude];
+          returnStationId = unit.currentStationId;
+          moving = false;
         }
-        const from: LngLat = [station.longitude, station.latitude];
+
         // Route to the scene; the exact parking spot is assigned on arrival so
         // first-due rigs end up closer than later arrivals.
         const route = await fetchRoute(from, center);
-        return { unit, route };
+        return { unit, route, returnStationId, moving };
       })
     );
 
@@ -216,7 +295,9 @@ export const useDispatchStore = create<DispatchStore>((set, get) => ({
       if (!item) {
         continue;
       }
-      const { unit, route } = item;
+      const { unit, route, returnStationId, moving } = item;
+      // A unit already on the road skips turnout and rolls straight to enroute.
+      relocationState.cancelRelocation(unit.id);
       const progression = buildProgressionFromSegments(route.segmentDurations);
       records.push({
         id: `dsp-${unit.id}`,
@@ -224,15 +305,15 @@ export const useDispatchStore = create<DispatchStore>((set, get) => ({
         callsign: unit.callsign,
         type: unit.type,
         callId: call.id,
-        stationId: unit.stationId,
-        phase: "dispatched",
+        stationId: returnStationId,
+        phase: moving ? "enroute" : "dispatched",
         route: route.coordinates,
         progression,
         distanceMeters: route.distanceMeters,
         startedAt,
         durationMs: legDurationMs(progression),
         fallback: route.fallback,
-        turnoutMs: randomTurnoutMs(),
+        turnoutMs: moving ? 0 : randomTurnoutMs(),
       });
       setUnitStatus(unit.id, "En Route");
     }
@@ -383,6 +464,11 @@ export const useDispatchStore = create<DispatchStore>((set, get) => ({
       dispatches: state.dispatches.filter((d) => d.id !== dispatchId),
     }));
     useUnitStore.getState().setUnitStatus(record.unitId, "Available");
+    // A returning unit may push its (current) station over capacity for its
+    // type, in which case a guest unit relocated there gets sent back home.
+    useRelocationStore
+      .getState()
+      .checkGarageOverflow(record.stationId, record.type, record.unitId);
   },
 
   resolveCall: (callId) => {
@@ -483,4 +569,14 @@ export const useDispatchStore = create<DispatchStore>((set, get) => ({
       incidentStore.setNextUpgradeCheck(callId, undefined);
     }
   },
-}));
+    }),
+    {
+      name: "nyc-dispatch:controls",
+      partialize: (state) => ({
+        showPaths: state.showPaths,
+        autoDispatch: state.autoDispatch,
+        simSpeed: state.simSpeed,
+      }),
+    }
+  )
+);
