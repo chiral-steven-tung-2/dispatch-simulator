@@ -1,464 +1,464 @@
-id,callsign,type,status,station_id
-fdny-battalion-45,Battalion 45,Battalion,Available,FDNY-E259L128B45
-fdny-battalion-21,Battalion 21,Battalion,Available,FDNY-E152B21
-fdny-battalion-4,Battalion 4,Battalion,Available,FDNY-E15L18B4
-fdny-battalion-23,Battalion 23,Battalion,Available,FDNY-E162L82B23
-fdny-battalion-40,Battalion 40,Battalion,Available,FDNY-E201L114B40
-fdny-battalion-32,Battalion 32,Battalion,Available,FDNY-E202L101B32
-fdny-battalion-31,Battalion 31,Battalion,Available,FDNY-E207L110B31D11
-fdny-battalion-35,Battalion 35,Battalion,Available,FDNY-E216L108B35
-fdny-battalion-37,Battalion 37,Battalion,Available,FDNY-E222B37
-fdny-battalion-39,Battalion 39,Battalion,Available,FDNY-E225L107B39
-fdny-battalion-10,Battalion 10,Battalion,Available,FDNY-E22L13B10
-fdny-battalion-44,Battalion 44,Battalion,Available,FDNY-E231L120B44
-fdny-battalion-38,Battalion 38,Battalion,Available,FDNY-E234L123B38
-fdny-battalion-57,Battalion 57,Battalion,Available,FDNY-E235B57
-fdny-battalion-42,Battalion 42,Battalion,Available,FDNY-E243L168B42
-fdny-battalion-43,Battalion 43,Battalion,Available,FDNY-E245L161B43
-fdny-battalion-41,Battalion 41,Battalion,Available,FDNY-E248B41
-fdny-battalion-2,Battalion 2,Battalion,Available,FDNY-E24L5B2
-fdny-battalion-58,Battalion 58,Battalion,Available,FDNY-E257L170B58
-fdny-battalion-47,Battalion 47,Battalion,Available,FDNY-E265L121B47
-fdny-battalion-28,Battalion 28,Battalion,Available,FDNY-E271L124B28
-fdny-battalion-52,Battalion 52,Battalion,Available,FDNY-E274B52
-fdny-battalion-33,Battalion 33,Battalion,Available,FDNY-E276L156B33
-fdny-battalion-46,Battalion 46,Battalion,Available,FDNY-E287L136B46
-fdny-battalion-50,Battalion 50,Battalion,Available,FDNY-E298L127B50
-fdny-battalion-51,Battalion 51,Battalion,Available,FDNY-E308B51
-fdny-battalion-49,Battalion 49,Battalion,Available,FDNY-E312B49
-fdny-battalion-54,Battalion 54,Battalion,Available,FDNY-E317L165B54
-fdny-battalion-53,Battalion 53,Battalion,Available,FDNY-E326L160B53
-fdny-battalion-12,Battalion 12,Battalion,Available,FDNY-E35L14B12
-fdny-battalion-7,Battalion 7,Battalion,Available,FDNY-E3L12B7
-fdny-battalion-18,Battalion 18,Battalion,Available,FDNY-E45L58B18
-fdny-battalion-26,Battalion 26,Battalion,Available,FDNY-E50L19B26
-fdny-battalion-9,Battalion 9,Battalion,Available,FDNY-E54L4B9
-fdny-battalion-14,Battalion 14,Battalion,Available,FDNY-E60L17B14
-fdny-battalion-15,Battalion 15,Battalion,Available,FDNY-E63L39B15
-fdny-battalion-16,Battalion 16,Battalion,Available,FDNY-E69L28B16
-fdny-battalion-19,Battalion 19,Battalion,Available,FDNY-E75L33B19
-fdny-battalion-11,Battalion 11,Battalion,Available,FDNY-E76L22B11
-fdny-battalion-27,Battalion 27,Battalion,Available,FDNY-E79L37B27
-fdny-battalion-1,Battalion 1,Battalion,Available,FDNY-E7L1B1
-fdny-battalion-8,Battalion 8,Battalion,Available,FDNY-E8L2B8
-fdny-battalion-17,Battalion 17,Battalion,Available,FDNY-E92L44B17
-fdny-battalion-13,Battalion 13,Battalion,Available,FDNY-E93L45B13
-fdny-battalion-3,Battalion 3,Battalion,Available,FDNY-E94L48B3
-fdny-battalion-6,Battalion 6,Battalion,Available,FDNY-L3B6
-fdny-battalion-22,Battalion 22,Battalion,Available,FDNY-L79B22
-fdny-battalion-20,Battalion 20,Battalion,Available,FDNY-S61B20
-fdny-battalion-rescue,Rescue Battalion,Battalion,Available,FDNY-SOC
-fdny-hazmat-battalion,HazMat Battalion,Battalion,Available,FDNY-Randall
-fdny-brush-1,Brush Fire 1,Brush,Available,FDNY-E164L84
-fdny-brush-2,Brush Fire 2,Brush,Available,FDNY-E166L86
-fdny-brush-3,Brush Fire 3,Brush,Available,FDNY-E156
-fdny-brush-4,Brush Fire 4,Brush,Available,FDNY-S8
-fdny-brush-5,Brush Fire 5,Brush,Available,FDNY-E161L81
-fdny-brush-6,Brush Fire 6,Brush,Available,FDNY-E321
-fdny-brush-7,Brush Fire 7,Brush,Available,FDNY-E266
-fdny-brush-8,Brush Fire 8,Brush,Available,FDNY-E97
-fdny-collapse-5,Collapse 5,Collapse,Available,FDNY-E160R5D8
-fdny-collapse-2,Collapse 2,Collapse,Available,FDNY-E280L132
-fdny-collapse-3,Collapse 3,Collapse,Available,FDNY-R3
-fdny-collapse-4,Collapse 4,Collapse,Available,FDNY-L116
-fdny-collapse-1,Collapse 1,Collapse,Available,FDNY-L25D3
-fdny-division-8,Division 8,Division,Available,FDNY-E160R5D8
-fdny-division-11,Division 11,Division,Available,FDNY-E207L110B31D11
-fdny-division-15,Division 15,Division,Available,FDNY-E283D15
-fdny-division-14,Division 14,Division,Available,FDNY-E324D14
-fdny-division-7,Division 7,Division,Available,FDNY-E48L56D7
-fdny-division-6,Division 6,Division,Available,FDNY-E71L55D6
-fdny-division-1,Division 1,Division,Available,FDNY-L20D1
-fdny-division-3,Division 3,Division,Available,FDNY-L25D3
-fdny-division-13,Division 13,Division,Available,FDNY-S270D13
-fdny-engine-258,Engine 258,Engine,Available,FDNY-E258L115
-fdny-engine-259,Engine 259,Engine,Available,FDNY-E259L128B45
-fdny-engine-260,Engine 260,Engine,Available,FDNY-E260
-fdny-engine-291,Engine 291,Engine,Available,FDNY-E291L140
-fdny-engine-10,Engine 10,Engine,Available,FDNY-E10L10
-fdny-engine-14,Engine 14,Engine,Available,FDNY-E14
-fdny-engine-151,Engine 151,Engine,Available,FDNY-E151L76
-fdny-engine-152,Engine 152,Engine,Available,FDNY-E152B21
-fdny-engine-153,Engine 153,Engine,Available,FDNY-E153L77
-fdny-engine-155,Engine 155,Engine,Available,FDNY-E155L78
-fdny-engine-156,Engine 156,Engine,Available,FDNY-E156
-fdny-engine-157,Engine 157,Engine,Available,FDNY-E157L80
-fdny-engine-158,Engine 158,Engine,Available,FDNY-E158
-fdny-engine-159,Engine 159,Engine,Available,FDNY-E159
-fdny-engine-15,Engine 15,Engine,Available,FDNY-E15L18B4
-fdny-engine-160,Engine 160,Engine,Available,FDNY-E160R5D8
-fdny-engine-161,Engine 161,Engine,Available,FDNY-E161L81
-fdny-engine-162,Engine 162,Engine,Available,FDNY-E162L82B23
-fdny-engine-163,Engine 163,Engine,Available,FDNY-E163L83
-fdny-engine-164,Engine 164,Engine,Available,FDNY-E164L84
-fdny-engine-165,Engine 165,Engine,Available,FDNY-E165L85
-fdny-engine-166,Engine 166,Engine,Available,FDNY-E166L86
-fdny-engine-167,Engine 167,Engine,Available,FDNY-E167L87
-fdny-engine-168,Engine 168,Engine,Available,FDNY-E168
-fdny-engine-16,Engine 16,Engine,Available,FDNY-E16L7
-fdny-engine-1,Engine 1,Engine,Available,FDNY-E1L24
-fdny-engine-201,Engine 201,Engine,Available,FDNY-E201L114B40
-fdny-engine-202,Engine 202,Engine,Available,FDNY-E202L101B32
-fdny-engine-205,Engine 205,Engine,Available,FDNY-E205L118
-fdny-engine-206,Engine 206,Engine,Available,FDNY-E206
-fdny-engine-207,Engine 207,Engine,Available,FDNY-E207L110B31D11
-fdny-engine-21,Engine 21,Engine,Available,FDNY-E21
-fdny-engine-210,Engine 210,Engine,Available,FDNY-E210
-fdny-engine-211,Engine 211,Engine,Available,FDNY-E211L119
-fdny-engine-214,Engine 214,Engine,Available,FDNY-E214L111
-fdny-engine-216,Engine 216,Engine,Available,FDNY-E216L108B35
-fdny-engine-217,Engine 217,Engine,Available,FDNY-E217
-fdny-engine-218,Engine 218,Engine,Available,FDNY-E218
-fdny-engine-219,Engine 219,Engine,Available,FDNY-E219L105
-fdny-engine-220,Engine 220,Engine,Available,FDNY-E220L122
-fdny-engine-221,Engine 221,Engine,Available,FDNY-E221L104
-fdny-engine-222,Engine 222,Engine,Available,FDNY-E222B37
-fdny-engine-224,Engine 224,Engine,Available,FDNY-E224
-fdny-engine-225,Engine 225,Engine,Available,FDNY-E225L107B39
-fdny-engine-226,Engine 226,Engine,Available,FDNY-E226
-fdny-engine-227,Engine 227,Engine,Available,FDNY-E227
-fdny-engine-228,Engine 228,Engine,Available,FDNY-E228
-fdny-engine-229,Engine 229,Engine,Available,FDNY-E229L146
-fdny-engine-22,Engine 22,Engine,Available,FDNY-E22L13B10
-fdny-engine-23,Engine 23,Engine,Available,FDNY-E23
-fdny-engine-230,Engine 230,Engine,Available,FDNY-E230
-fdny-engine-231,Engine 231,Engine,Available,FDNY-E231L120B44
-fdny-engine-233,Engine 233,Engine,Available,FDNY-E233L176
-fdny-engine-234,Engine 234,Engine,Available,FDNY-E234L123B38
-fdny-engine-235,Engine 235,Engine,Available,FDNY-E235B57
-fdny-engine-236,Engine 236,Engine,Available,FDNY-E236
-fdny-engine-237,Engine 237,Engine,Available,FDNY-E237
-fdny-engine-238,Engine 238,Engine,Available,FDNY-E238L106
-fdny-engine-239,Engine 239,Engine,Available,FDNY-E239
-fdny-engine-240,Engine 240,Engine,Available,FDNY-E240B48
-fdny-engine-241,Engine 241,Engine,Available,FDNY-E241L109
-fdny-engine-242,Engine 242,Engine,Available,FDNY-E242
-fdny-engine-243,Engine 243,Engine,Available,FDNY-E243L168B42
-fdny-engine-245,Engine 245,Engine,Available,FDNY-E245L161B43
-fdny-engine-246,Engine 246,Engine,Available,FDNY-E246L169
-fdny-engine-247,Engine 247,Engine,Available,FDNY-E247
-fdny-engine-248,Engine 248,Engine,Available,FDNY-E248B41
-fdny-engine-249,Engine 249,Engine,Available,FDNY-E249L113
-fdny-engine-24,Engine 24,Engine,Available,FDNY-E24L5B2
-fdny-engine-250,Engine 250,Engine,Available,FDNY-E250
-fdny-engine-251,Engine 251,Engine,Available,FDNY-E251
-fdny-engine-253,Engine 253,Engine,Available,FDNY-E253
-fdny-engine-254,Engine 254,Engine,Available,FDNY-E254L153
-fdny-engine-255,Engine 255,Engine,Available,FDNY-E255L157
-fdny-engine-257,Engine 257,Engine,Available,FDNY-E257L170B58
-fdny-engine-26,Engine 26,Engine,Available,FDNY-E26
-fdny-engine-262,Engine 262,Engine,Available,FDNY-E262
-fdny-engine-263,Engine 263,Engine,Available,FDNY-E263L117
-fdny-engine-264,Engine 264,Engine,Available,FDNY-E264E328L134
-fdny-engine-328,Engine 328,Engine,Available,FDNY-E264E328L134
-fdny-engine-265,Engine 265,Engine,Available,FDNY-E265L121B47
-fdny-engine-266,Engine 266,Engine,Available,FDNY-E266
-fdny-engine-268,Engine 268,Engine,Available,FDNY-E268L137
-fdny-engine-271,Engine 271,Engine,Available,FDNY-E271L124B28
-fdny-engine-273,Engine 273,Engine,Available,FDNY-E273L129
-fdny-engine-274,Engine 274,Engine,Available,FDNY-E274B52
-fdny-engine-275,Engine 275,Engine,Available,FDNY-E275L133
-fdny-engine-276,Engine 276,Engine,Available,FDNY-E276L156B33
-fdny-engine-277,Engine 277,Engine,Available,FDNY-E277L112
-fdny-engine-279,Engine 279,Engine,Available,FDNY-E279L131
-fdny-engine-280,Engine 280,Engine,Available,FDNY-E280L132
-fdny-engine-281,Engine 281,Engine,Available,FDNY-E281L147
-fdny-engine-282,Engine 282,Engine,Available,FDNY-E282L148
-fdny-engine-283,Engine 283,Engine,Available,FDNY-E283D15
-fdny-engine-284,Engine 284,Engine,Available,FDNY-E284L149
-fdny-engine-285,Engine 285,Engine,Available,FDNY-E285L142
-fdny-engine-286,Engine 286,Engine,Available,FDNY-E286L135
-fdny-engine-287,Engine 287,Engine,Available,FDNY-E287L136B46
-fdny-engine-289,Engine 289,Engine,Available,FDNY-E289L138
-fdny-engine-28,Engine 28,Engine,Available,FDNY-E28L11
-fdny-engine-290,Engine 290,Engine,Available,FDNY-E290L103
-fdny-engine-292,Engine 292,Engine,Available,FDNY-E292R4
-fdny-engine-293,Engine 293,Engine,Available,FDNY-E293
-fdny-engine-294,Engine 294,Engine,Available,FDNY-E294L143
-fdny-engine-295,Engine 295,Engine,Available,FDNY-E295L144
-fdny-engine-297,Engine 297,Engine,Available,FDNY-E297L130
-fdny-engine-298,Engine 298,Engine,Available,FDNY-E298L127B50
-fdny-engine-299,Engine 299,Engine,Available,FDNY-E299L152
-fdny-engine-301,Engine 301,Engine,Available,FDNY-E301L150
-fdny-engine-302,Engine 302,Engine,Available,FDNY-E302L155
-fdny-engine-303,Engine 303,Engine,Available,FDNY-E303L126
-fdny-engine-304,Engine 304,Engine,Available,FDNY-E304L162
-fdny-engine-305,Engine 305,Engine,Available,FDNY-E305L151
-fdny-engine-306,Engine 306,Engine,Available,FDNY-E306
-fdny-engine-307,Engine 307,Engine,Available,FDNY-E307L154
-fdny-engine-308,Engine 308,Engine,Available,FDNY-E308B51
-fdny-engine-309,Engine 309,Engine,Available,FDNY-E309L159
-fdny-engine-310,Engine 310,Engine,Available,FDNY-E310L174
-fdny-engine-311,Engine 311,Engine,Available,FDNY-E311L158
-fdny-engine-312,Engine 312,Engine,Available,FDNY-E312B49
-fdny-engine-313,Engine 313,Engine,Available,FDNY-E313L164
-fdny-engine-314,Engine 314,Engine,Available,FDNY-E314
-fdny-engine-315,Engine 315,Engine,Available,FDNY-E315L125
-fdny-engine-316,Engine 316,Engine,Available,FDNY-E316
-fdny-engine-317,Engine 317,Engine,Available,FDNY-E317L165B54
-fdny-engine-318,Engine 318,Engine,Available,FDNY-E318L166
-fdny-engine-319,Engine 319,Engine,Available,FDNY-E319
-fdny-engine-320,Engine 320,Engine,Available,FDNY-E320L167
-fdny-engine-321,Engine 321,Engine,Available,FDNY-E321
-fdny-engine-323,Engine 323,Engine,Available,FDNY-E323
-fdny-engine-324,Engine 324,Engine,Available,FDNY-E324D14
-fdny-engine-325,Engine 325,Engine,Available,FDNY-E325L163
-fdny-engine-326,Engine 326,Engine,Available,FDNY-E326L160B53
-fdny-engine-329,Engine 329,Engine,Available,FDNY-E329
-fdny-engine-330,Engine 330,Engine,Available,FDNY-E330L172
-fdny-engine-331,Engine 331,Engine,Available,FDNY-E331L173
-fdny-engine-332,Engine 332,Engine,Available,FDNY-E332L175
-fdny-engine-33,Engine 33,Engine,Available,FDNY-E33L9
-fdny-engine-34,Engine 34,Engine,Available,FDNY-E34L21
-fdny-engine-35,Engine 35,Engine,Available,FDNY-E35L14B12
-fdny-engine-37,Engine 37,Engine,Available,FDNY-E37L40
-fdny-engine-38,Engine 38,Engine,Available,FDNY-E38L51
-fdny-engine-39,Engine 39,Engine,Available,FDNY-E39L16
-fdny-engine-3,Engine 3,Engine,Available,FDNY-E3L12B7
-fdny-engine-40,Engine 40,Engine,Available,FDNY-E40L35
-fdny-engine-42,Engine 42,Engine,Available,FDNY-E42
-fdny-engine-43,Engine 43,Engine,Available,FDNY-E43L59
-fdny-engine-44,Engine 44,Engine,Available,FDNY-E44
-fdny-engine-45,Engine 45,Engine,Available,FDNY-E45L58B18
-fdny-engine-46,Engine 46,Engine,Available,FDNY-E46L27
-fdny-engine-47,Engine 47,Engine,Available,FDNY-E47
-fdny-engine-48,Engine 48,Engine,Available,FDNY-E48L56D7
-fdny-engine-4,Engine 4,Engine,Available,FDNY-E4L15
-fdny-engine-5,Engine 5,Engine,Available,FDNY-E5
-fdny-engine-50,Engine 50,Engine,Available,FDNY-E50L19B26
-fdny-engine-52,Engine 52,Engine,Available,FDNY-E52L52
-fdny-engine-53,Engine 53,Engine,Available,FDNY-E53L43
-fdny-engine-54,Engine 54,Engine,Available,FDNY-E54L4B9
-fdny-engine-55,Engine 55,Engine,Available,FDNY-E55
-fdny-engine-58,Engine 58,Engine,Available,FDNY-E58L26
-fdny-engine-59,Engine 59,Engine,Available,FDNY-E59L30
-fdny-engine-6,Engine 6,Engine,Available,FDNY-E6
-fdny-engine-60,Engine 60,Engine,Available,FDNY-E60L17B14
-fdny-engine-62,Engine 62,Engine,Available,FDNY-E62L32
-fdny-engine-63,Engine 63,Engine,Available,FDNY-E63L39B15
-fdny-engine-64,Engine 64,Engine,Available,FDNY-E64L47
-fdny-engine-65,Engine 65,Engine,Available,FDNY-E65
-fdny-engine-66,Engine 66,Engine,Available,FDNY-E66L61
-fdny-engine-67,Engine 67,Engine,Available,FDNY-E67
-fdny-engine-68,Engine 68,Engine,Available,FDNY-E68L49
-fdny-engine-69,Engine 69,Engine,Available,FDNY-E69L28B16
-fdny-engine-70,Engine 70,Engine,Available,FDNY-E70L53
-fdny-engine-71,Engine 71,Engine,Available,FDNY-E71L55D6
-fdny-engine-72,Engine 72,Engine,Available,FDNY-E72
-fdny-engine-73,Engine 73,Engine,Available,FDNY-E73L42
-fdny-engine-74,Engine 74,Engine,Available,FDNY-E74
-fdny-engine-75,Engine 75,Engine,Available,FDNY-E75L33B19
-fdny-engine-76,Engine 76,Engine,Available,FDNY-E76L22B11
-fdny-engine-79,Engine 79,Engine,Available,FDNY-E79L37B27
-fdny-engine-7,Engine 7,Engine,Available,FDNY-E7L1B1
-fdny-engine-80,Engine 80,Engine,Available,FDNY-E80L23
-fdny-engine-81,Engine 81,Engine,Available,FDNY-E81L46
-fdny-engine-82,Engine 82,Engine,Available,FDNY-E82L31
-fdny-engine-83,Engine 83,Engine,Available,FDNY-E83L29
-fdny-engine-84,Engine 84,Engine,Available,FDNY-E84L34
-fdny-engine-88,Engine 88,Engine,Available,FDNY-E88L38
-fdny-engine-89,Engine 89,Engine,Available,FDNY-E89L50
-fdny-engine-8,Engine 8,Engine,Available,FDNY-E8L2B8
-fdny-engine-90,Engine 90,Engine,Available,FDNY-E90L41
-fdny-engine-91,Engine 91,Engine,Available,FDNY-E91
-fdny-engine-92,Engine 92,Engine,Available,FDNY-E92L44B17
-fdny-engine-93,Engine 93,Engine,Available,FDNY-E93L45B13
-fdny-engine-94,Engine 94,Engine,Available,FDNY-E94L48B3
-fdny-engine-95,Engine 95,Engine,Available,FDNY-E95L36
-fdny-engine-96,Engine 96,Engine,Available,FDNY-E96L54
-fdny-engine-97,Engine 97,Engine,Available,FDNY-E97
-fdny-engine-9,Engine 9,Engine,Available,FDNY-E9L6
-fdny-fc-1,Field Comm. 1,Field Comm.,Available,FDNY-E233L176
-fdny-htmu-165,HTMU 165,HazMat,Available,FDNY-E165L85
-fdny-htmu-250,HTMU 250,HazMat,Available,FDNY-E250
-fdny-htmu-274,HTMU 274,HazMat,Available,FDNY-E274B52
-fdny-htmu-44,HTMU 44,HazMat,Available,FDNY-E44
-fdny-hazmat-1,HazMat 1,HazMat,Available,FDNY-S288HM1
-fdny-dsu-1,DSU 1,HazMat Support,Available,FDNY-DSU
-fdny-high-rise-1,High Rise 1,High Rise,Available,FDNY-E3L12B7
-fdny-high-rise-2,High Rise 2,High Rise,Available,FDNY-E39L16
-fdny-imt-1,IMT Planning Vehicle 1,IMT,Available,FDNY-E262
-fdny-mcp1,Mobile Command Post 1,MCP,Available,FDNY-E233L176
-fdny-mcp2,Mobile Command Post 2,MCP,Available,FDNY-E93L45B13
-fdny-msu,Mask Service Unit,MSU,Available,FDNY-Randall
-fdny-purple-163,Purple-K 163,Purple-K,Available,FDNY-E163L83
-fdny-purple-228,Purple-K 228,Purple-K,Available,FDNY-E228
-fdny-purple-33,Purple-K 33,Purple-K,Available,FDNY-E33L9
-fdny-purple-84,Purple-K 84,Purple-K,Available,FDNY-E84L34
-fdny-purple-326,Purple-K 326,Purple-K,Available,FDNY-E326L160B53
-fdny-purple-229,Purple-K 229,Purple-K,Available,FDNY-E229L146
-fdny-rac-1,RAC 1,RAC,Available,FDNY-E91
-fdny-rac-2,RAC 2,RAC,Available,FDNY-E332L175
-fdny-rac-3,RAC 3,RAC,Available,FDNY-R3
-fdny-rac-4,RAC 4,RAC,Available,FDNY-SOC
-fdny-rac-5,RAC 5,RAC,Available,FDNY-E242
-fdny-ladder-128,Ladder 128,Rear Mount,Available,FDNY-E259L128B45
-fdny-ladder-140,Ladder 140,Rear Mount,Available,FDNY-E291L140
-fdny-ladder-10,Ladder 10,Rear Mount,Available,FDNY-E10L10
-fdny-ladder-78,Ladder 78,Rear Mount,Available,FDNY-E155L78
-fdny-ladder-80,Ladder 80,Rear Mount,Available,FDNY-E157L80
-fdny-ladder-81,Ladder 81,Rear Mount,Available,FDNY-E161L81
-fdny-ladder-82,Ladder 82,Rear Mount,Available,FDNY-E162L82B23
-fdny-ladder-83,Ladder 83,Rear Mount,Available,FDNY-E163L83
-fdny-ladder-84,Ladder 84,Rear Mount,Available,FDNY-E164L84
-fdny-ladder-24,Ladder 24,Rear Mount,Available,FDNY-E1L24
-fdny-ladder-110,Ladder 110,Rear Mount,Available,FDNY-E207L110B31D11
-fdny-ladder-108,Ladder 108,Rear Mount,Available,FDNY-E216L108B35
-fdny-ladder-122,Ladder 122,Rear Mount,Available,FDNY-E220L122
-fdny-ladder-176,Ladder 176,Rear Mount,Available,FDNY-E233L176
-fdny-ladder-123,Ladder 123,Rear Mount,Available,FDNY-E234L123B38
-fdny-battalion-48,Battalion 48,Rear Mount,Available,FDNY-E240B48
-fdny-ladder-109,Ladder 109,Rear Mount,Available,FDNY-E241L109
-fdny-ladder-168,Ladder 168,Rear Mount,Available,FDNY-E243L168B42
-fdny-ladder-169,Ladder 169,Rear Mount,Available,FDNY-E246L169
-fdny-ladder-113,Ladder 113,Rear Mount,Available,FDNY-E249L113
-fdny-ladder-134,Ladder 134,Rear Mount,Available,FDNY-E264E328L134
-fdny-ladder-137,Ladder 137,Rear Mount,Available,FDNY-E268L137
-fdny-ladder-129,Ladder 129,Rear Mount,Available,FDNY-E273L129
-fdny-ladder-133,Ladder 133,Rear Mount,Available,FDNY-E275L133
-fdny-ladder-156,Ladder 156,Rear Mount,Available,FDNY-E276L156B33
-fdny-ladder-112,Ladder 112,Rear Mount,Available,FDNY-E277L112
-fdny-ladder-132,Ladder 132,Rear Mount,Available,FDNY-E280L132
-fdny-ladder-148,Ladder 148,Rear Mount,Available,FDNY-E282L148
-fdny-ladder-136,Ladder 136,Rear Mount,Available,FDNY-E287L136B46
-fdny-ladder-11,Ladder 11,Rear Mount,Available,FDNY-E28L11
-fdny-ladder-103,Ladder 103,Rear Mount,Available,FDNY-E290L103
-fdny-ladder-130,Ladder 130,Rear Mount,Available,FDNY-E297L130
-fdny-ladder-150,Ladder 150,Rear Mount,Available,FDNY-E301L150
-fdny-ladder-126,Ladder 126,Rear Mount,Available,FDNY-E303L126
-fdny-ladder-151,Ladder 151,Rear Mount,Available,FDNY-E305L151
-fdny-ladder-154,Ladder 154,Rear Mount,Available,FDNY-E307L154
-fdny-ladder-174,Ladder 174,Rear Mount,Available,FDNY-E310L174
-fdny-ladder-125,Ladder 125,Rear Mount,Available,FDNY-E315L125
-fdny-ladder-165,Ladder 165,Rear Mount,Available,FDNY-E317L165B54
-fdny-ladder-166,Ladder 166,Rear Mount,Available,FDNY-E318L166
-fdny-ladder-167,Ladder 167,Rear Mount,Available,FDNY-E320L167
-fdny-ladder-173,Ladder 173,Rear Mount,Available,FDNY-E331L173
-fdny-ladder-16,Ladder 16,Rear Mount,Available,FDNY-E39L16
-fdny-ladder-59,Ladder 59,Rear Mount,Available,FDNY-E43L59
-fdny-ladder-27,Ladder 27,Rear Mount,Available,FDNY-E46L27
-fdny-ladder-56,Ladder 56,Rear Mount,Available,FDNY-E48L56D7
-fdny-ladder-19,Ladder 19,Rear Mount,Available,FDNY-E50L19B26
-fdny-ladder-52,Ladder 52,Rear Mount,Available,FDNY-E52L52
-fdny-ladder-43,Ladder 43,Rear Mount,Available,FDNY-E53L43
-fdny-ladder-4,Ladder 4,Rear Mount,Available,FDNY-E54L4B9
-fdny-ladder-26,Ladder 26,Rear Mount,Available,FDNY-E58L26
-fdny-ladder-30,Ladder 30,Rear Mount,Available,FDNY-E59L30
-fdny-ladder-32,Ladder 32,Rear Mount,Available,FDNY-E62L32
-fdny-ladder-47,Ladder 47,Rear Mount,Available,FDNY-E64L47
-fdny-ladder-61,Ladder 61,Rear Mount,Available,FDNY-E66L61
-fdny-ladder-49,Ladder 49,Rear Mount,Available,FDNY-E68L49
-fdny-ladder-28,Ladder 28,Rear Mount,Available,FDNY-E69L28B16
-fdny-ladder-55,Ladder 55,Rear Mount,Available,FDNY-E71L55D6
-fdny-ladder-42,Ladder 42,Rear Mount,Available,FDNY-E73L42
-fdny-ladder-37,Ladder 37,Rear Mount,Available,FDNY-E79L37B27
-fdny-ladder-29,Ladder 29,Rear Mount,Available,FDNY-E83L29
-fdny-ladder-38,Ladder 38,Rear Mount,Available,FDNY-E88L38
-fdny-ladder-2,Ladder 2,Rear Mount,Available,FDNY-E8L2B8
-fdny-ladder-48,Ladder 48,Rear Mount,Available,FDNY-E94L48B3
-fdny-ladder-36,Ladder 36,Rear Mount,Available,FDNY-E95L36
-fdny-ladder-102,Ladder 102,Rear Mount,Available,FDNY-L102
-fdny-ladder-116,Ladder 116,Rear Mount,Available,FDNY-L116
-fdny-ladder-25,Ladder 25,Rear Mount,Available,FDNY-L25D3
-fdny-ladder-3,Ladder 3,Rear Mount,Available,FDNY-L3B6
-fdny-ladder-8,Ladder 8,Rear Mount,Available,FDNY-L8
-fdny-rescue-5,Rescue 5,Rescue,Available,FDNY-E160R5D8
-fdny-rescue- 4,Rescue 4,Rescue,Available,FDNY-E292R4
-fdny-rescue-1,Rescue 1,Rescue,Available,FDNY-R1
-fdny-rescue- 2,Rescue 2,Rescue,Available,FDNY-R2
-fdny-rescue-3,Rescue 3,Rescue,Available,FDNY-R3
-fdny-satellite-5,Satellite 5,Satellite,Available,FDNY-E159
-fdny-satellite-6,Satellite 6,Satellite,Available,FDNY-E207L110B31D11
-fdny-satellite-3,Satellite 3,Satellite,Available,FDNY-E284L149
-fdny-satellite-4,Satellite 4,Satellite,Available,FDNY-E324D14
-fdny-satellite-2,Satellite 2,Satellite,Available,FDNY-E72
-fdny-satellite-1,Satellite 1,Satellite,Available,FDNY-E9L6
-fdny-squad-1,Squad 1,Squad,Available,FDNY-S1
-fdny-squad-18,Squad 18,Squad,Available,FDNY-S18
-fdny-squad-252,Squad 252,Squad,Available,FDNY-S252
-fdny-squad-270,Squad 270,Squad,Available,FDNY-S270D13
-fdny-squad-288,Squad 288,Squad,Available,FDNY-S288HM1
-fdny-squad-41,Squad 41,Squad,Available,FDNY-S41
-fdny-squad-61,Squad 61,Squad,Available,FDNY-S61B20
-fdny-squad-8,Squad 8,Squad,Available,FDNY-S8
-fdny-thawing-76,Thawing Apparatus 76,Thawing Apparatus,Available,FDNY-E76L22B11
-fdny-thawing-97,Thawing Apparatus 97,Thawing Apparatus,Available,FDNY-E97
-fdny-thawing-151,Thawing Apparatus 151,Thawing Apparatus,Available,FDNY-E151L76
-fdny-thawing-330,Thawing Apparatus 330,Thawing Apparatus,Available,FDNY-E330L172
-fdny-thawing-266,Thawing Apparatus 266,Thawing Apparatus,Available,FDNY-E226
-fdny-ladder-115,Ladder 115,Tower Ladder,Available,FDNY-E258L115
-fdny-ladder-76,Ladder 76,Tower Ladder,Available,FDNY-E151L76
-fdny-ladder-77,Ladder 77,Tower Ladder,Available,FDNY-E153L77
-fdny-ladder-18,Ladder 18,Tower Ladder,Available,FDNY-E15L18B4
-fdny-ladder-85,Ladder 85,Tower Ladder,Available,FDNY-E165L85
-fdny-ladder-86,Ladder 86,Tower Ladder,Available,FDNY-E166L86
-fdny-ladder-87,Ladder 87,Tower Ladder,Available,FDNY-E167L87
-fdny-ladder-7,Ladder 7,Tower Ladder,Available,FDNY-E16L7
-fdny-ladder-114,Ladder 114,Tower Ladder,Available,FDNY-E201L114B40
-fdny-ladder-119,Ladder 119,Tower Ladder,Available,FDNY-E211L119
-fdny-ladder-111,Ladder 111,Tower Ladder,Available,FDNY-E214L111
-fdny-ladder-105,Ladder 105,Tower Ladder,Available,FDNY-E219L105
-fdny-ladder-107,Ladder 107,Tower Ladder,Available,FDNY-E225L107B39
-fdny-ladder-146,Ladder 146,Tower Ladder,Available,FDNY-E229L146
-fdny-ladder-13,Ladder 13,Tower Ladder,Available,FDNY-E22L13B10
-fdny-ladder-120,Ladder 120,Tower Ladder,Available,FDNY-E231L120B44
-fdny-ladder-161,Ladder 161,Tower Ladder,Available,FDNY-E245L161B43
-fdny-ladder-153,Ladder 153,Tower Ladder,Available,FDNY-E254L153
-fdny-ladder-157,Ladder 157,Tower Ladder,Available,FDNY-E255L157
-fdny-ladder-170,Ladder 170,Tower Ladder,Available,FDNY-E257L170B58
-fdny-ladder-117,Ladder 117,Tower Ladder,Available,FDNY-E263L117
-fdny-ladder-121,Ladder 121,Tower Ladder,Available,FDNY-E265L121B47
-fdny-ladder-124,Ladder 124,Tower Ladder,Available,FDNY-E271L124B28
-fdny-ladder-131,Ladder 131,Tower Ladder,Available,FDNY-E279L131
-fdny-ladder-149,Ladder 149,Tower Ladder,Available,FDNY-E284L149
-fdny-ladder-142,Ladder 142,Tower Ladder,Available,FDNY-E285L142
-fdny-ladder-135,Ladder 135,Tower Ladder,Available,FDNY-E286L135
-fdny-ladder-138,Ladder 138,Tower Ladder,Available,FDNY-E289L138
-fdny-ladder-144,Ladder 144,Tower Ladder,Available,FDNY-E295L144
-fdny-ladder-127,Ladder 127,Tower Ladder,Available,FDNY-E298L127B50
-fdny-ladder-152,Ladder 152,Tower Ladder,Available,FDNY-E299L152
-fdny-ladder-155,Ladder 155,Tower Ladder,Available,FDNY-E302L155
-fdny-ladder-162,Ladder 162,Tower Ladder,Available,FDNY-E304L162
-fdny-ladder-159,Ladder 159,Tower Ladder,Available,FDNY-E309L159
-fdny-ladder-158,Ladder 158,Tower Ladder,Available,FDNY-E311L158
-fdny-ladder-164,Ladder 164,Tower Ladder,Available,FDNY-E313L164
-fdny-ladder-163,Ladder 163,Tower Ladder,Available,FDNY-E325L163
-fdny-ladder-160,Ladder 160,Tower Ladder,Available,FDNY-E326L160B53
-fdny-ladder-172,Ladder 172,Tower Ladder,Available,FDNY-E330L172
-fdny-ladder-9,Ladder 9,Tower Ladder,Available,FDNY-E33L9
-fdny-ladder-21,Ladder 21,Tower Ladder,Available,FDNY-E34L21
-fdny-ladder-14,Ladder 14,Tower Ladder,Available,FDNY-E35L14B12
-fdny-ladder-51,Ladder 51,Tower Ladder,Available,FDNY-E38L51
-fdny-ladder-12,Ladder 12,Tower Ladder,Available,FDNY-E3L12B7
-fdny-ladder-35,Ladder 35,Tower Ladder,Available,FDNY-E40L35
-fdny-ladder-58,Ladder 58,Tower Ladder,Available,FDNY-E45L58B18
-fdny-ladder-15,Ladder 15,Tower Ladder,Available,FDNY-E4L15
-fdny-ladder-17,Ladder 17,Tower Ladder,Available,FDNY-E60L17B14
-fdny-ladder-53,Ladder 53,Tower Ladder,Available,FDNY-E70L53
-fdny-ladder-33,Ladder 33,Tower Ladder,Available,FDNY-E75L33B19
-fdny-ladder-22,Ladder 22,Tower Ladder,Available,FDNY-E76L22B11
-fdny-ladder-1,Ladder 1,Tower Ladder,Available,FDNY-E7L1B1
-fdny-ladder-23,Ladder 23,Tower Ladder,Available,FDNY-E80L23
-fdny-ladder-46,Ladder 46,Tower Ladder,Available,FDNY-E81L46
-fdny-ladder-31,Ladder 31,Tower Ladder,Available,FDNY-E82L31
-fdny-ladder-50,Ladder 50,Tower Ladder,Available,FDNY-E89L50
-fdny-ladder-41,Ladder 41,Tower Ladder,Available,FDNY-E90L41
-fdny-ladder-44,Ladder 44,Tower Ladder,Available,FDNY-E92L44B17
-fdny-ladder-45,Ladder 45,Tower Ladder,Available,FDNY-E93L45B13
-fdny-ladder-54,Ladder 54,Tower Ladder,Available,FDNY-E96L54
-fdny-ladder-79,Ladder 79,Tower Ladder,Available,FDNY-L79B22
-fdny-ladder-101,Ladder 101,Tractor Trailor,Available,FDNY-E202L101B32
-fdny-ladder-118,Ladder 118,Tractor Trailor,Available,FDNY-E205L118
-fdny-ladder-104,Ladder 104,Tractor Trailor,Available,FDNY-E221L104
-fdny-ladder-106,Ladder 106,Tractor Trailor,Available,FDNY-E238L106
-fdny-ladder-5,Ladder 5,Tractor Trailor,Available,FDNY-E24L5B2
-fdny-ladder-147,Ladder 147,Tractor Trailor,Available,FDNY-E281L147
-fdny-ladder-143,Ladder 143,Tractor Trailor,Available,FDNY-E294L143
-fdny-ladder-175,Ladder 175,Tractor Trailor,Available,FDNY-E332L175
-fdny-ladder-40,Ladder 40,Tractor Trailor,Available,FDNY-E37L40
-fdny-ladder-39,Ladder 39,Tractor Trailor,Available,FDNY-E63L39B15
-fdny-ladder-34,Ladder 34,Tractor Trailor,Available,FDNY-E84L34
-fdny-ladder-6,Ladder 6,Tractor Trailor,Available,FDNY-E9L6
-fdny-ladder-20,Ladder 20,Tractor Trailor,Available,FDNY-L20D1
-fdny-tsu-2,TSU 2,TSU,Available,FDNY-E160R5D8
-fdny-tsu-1,TSU 1,TSU,Available,FDNY-SOC
+id,callsign,type,status,station_id,ff_count
+fdny-battalion-45,Battalion 45,Battalion,Available,FDNY-E259L128B45,2
+fdny-battalion-21,Battalion 21,Battalion,Available,FDNY-E152B21,2
+fdny-battalion-4,Battalion 4,Battalion,Available,FDNY-E15L18B4,2
+fdny-battalion-23,Battalion 23,Battalion,Available,FDNY-E162L82B23,2
+fdny-battalion-40,Battalion 40,Battalion,Available,FDNY-E201L114B40,2
+fdny-battalion-32,Battalion 32,Battalion,Available,FDNY-E202L101B32,2
+fdny-battalion-31,Battalion 31,Battalion,Available,FDNY-E207L110B31D11,2
+fdny-battalion-35,Battalion 35,Battalion,Available,FDNY-E216L108B35,2
+fdny-battalion-37,Battalion 37,Battalion,Available,FDNY-E222B37,2
+fdny-battalion-39,Battalion 39,Battalion,Available,FDNY-E225L107B39,2
+fdny-battalion-10,Battalion 10,Battalion,Available,FDNY-E22L13B10,2
+fdny-battalion-44,Battalion 44,Battalion,Available,FDNY-E231L120B44,2
+fdny-battalion-38,Battalion 38,Battalion,Available,FDNY-E234L123B38,2
+fdny-battalion-57,Battalion 57,Battalion,Available,FDNY-E235B57,2
+fdny-battalion-42,Battalion 42,Battalion,Available,FDNY-E243L168B42,2
+fdny-battalion-43,Battalion 43,Battalion,Available,FDNY-E245L161B43,2
+fdny-battalion-41,Battalion 41,Battalion,Available,FDNY-E248B41,2
+fdny-battalion-2,Battalion 2,Battalion,Available,FDNY-E24L5B2,2
+fdny-battalion-58,Battalion 58,Battalion,Available,FDNY-E257L170B58,2
+fdny-battalion-47,Battalion 47,Battalion,Available,FDNY-E265L121B47,2
+fdny-battalion-28,Battalion 28,Battalion,Available,FDNY-E271L124B28,2
+fdny-battalion-52,Battalion 52,Battalion,Available,FDNY-E274B52,2
+fdny-battalion-33,Battalion 33,Battalion,Available,FDNY-E276L156B33,2
+fdny-battalion-46,Battalion 46,Battalion,Available,FDNY-E287L136B46,2
+fdny-battalion-50,Battalion 50,Battalion,Available,FDNY-E298L127B50,2
+fdny-battalion-51,Battalion 51,Battalion,Available,FDNY-E308B51,2
+fdny-battalion-49,Battalion 49,Battalion,Available,FDNY-E312B49,2
+fdny-battalion-54,Battalion 54,Battalion,Available,FDNY-E317L165B54,2
+fdny-battalion-53,Battalion 53,Battalion,Available,FDNY-E326L160B53,2
+fdny-battalion-12,Battalion 12,Battalion,Available,FDNY-E35L14B12,2
+fdny-battalion-7,Battalion 7,Battalion,Available,FDNY-E3L12B7,2
+fdny-battalion-18,Battalion 18,Battalion,Available,FDNY-E45L58B18,2
+fdny-battalion-26,Battalion 26,Battalion,Available,FDNY-E50L19B26,2
+fdny-battalion-9,Battalion 9,Battalion,Available,FDNY-E54L4B9,2
+fdny-battalion-14,Battalion 14,Battalion,Available,FDNY-E60L17B14,2
+fdny-battalion-15,Battalion 15,Battalion,Available,FDNY-E63L39B15,2
+fdny-battalion-16,Battalion 16,Battalion,Available,FDNY-E69L28B16,2
+fdny-battalion-19,Battalion 19,Battalion,Available,FDNY-E75L33B19,2
+fdny-battalion-11,Battalion 11,Battalion,Available,FDNY-E76L22B11,2
+fdny-battalion-27,Battalion 27,Battalion,Available,FDNY-E79L37B27,2
+fdny-battalion-1,Battalion 1,Battalion,Available,FDNY-E7L1B1,2
+fdny-battalion-8,Battalion 8,Battalion,Available,FDNY-E8L2B8,2
+fdny-battalion-17,Battalion 17,Battalion,Available,FDNY-E92L44B17,2
+fdny-battalion-13,Battalion 13,Battalion,Available,FDNY-E93L45B13,2
+fdny-battalion-3,Battalion 3,Battalion,Available,FDNY-E94L48B3,2
+fdny-battalion-6,Battalion 6,Battalion,Available,FDNY-L3B6,2
+fdny-battalion-22,Battalion 22,Battalion,Available,FDNY-L79B22,2
+fdny-battalion-20,Battalion 20,Battalion,Available,FDNY-S61B20,2
+fdny-battalion-rescue,Rescue Battalion,Battalion,Available,FDNY-SOC,2
+fdny-hazmat-battalion,HazMat Battalion,Battalion,Available,FDNY-Randall,2
+fdny-brush-1,Brush Fire 1,Brush,Available,FDNY-E164L84,3
+fdny-brush-2,Brush Fire 2,Brush,Available,FDNY-E166L86,3
+fdny-brush-3,Brush Fire 3,Brush,Available,FDNY-E156,3
+fdny-brush-4,Brush Fire 4,Brush,Available,FDNY-S8,3
+fdny-brush-5,Brush Fire 5,Brush,Available,FDNY-E161L81,3
+fdny-brush-6,Brush Fire 6,Brush,Available,FDNY-E321,3
+fdny-brush-7,Brush Fire 7,Brush,Available,FDNY-E266,3
+fdny-brush-8,Brush Fire 8,Brush,Available,FDNY-E97,3
+fdny-collapse-5,Collapse 5,Collapse,Available,FDNY-E160R5D8,2
+fdny-collapse-2,Collapse 2,Collapse,Available,FDNY-E280L132,2
+fdny-collapse-3,Collapse 3,Collapse,Available,FDNY-R3,2
+fdny-collapse-4,Collapse 4,Collapse,Available,FDNY-L116,2
+fdny-collapse-1,Collapse 1,Collapse,Available,FDNY-L25D3,2
+fdny-division-8,Division 8,Division,Available,FDNY-E160R5D8,2
+fdny-division-11,Division 11,Division,Available,FDNY-E207L110B31D11,2
+fdny-division-15,Division 15,Division,Available,FDNY-E283D15,2
+fdny-division-14,Division 14,Division,Available,FDNY-E324D14,2
+fdny-division-7,Division 7,Division,Available,FDNY-E48L56D7,2
+fdny-division-6,Division 6,Division,Available,FDNY-E71L55D6,2
+fdny-division-1,Division 1,Division,Available,FDNY-L20D1,2
+fdny-division-3,Division 3,Division,Available,FDNY-L25D3,2
+fdny-division-13,Division 13,Division,Available,FDNY-S270D13,2
+fdny-engine-258,Engine 258,Engine,Available,FDNY-E258L115,4
+fdny-engine-259,Engine 259,Engine,Available,FDNY-E259L128B45,4
+fdny-engine-260,Engine 260,Engine,Available,FDNY-E260,4
+fdny-engine-291,Engine 291,Engine,Available,FDNY-E291L140,4
+fdny-engine-10,Engine 10,Engine,Available,FDNY-E10L10,4
+fdny-engine-14,Engine 14,Engine,Available,FDNY-E14,4
+fdny-engine-151,Engine 151,Engine,Available,FDNY-E151L76,4
+fdny-engine-152,Engine 152,Engine,Available,FDNY-E152B21,4
+fdny-engine-153,Engine 153,Engine,Available,FDNY-E153L77,4
+fdny-engine-155,Engine 155,Engine,Available,FDNY-E155L78,4
+fdny-engine-156,Engine 156,Engine,Available,FDNY-E156,4
+fdny-engine-157,Engine 157,Engine,Available,FDNY-E157L80,4
+fdny-engine-158,Engine 158,Engine,Available,FDNY-E158,4
+fdny-engine-159,Engine 159,Engine,Available,FDNY-E159,4
+fdny-engine-15,Engine 15,Engine,Available,FDNY-E15L18B4,4
+fdny-engine-160,Engine 160,Engine,Available,FDNY-E160R5D8,4
+fdny-engine-161,Engine 161,Engine,Available,FDNY-E161L81,4
+fdny-engine-162,Engine 162,Engine,Available,FDNY-E162L82B23,4
+fdny-engine-163,Engine 163,Engine,Available,FDNY-E163L83,4
+fdny-engine-164,Engine 164,Engine,Available,FDNY-E164L84,4
+fdny-engine-165,Engine 165,Engine,Available,FDNY-E165L85,4
+fdny-engine-166,Engine 166,Engine,Available,FDNY-E166L86,4
+fdny-engine-167,Engine 167,Engine,Available,FDNY-E167L87,4
+fdny-engine-168,Engine 168,Engine,Available,FDNY-E168,4
+fdny-engine-16,Engine 16,Engine,Available,FDNY-E16L7,4
+fdny-engine-1,Engine 1,Engine,Available,FDNY-E1L24,4
+fdny-engine-201,Engine 201,Engine,Available,FDNY-E201L114B40,4
+fdny-engine-202,Engine 202,Engine,Available,FDNY-E202L101B32,4
+fdny-engine-205,Engine 205,Engine,Available,FDNY-E205L118,4
+fdny-engine-206,Engine 206,Engine,Available,FDNY-E206,4
+fdny-engine-207,Engine 207,Engine,Available,FDNY-E207L110B31D11,4
+fdny-engine-21,Engine 21,Engine,Available,FDNY-E21,4
+fdny-engine-210,Engine 210,Engine,Available,FDNY-E210,4
+fdny-engine-211,Engine 211,Engine,Available,FDNY-E211L119,4
+fdny-engine-214,Engine 214,Engine,Available,FDNY-E214L111,4
+fdny-engine-216,Engine 216,Engine,Available,FDNY-E216L108B35,4
+fdny-engine-217,Engine 217,Engine,Available,FDNY-E217,4
+fdny-engine-218,Engine 218,Engine,Available,FDNY-E218,4
+fdny-engine-219,Engine 219,Engine,Available,FDNY-E219L105,4
+fdny-engine-220,Engine 220,Engine,Available,FDNY-E220L122,4
+fdny-engine-221,Engine 221,Engine,Available,FDNY-E221L104,4
+fdny-engine-222,Engine 222,Engine,Available,FDNY-E222B37,4
+fdny-engine-224,Engine 224,Engine,Available,FDNY-E224,4
+fdny-engine-225,Engine 225,Engine,Available,FDNY-E225L107B39,4
+fdny-engine-226,Engine 226,Engine,Available,FDNY-E226,4
+fdny-engine-227,Engine 227,Engine,Available,FDNY-E227,4
+fdny-engine-228,Engine 228,Engine,Available,FDNY-E228,4
+fdny-engine-229,Engine 229,Engine,Available,FDNY-E229L146,4
+fdny-engine-22,Engine 22,Engine,Available,FDNY-E22L13B10,4
+fdny-engine-23,Engine 23,Engine,Available,FDNY-E23,4
+fdny-engine-230,Engine 230,Engine,Available,FDNY-E230,4
+fdny-engine-231,Engine 231,Engine,Available,FDNY-E231L120B44,4
+fdny-engine-233,Engine 233,Engine,Available,FDNY-E233L176,4
+fdny-engine-234,Engine 234,Engine,Available,FDNY-E234L123B38,4
+fdny-engine-235,Engine 235,Engine,Available,FDNY-E235B57,4
+fdny-engine-236,Engine 236,Engine,Available,FDNY-E236,4
+fdny-engine-237,Engine 237,Engine,Available,FDNY-E237,4
+fdny-engine-238,Engine 238,Engine,Available,FDNY-E238L106,4
+fdny-engine-239,Engine 239,Engine,Available,FDNY-E239,4
+fdny-engine-240,Engine 240,Engine,Available,FDNY-E240B48,4
+fdny-engine-241,Engine 241,Engine,Available,FDNY-E241L109,4
+fdny-engine-242,Engine 242,Engine,Available,FDNY-E242,4
+fdny-engine-243,Engine 243,Engine,Available,FDNY-E243L168B42,4
+fdny-engine-245,Engine 245,Engine,Available,FDNY-E245L161B43,4
+fdny-engine-246,Engine 246,Engine,Available,FDNY-E246L169,4
+fdny-engine-247,Engine 247,Engine,Available,FDNY-E247,4
+fdny-engine-248,Engine 248,Engine,Available,FDNY-E248B41,4
+fdny-engine-249,Engine 249,Engine,Available,FDNY-E249L113,4
+fdny-engine-24,Engine 24,Engine,Available,FDNY-E24L5B2,4
+fdny-engine-250,Engine 250,Engine,Available,FDNY-E250,4
+fdny-engine-251,Engine 251,Engine,Available,FDNY-E251,4
+fdny-engine-253,Engine 253,Engine,Available,FDNY-E253,4
+fdny-engine-254,Engine 254,Engine,Available,FDNY-E254L153,4
+fdny-engine-255,Engine 255,Engine,Available,FDNY-E255L157,4
+fdny-engine-257,Engine 257,Engine,Available,FDNY-E257L170B58,4
+fdny-engine-26,Engine 26,Engine,Available,FDNY-E26,4
+fdny-engine-262,Engine 262,Engine,Available,FDNY-E262,4
+fdny-engine-263,Engine 263,Engine,Available,FDNY-E263L117,4
+fdny-engine-264,Engine 264,Engine,Available,FDNY-E264E328L134,4
+fdny-engine-328,Engine 328,Engine,Available,FDNY-E264E328L134,4
+fdny-engine-265,Engine 265,Engine,Available,FDNY-E265L121B47,4
+fdny-engine-266,Engine 266,Engine,Available,FDNY-E266,4
+fdny-engine-268,Engine 268,Engine,Available,FDNY-E268L137,4
+fdny-engine-271,Engine 271,Engine,Available,FDNY-E271L124B28,4
+fdny-engine-273,Engine 273,Engine,Available,FDNY-E273L129,4
+fdny-engine-274,Engine 274,Engine,Available,FDNY-E274B52,4
+fdny-engine-275,Engine 275,Engine,Available,FDNY-E275L133,4
+fdny-engine-276,Engine 276,Engine,Available,FDNY-E276L156B33,4
+fdny-engine-277,Engine 277,Engine,Available,FDNY-E277L112,4
+fdny-engine-279,Engine 279,Engine,Available,FDNY-E279L131,4
+fdny-engine-280,Engine 280,Engine,Available,FDNY-E280L132,4
+fdny-engine-281,Engine 281,Engine,Available,FDNY-E281L147,4
+fdny-engine-282,Engine 282,Engine,Available,FDNY-E282L148,4
+fdny-engine-283,Engine 283,Engine,Available,FDNY-E283D15,4
+fdny-engine-284,Engine 284,Engine,Available,FDNY-E284L149,4
+fdny-engine-285,Engine 285,Engine,Available,FDNY-E285L142,4
+fdny-engine-286,Engine 286,Engine,Available,FDNY-E286L135,4
+fdny-engine-287,Engine 287,Engine,Available,FDNY-E287L136B46,4
+fdny-engine-289,Engine 289,Engine,Available,FDNY-E289L138,4
+fdny-engine-28,Engine 28,Engine,Available,FDNY-E28L11,4
+fdny-engine-290,Engine 290,Engine,Available,FDNY-E290L103,4
+fdny-engine-292,Engine 292,Engine,Available,FDNY-E292R4,4
+fdny-engine-293,Engine 293,Engine,Available,FDNY-E293,4
+fdny-engine-294,Engine 294,Engine,Available,FDNY-E294L143,4
+fdny-engine-295,Engine 295,Engine,Available,FDNY-E295L144,4
+fdny-engine-297,Engine 297,Engine,Available,FDNY-E297L130,4
+fdny-engine-298,Engine 298,Engine,Available,FDNY-E298L127B50,4
+fdny-engine-299,Engine 299,Engine,Available,FDNY-E299L152,4
+fdny-engine-301,Engine 301,Engine,Available,FDNY-E301L150,4
+fdny-engine-302,Engine 302,Engine,Available,FDNY-E302L155,4
+fdny-engine-303,Engine 303,Engine,Available,FDNY-E303L126,4
+fdny-engine-304,Engine 304,Engine,Available,FDNY-E304L162,4
+fdny-engine-305,Engine 305,Engine,Available,FDNY-E305L151,4
+fdny-engine-306,Engine 306,Engine,Available,FDNY-E306,4
+fdny-engine-307,Engine 307,Engine,Available,FDNY-E307L154,4
+fdny-engine-308,Engine 308,Engine,Available,FDNY-E308B51,4
+fdny-engine-309,Engine 309,Engine,Available,FDNY-E309L159,4
+fdny-engine-310,Engine 310,Engine,Available,FDNY-E310L174,4
+fdny-engine-311,Engine 311,Engine,Available,FDNY-E311L158,4
+fdny-engine-312,Engine 312,Engine,Available,FDNY-E312B49,4
+fdny-engine-313,Engine 313,Engine,Available,FDNY-E313L164,4
+fdny-engine-314,Engine 314,Engine,Available,FDNY-E314,4
+fdny-engine-315,Engine 315,Engine,Available,FDNY-E315L125,4
+fdny-engine-316,Engine 316,Engine,Available,FDNY-E316,4
+fdny-engine-317,Engine 317,Engine,Available,FDNY-E317L165B54,4
+fdny-engine-318,Engine 318,Engine,Available,FDNY-E318L166,4
+fdny-engine-319,Engine 319,Engine,Available,FDNY-E319,4
+fdny-engine-320,Engine 320,Engine,Available,FDNY-E320L167,4
+fdny-engine-321,Engine 321,Engine,Available,FDNY-E321,4
+fdny-engine-323,Engine 323,Engine,Available,FDNY-E323,4
+fdny-engine-324,Engine 324,Engine,Available,FDNY-E324D14,4
+fdny-engine-325,Engine 325,Engine,Available,FDNY-E325L163,4
+fdny-engine-326,Engine 326,Engine,Available,FDNY-E326L160B53,4
+fdny-engine-329,Engine 329,Engine,Available,FDNY-E329,4
+fdny-engine-330,Engine 330,Engine,Available,FDNY-E330L172,4
+fdny-engine-331,Engine 331,Engine,Available,FDNY-E331L173,4
+fdny-engine-332,Engine 332,Engine,Available,FDNY-E332L175,4
+fdny-engine-33,Engine 33,Engine,Available,FDNY-E33L9,4
+fdny-engine-34,Engine 34,Engine,Available,FDNY-E34L21,4
+fdny-engine-35,Engine 35,Engine,Available,FDNY-E35L14B12,4
+fdny-engine-37,Engine 37,Engine,Available,FDNY-E37L40,4
+fdny-engine-38,Engine 38,Engine,Available,FDNY-E38L51,4
+fdny-engine-39,Engine 39,Engine,Available,FDNY-E39L16,4
+fdny-engine-3,Engine 3,Engine,Available,FDNY-E3L12B7,4
+fdny-engine-40,Engine 40,Engine,Available,FDNY-E40L35,4
+fdny-engine-42,Engine 42,Engine,Available,FDNY-E42,4
+fdny-engine-43,Engine 43,Engine,Available,FDNY-E43L59,4
+fdny-engine-44,Engine 44,Engine,Available,FDNY-E44,4
+fdny-engine-45,Engine 45,Engine,Available,FDNY-E45L58B18,4
+fdny-engine-46,Engine 46,Engine,Available,FDNY-E46L27,4
+fdny-engine-47,Engine 47,Engine,Available,FDNY-E47,4
+fdny-engine-48,Engine 48,Engine,Available,FDNY-E48L56D7,4
+fdny-engine-4,Engine 4,Engine,Available,FDNY-E4L15,4
+fdny-engine-5,Engine 5,Engine,Available,FDNY-E5,4
+fdny-engine-50,Engine 50,Engine,Available,FDNY-E50L19B26,4
+fdny-engine-52,Engine 52,Engine,Available,FDNY-E52L52,4
+fdny-engine-53,Engine 53,Engine,Available,FDNY-E53L43,4
+fdny-engine-54,Engine 54,Engine,Available,FDNY-E54L4B9,4
+fdny-engine-55,Engine 55,Engine,Available,FDNY-E55,4
+fdny-engine-58,Engine 58,Engine,Available,FDNY-E58L26,4
+fdny-engine-59,Engine 59,Engine,Available,FDNY-E59L30,4
+fdny-engine-6,Engine 6,Engine,Available,FDNY-E6,4
+fdny-engine-60,Engine 60,Engine,Available,FDNY-E60L17B14,4
+fdny-engine-62,Engine 62,Engine,Available,FDNY-E62L32,4
+fdny-engine-63,Engine 63,Engine,Available,FDNY-E63L39B15,4
+fdny-engine-64,Engine 64,Engine,Available,FDNY-E64L47,4
+fdny-engine-65,Engine 65,Engine,Available,FDNY-E65,4
+fdny-engine-66,Engine 66,Engine,Available,FDNY-E66L61,4
+fdny-engine-67,Engine 67,Engine,Available,FDNY-E67,4
+fdny-engine-68,Engine 68,Engine,Available,FDNY-E68L49,4
+fdny-engine-69,Engine 69,Engine,Available,FDNY-E69L28B16,4
+fdny-engine-70,Engine 70,Engine,Available,FDNY-E70L53,4
+fdny-engine-71,Engine 71,Engine,Available,FDNY-E71L55D6,4
+fdny-engine-72,Engine 72,Engine,Available,FDNY-E72,4
+fdny-engine-73,Engine 73,Engine,Available,FDNY-E73L42,4
+fdny-engine-74,Engine 74,Engine,Available,FDNY-E74,4
+fdny-engine-75,Engine 75,Engine,Available,FDNY-E75L33B19,4
+fdny-engine-76,Engine 76,Engine,Available,FDNY-E76L22B11,4
+fdny-engine-79,Engine 79,Engine,Available,FDNY-E79L37B27,4
+fdny-engine-7,Engine 7,Engine,Available,FDNY-E7L1B1,4
+fdny-engine-80,Engine 80,Engine,Available,FDNY-E80L23,4
+fdny-engine-81,Engine 81,Engine,Available,FDNY-E81L46,4
+fdny-engine-82,Engine 82,Engine,Available,FDNY-E82L31,4
+fdny-engine-83,Engine 83,Engine,Available,FDNY-E83L29,4
+fdny-engine-84,Engine 84,Engine,Available,FDNY-E84L34,4
+fdny-engine-88,Engine 88,Engine,Available,FDNY-E88L38,4
+fdny-engine-89,Engine 89,Engine,Available,FDNY-E89L50,4
+fdny-engine-8,Engine 8,Engine,Available,FDNY-E8L2B8,4
+fdny-engine-90,Engine 90,Engine,Available,FDNY-E90L41,4
+fdny-engine-91,Engine 91,Engine,Available,FDNY-E91,4
+fdny-engine-92,Engine 92,Engine,Available,FDNY-E92L44B17,4
+fdny-engine-93,Engine 93,Engine,Available,FDNY-E93L45B13,4
+fdny-engine-94,Engine 94,Engine,Available,FDNY-E94L48B3,4
+fdny-engine-95,Engine 95,Engine,Available,FDNY-E95L36,4
+fdny-engine-96,Engine 96,Engine,Available,FDNY-E96L54,4
+fdny-engine-97,Engine 97,Engine,Available,FDNY-E97,4
+fdny-engine-9,Engine 9,Engine,Available,FDNY-E9L6,4
+fdny-fc-1,Field Comm. 1,Field Comm.,Available,FDNY-E233L176,2
+fdny-htmu-165,HTMU 165,HazMat,Available,FDNY-E165L85,6
+fdny-htmu-250,HTMU 250,HazMat,Available,FDNY-E250,6
+fdny-htmu-274,HTMU 274,HazMat,Available,FDNY-E274B52,6
+fdny-htmu-44,HTMU 44,HazMat,Available,FDNY-E44,6
+fdny-hazmat-1,HazMat 1,HazMat,Available,FDNY-S288HM1,6
+fdny-dsu-1,DSU 1,HazMat Support,Available,FDNY-DSU,2
+fdny-high-rise-1,High Rise 1,High Rise,Available,FDNY-E3L12B7,2
+fdny-high-rise-2,High Rise 2,High Rise,Available,FDNY-E39L16,2
+fdny-imt-1,IMT Planning Vehicle 1,IMT,Available,FDNY-E262,2
+fdny-mcp1,Mobile Command Post 1,MCP,Available,FDNY-E233L176,2
+fdny-mcp2,Mobile Command Post 2,MCP,Available,FDNY-E93L45B13,2
+fdny-msu,Mask Service Unit,MSU,Available,FDNY-Randall,2
+fdny-purple-163,Purple-K 163,Purple-K,Available,FDNY-E163L83,2
+fdny-purple-228,Purple-K 228,Purple-K,Available,FDNY-E228,2
+fdny-purple-33,Purple-K 33,Purple-K,Available,FDNY-E33L9,2
+fdny-purple-84,Purple-K 84,Purple-K,Available,FDNY-E84L34,2
+fdny-purple-326,Purple-K 326,Purple-K,Available,FDNY-E326L160B53,2
+fdny-purple-229,Purple-K 229,Purple-K,Available,FDNY-E229L146,2
+fdny-rac-1,RAC 1,RAC,Available,FDNY-E91,2
+fdny-rac-2,RAC 2,RAC,Available,FDNY-E332L175,2
+fdny-rac-3,RAC 3,RAC,Available,FDNY-R3,2
+fdny-rac-4,RAC 4,RAC,Available,FDNY-SOC,2
+fdny-rac-5,RAC 5,RAC,Available,FDNY-E242,2
+fdny-ladder-128,Ladder 128,Rear Mount,Available,FDNY-E259L128B45,5
+fdny-ladder-140,Ladder 140,Rear Mount,Available,FDNY-E291L140,5
+fdny-ladder-10,Ladder 10,Rear Mount,Available,FDNY-E10L10,5
+fdny-ladder-78,Ladder 78,Rear Mount,Available,FDNY-E155L78,5
+fdny-ladder-80,Ladder 80,Rear Mount,Available,FDNY-E157L80,5
+fdny-ladder-81,Ladder 81,Rear Mount,Available,FDNY-E161L81,5
+fdny-ladder-82,Ladder 82,Rear Mount,Available,FDNY-E162L82B23,5
+fdny-ladder-83,Ladder 83,Rear Mount,Available,FDNY-E163L83,5
+fdny-ladder-84,Ladder 84,Rear Mount,Available,FDNY-E164L84,5
+fdny-ladder-24,Ladder 24,Rear Mount,Available,FDNY-E1L24,5
+fdny-ladder-110,Ladder 110,Rear Mount,Available,FDNY-E207L110B31D11,5
+fdny-ladder-108,Ladder 108,Rear Mount,Available,FDNY-E216L108B35,5
+fdny-ladder-122,Ladder 122,Rear Mount,Available,FDNY-E220L122,5
+fdny-ladder-176,Ladder 176,Rear Mount,Available,FDNY-E233L176,5
+fdny-ladder-123,Ladder 123,Rear Mount,Available,FDNY-E234L123B38,5
+fdny-battalion-48,Battalion 48,Rear Mount,Available,FDNY-E240B48,5
+fdny-ladder-109,Ladder 109,Rear Mount,Available,FDNY-E241L109,5
+fdny-ladder-168,Ladder 168,Rear Mount,Available,FDNY-E243L168B42,5
+fdny-ladder-169,Ladder 169,Rear Mount,Available,FDNY-E246L169,5
+fdny-ladder-113,Ladder 113,Rear Mount,Available,FDNY-E249L113,5
+fdny-ladder-134,Ladder 134,Rear Mount,Available,FDNY-E264E328L134,5
+fdny-ladder-137,Ladder 137,Rear Mount,Available,FDNY-E268L137,5
+fdny-ladder-129,Ladder 129,Rear Mount,Available,FDNY-E273L129,5
+fdny-ladder-133,Ladder 133,Rear Mount,Available,FDNY-E275L133,5
+fdny-ladder-156,Ladder 156,Rear Mount,Available,FDNY-E276L156B33,5
+fdny-ladder-112,Ladder 112,Rear Mount,Available,FDNY-E277L112,5
+fdny-ladder-132,Ladder 132,Rear Mount,Available,FDNY-E280L132,5
+fdny-ladder-148,Ladder 148,Rear Mount,Available,FDNY-E282L148,5
+fdny-ladder-136,Ladder 136,Rear Mount,Available,FDNY-E287L136B46,5
+fdny-ladder-11,Ladder 11,Rear Mount,Available,FDNY-E28L11,5
+fdny-ladder-103,Ladder 103,Rear Mount,Available,FDNY-E290L103,5
+fdny-ladder-130,Ladder 130,Rear Mount,Available,FDNY-E297L130,5
+fdny-ladder-150,Ladder 150,Rear Mount,Available,FDNY-E301L150,5
+fdny-ladder-126,Ladder 126,Rear Mount,Available,FDNY-E303L126,5
+fdny-ladder-151,Ladder 151,Rear Mount,Available,FDNY-E305L151,5
+fdny-ladder-154,Ladder 154,Rear Mount,Available,FDNY-E307L154,5
+fdny-ladder-174,Ladder 174,Rear Mount,Available,FDNY-E310L174,5
+fdny-ladder-125,Ladder 125,Rear Mount,Available,FDNY-E315L125,5
+fdny-ladder-165,Ladder 165,Rear Mount,Available,FDNY-E317L165B54,5
+fdny-ladder-166,Ladder 166,Rear Mount,Available,FDNY-E318L166,5
+fdny-ladder-167,Ladder 167,Rear Mount,Available,FDNY-E320L167,5
+fdny-ladder-173,Ladder 173,Rear Mount,Available,FDNY-E331L173,5
+fdny-ladder-16,Ladder 16,Rear Mount,Available,FDNY-E39L16,5
+fdny-ladder-59,Ladder 59,Rear Mount,Available,FDNY-E43L59,5
+fdny-ladder-27,Ladder 27,Rear Mount,Available,FDNY-E46L27,5
+fdny-ladder-56,Ladder 56,Rear Mount,Available,FDNY-E48L56D7,5
+fdny-ladder-19,Ladder 19,Rear Mount,Available,FDNY-E50L19B26,5
+fdny-ladder-52,Ladder 52,Rear Mount,Available,FDNY-E52L52,5
+fdny-ladder-43,Ladder 43,Rear Mount,Available,FDNY-E53L43,5
+fdny-ladder-4,Ladder 4,Rear Mount,Available,FDNY-E54L4B9,5
+fdny-ladder-26,Ladder 26,Rear Mount,Available,FDNY-E58L26,5
+fdny-ladder-30,Ladder 30,Rear Mount,Available,FDNY-E59L30,5
+fdny-ladder-32,Ladder 32,Rear Mount,Available,FDNY-E62L32,5
+fdny-ladder-47,Ladder 47,Rear Mount,Available,FDNY-E64L47,5
+fdny-ladder-61,Ladder 61,Rear Mount,Available,FDNY-E66L61,5
+fdny-ladder-49,Ladder 49,Rear Mount,Available,FDNY-E68L49,5
+fdny-ladder-28,Ladder 28,Rear Mount,Available,FDNY-E69L28B16,5
+fdny-ladder-55,Ladder 55,Rear Mount,Available,FDNY-E71L55D6,5
+fdny-ladder-42,Ladder 42,Rear Mount,Available,FDNY-E73L42,5
+fdny-ladder-37,Ladder 37,Rear Mount,Available,FDNY-E79L37B27,5
+fdny-ladder-29,Ladder 29,Rear Mount,Available,FDNY-E83L29,5
+fdny-ladder-38,Ladder 38,Rear Mount,Available,FDNY-E88L38,5
+fdny-ladder-2,Ladder 2,Rear Mount,Available,FDNY-E8L2B8,5
+fdny-ladder-48,Ladder 48,Rear Mount,Available,FDNY-E94L48B3,5
+fdny-ladder-36,Ladder 36,Rear Mount,Available,FDNY-E95L36,5
+fdny-ladder-102,Ladder 102,Rear Mount,Available,FDNY-L102,5
+fdny-ladder-116,Ladder 116,Rear Mount,Available,FDNY-L116,5
+fdny-ladder-25,Ladder 25,Rear Mount,Available,FDNY-L25D3,5
+fdny-ladder-3,Ladder 3,Rear Mount,Available,FDNY-L3B6,5
+fdny-ladder-8,Ladder 8,Rear Mount,Available,FDNY-L8,5
+fdny-rescue-5,Rescue 5,Rescue,Available,FDNY-E160R5D8,6
+fdny-rescue- 4,Rescue 4,Rescue,Available,FDNY-E292R4,6
+fdny-rescue-1,Rescue 1,Rescue,Available,FDNY-R1,6
+fdny-rescue- 2,Rescue 2,Rescue,Available,FDNY-R2,6
+fdny-rescue-3,Rescue 3,Rescue,Available,FDNY-R3,6
+fdny-satellite-5,Satellite 5,Satellite,Available,FDNY-E159,2
+fdny-satellite-6,Satellite 6,Satellite,Available,FDNY-E207L110B31D11,2
+fdny-satellite-3,Satellite 3,Satellite,Available,FDNY-E284L149,2
+fdny-satellite-4,Satellite 4,Satellite,Available,FDNY-E324D14,2
+fdny-satellite-2,Satellite 2,Satellite,Available,FDNY-E72,2
+fdny-satellite-1,Satellite 1,Satellite,Available,FDNY-E9L6,2
+fdny-squad-1,Squad 1,Squad,Available,FDNY-S1,5
+fdny-squad-18,Squad 18,Squad,Available,FDNY-S18,5
+fdny-squad-252,Squad 252,Squad,Available,FDNY-S252,5
+fdny-squad-270,Squad 270,Squad,Available,FDNY-S270D13,5
+fdny-squad-288,Squad 288,Squad,Available,FDNY-S288HM1,5
+fdny-squad-41,Squad 41,Squad,Available,FDNY-S41,5
+fdny-squad-61,Squad 61,Squad,Available,FDNY-S61B20,5
+fdny-squad-8,Squad 8,Squad,Available,FDNY-S8,5
+fdny-thawing-76,Thawing Apparatus 76,Thawing Apparatus,Available,FDNY-E76L22B11,2
+fdny-thawing-97,Thawing Apparatus 97,Thawing Apparatus,Available,FDNY-E97,2
+fdny-thawing-151,Thawing Apparatus 151,Thawing Apparatus,Available,FDNY-E151L76,2
+fdny-thawing-330,Thawing Apparatus 330,Thawing Apparatus,Available,FDNY-E330L172,2
+fdny-thawing-266,Thawing Apparatus 266,Thawing Apparatus,Available,FDNY-E226,2
+fdny-ladder-115,Ladder 115,Tower Ladder,Available,FDNY-E258L115,5
+fdny-ladder-76,Ladder 76,Tower Ladder,Available,FDNY-E151L76,5
+fdny-ladder-77,Ladder 77,Tower Ladder,Available,FDNY-E153L77,5
+fdny-ladder-18,Ladder 18,Tower Ladder,Available,FDNY-E15L18B4,5
+fdny-ladder-85,Ladder 85,Tower Ladder,Available,FDNY-E165L85,5
+fdny-ladder-86,Ladder 86,Tower Ladder,Available,FDNY-E166L86,5
+fdny-ladder-87,Ladder 87,Tower Ladder,Available,FDNY-E167L87,5
+fdny-ladder-7,Ladder 7,Tower Ladder,Available,FDNY-E16L7,5
+fdny-ladder-114,Ladder 114,Tower Ladder,Available,FDNY-E201L114B40,5
+fdny-ladder-119,Ladder 119,Tower Ladder,Available,FDNY-E211L119,5
+fdny-ladder-111,Ladder 111,Tower Ladder,Available,FDNY-E214L111,5
+fdny-ladder-105,Ladder 105,Tower Ladder,Available,FDNY-E219L105,5
+fdny-ladder-107,Ladder 107,Tower Ladder,Available,FDNY-E225L107B39,5
+fdny-ladder-146,Ladder 146,Tower Ladder,Available,FDNY-E229L146,5
+fdny-ladder-13,Ladder 13,Tower Ladder,Available,FDNY-E22L13B10,5
+fdny-ladder-120,Ladder 120,Tower Ladder,Available,FDNY-E231L120B44,5
+fdny-ladder-161,Ladder 161,Tower Ladder,Available,FDNY-E245L161B43,5
+fdny-ladder-153,Ladder 153,Tower Ladder,Available,FDNY-E254L153,5
+fdny-ladder-157,Ladder 157,Tower Ladder,Available,FDNY-E255L157,5
+fdny-ladder-170,Ladder 170,Tower Ladder,Available,FDNY-E257L170B58,5
+fdny-ladder-117,Ladder 117,Tower Ladder,Available,FDNY-E263L117,5
+fdny-ladder-121,Ladder 121,Tower Ladder,Available,FDNY-E265L121B47,5
+fdny-ladder-124,Ladder 124,Tower Ladder,Available,FDNY-E271L124B28,5
+fdny-ladder-131,Ladder 131,Tower Ladder,Available,FDNY-E279L131,5
+fdny-ladder-149,Ladder 149,Tower Ladder,Available,FDNY-E284L149,5
+fdny-ladder-142,Ladder 142,Tower Ladder,Available,FDNY-E285L142,5
+fdny-ladder-135,Ladder 135,Tower Ladder,Available,FDNY-E286L135,5
+fdny-ladder-138,Ladder 138,Tower Ladder,Available,FDNY-E289L138,5
+fdny-ladder-144,Ladder 144,Tower Ladder,Available,FDNY-E295L144,5
+fdny-ladder-127,Ladder 127,Tower Ladder,Available,FDNY-E298L127B50,5
+fdny-ladder-152,Ladder 152,Tower Ladder,Available,FDNY-E299L152,5
+fdny-ladder-155,Ladder 155,Tower Ladder,Available,FDNY-E302L155,5
+fdny-ladder-162,Ladder 162,Tower Ladder,Available,FDNY-E304L162,5
+fdny-ladder-159,Ladder 159,Tower Ladder,Available,FDNY-E309L159,5
+fdny-ladder-158,Ladder 158,Tower Ladder,Available,FDNY-E311L158,5
+fdny-ladder-164,Ladder 164,Tower Ladder,Available,FDNY-E313L164,5
+fdny-ladder-163,Ladder 163,Tower Ladder,Available,FDNY-E325L163,5
+fdny-ladder-160,Ladder 160,Tower Ladder,Available,FDNY-E326L160B53,5
+fdny-ladder-172,Ladder 172,Tower Ladder,Available,FDNY-E330L172,5
+fdny-ladder-9,Ladder 9,Tower Ladder,Available,FDNY-E33L9,5
+fdny-ladder-21,Ladder 21,Tower Ladder,Available,FDNY-E34L21,5
+fdny-ladder-14,Ladder 14,Tower Ladder,Available,FDNY-E35L14B12,5
+fdny-ladder-51,Ladder 51,Tower Ladder,Available,FDNY-E38L51,5
+fdny-ladder-12,Ladder 12,Tower Ladder,Available,FDNY-E3L12B7,5
+fdny-ladder-35,Ladder 35,Tower Ladder,Available,FDNY-E40L35,5
+fdny-ladder-58,Ladder 58,Tower Ladder,Available,FDNY-E45L58B18,5
+fdny-ladder-15,Ladder 15,Tower Ladder,Available,FDNY-E4L15,5
+fdny-ladder-17,Ladder 17,Tower Ladder,Available,FDNY-E60L17B14,5
+fdny-ladder-53,Ladder 53,Tower Ladder,Available,FDNY-E70L53,5
+fdny-ladder-33,Ladder 33,Tower Ladder,Available,FDNY-E75L33B19,5
+fdny-ladder-22,Ladder 22,Tower Ladder,Available,FDNY-E76L22B11,5
+fdny-ladder-1,Ladder 1,Tower Ladder,Available,FDNY-E7L1B1,5
+fdny-ladder-23,Ladder 23,Tower Ladder,Available,FDNY-E80L23,5
+fdny-ladder-46,Ladder 46,Tower Ladder,Available,FDNY-E81L46,5
+fdny-ladder-31,Ladder 31,Tower Ladder,Available,FDNY-E82L31,5
+fdny-ladder-50,Ladder 50,Tower Ladder,Available,FDNY-E89L50,5
+fdny-ladder-41,Ladder 41,Tower Ladder,Available,FDNY-E90L41,5
+fdny-ladder-44,Ladder 44,Tower Ladder,Available,FDNY-E92L44B17,5
+fdny-ladder-45,Ladder 45,Tower Ladder,Available,FDNY-E93L45B13,5
+fdny-ladder-54,Ladder 54,Tower Ladder,Available,FDNY-E96L54,5
+fdny-ladder-79,Ladder 79,Tower Ladder,Available,FDNY-L79B22,5
+fdny-ladder-101,Ladder 101,Tractor Trailor,Available,FDNY-E202L101B32,5
+fdny-ladder-118,Ladder 118,Tractor Trailor,Available,FDNY-E205L118,5
+fdny-ladder-104,Ladder 104,Tractor Trailor,Available,FDNY-E221L104,5
+fdny-ladder-106,Ladder 106,Tractor Trailor,Available,FDNY-E238L106,5
+fdny-ladder-5,Ladder 5,Tractor Trailor,Available,FDNY-E24L5B2,5
+fdny-ladder-147,Ladder 147,Tractor Trailor,Available,FDNY-E281L147,5
+fdny-ladder-143,Ladder 143,Tractor Trailor,Available,FDNY-E294L143,5
+fdny-ladder-175,Ladder 175,Tractor Trailor,Available,FDNY-E332L175,5
+fdny-ladder-40,Ladder 40,Tractor Trailor,Available,FDNY-E37L40,5
+fdny-ladder-39,Ladder 39,Tractor Trailor,Available,FDNY-E63L39B15,5
+fdny-ladder-34,Ladder 34,Tractor Trailor,Available,FDNY-E84L34,5
+fdny-ladder-6,Ladder 6,Tractor Trailor,Available,FDNY-E9L6,5
+fdny-ladder-20,Ladder 20,Tractor Trailor,Available,FDNY-L20D1,5
+fdny-tsu-2,TSU 2,TSU,Available,FDNY-E160R5D8,2
+fdny-tsu-1,TSU 1,TSU,Available,FDNY-SOC,2

@@ -15,4 +15,7 @@ public record Vehicle
 
     /// <summary>Id of the station this vehicle is quartered at.</summary>
     public required string StationId { get; init; }
+
+    /// <summary>Number of firefighters staffing this unit.</summary>
+    public required int FfCount { get; init; }
 }

@@ -10,4 +10,6 @@ export interface Unit {
   stationId: string;
   /** Id of the station this unit is currently garaged at (differs from stationId while relocated). */
   currentStationId: string;
+  /** Number of firefighters staffing this unit. */
+  ffCount: number;
 }

@@ -49,6 +49,7 @@ public class DispatchData
             Type = row["type"],
             Status = row["status"],
             StationId = row["station_id"],
+            FfCount = ParseInt(row["ff_count"]),
         });
 
         CallTypes = LoadCsv(Path.Combine(dir, "fdny_calls.csv"), row => new CallType

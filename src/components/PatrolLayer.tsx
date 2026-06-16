@@ -27,8 +27,6 @@ const LAYER = "nypd-patrol-cars-dots";
 const PATROL_COLOR = "#1d4ed8"; // blue
 const MIN_LEG_MS = GAME_CONFIG.dispatch.minLegMs;
 
-/** How often (real ms) to recompute marker positions and push them to the source. */
-const POSITION_UPDATE_MS = 200;
 
 const EMPTY: FeatureCollection<Point> = { type: "FeatureCollection", features: [] };
 
@@ -179,11 +177,9 @@ export default function PatrolLayer({ map }: PatrolLayerProps) {
     const unsubStations = useNypdStationStore.subscribe(reconcile);
 
     let raf = 0;
-    let lastUpdate = 0;
     const tick = () => {
       const now = performance.now();
-      if (now - lastUpdate >= POSITION_UPDATE_MS) {
-        lastUpdate = now;
+      {
         const simSpeed = useDispatchStore.getState().simSpeed;
         const features: Feature<Point>[] = [];
         for (const [id, car] of cars) {
