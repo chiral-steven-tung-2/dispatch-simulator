@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Marker, Popup, type Map as MapLibreMap } from "maplibre-gl";
 import type { Station, Unit } from "../models";
 import type { RelocationRecord } from "../stores/relocationStore";
@@ -16,6 +16,8 @@ interface StationMarkerProps {
   showUnitIcons?: boolean;
 }
 
+const POPUP_REFRESH_MS = 1500;
+
 export default function StationMarker({
   map,
   station,
@@ -26,20 +28,19 @@ export default function StationMarker({
   showChiefQuarters = true,
   showUnitIcons = true,
 }: StationMarkerProps) {
+  // Keep latest dynamic data in a ref so the popup interval always reads fresh
+  // values without causing the marker to be recreated on every unit change.
+  const liveRef = useRef({ units, allUnits, allStations, relocations });
+  liveRef.current = { units, allUnits, allStations, relocations };
+
   useEffect(() => {
-    const chief = chiefLevelFor(units);
-    // The house shows "active" (red) while any unit is actually parked here —
-    // its own rigs or a guest covering it. Units out on a call or relocating
-    // don't count; an empty house is grayed.
-    const hasUnitPresent = allUnits.some(
+    const { units: u, allUnits: au, allStations: as_, relocations: rel } = liveRef.current;
+
+    const chief = chiefLevelFor(u);
+    const hasUnitPresent = au.some(
       (u) => u.currentStationId === station.id && u.status === "Available"
     );
-    const element = createStationElement(
-      units,
-      showChiefQuarters,
-      showUnitIcons,
-      hasUnitPresent
-    );
+    const element = createStationElement(u, showChiefQuarters, showUnitIcons, hasUnitPresent);
     element.title =
       chief === "division"
         ? `${station.name} — Division HQ`
@@ -48,19 +49,34 @@ export default function StationMarker({
         : station.name;
 
     const popup = new Popup({ offset: 16, closeButton: true, maxWidth: "288px" }).setDOMContent(
-      buildStationPopupContent(station, units, allUnits, allStations, relocations)
+      buildStationPopupContent(station, u, au, as_, rel)
     );
+
+    let refreshId: number | undefined;
+    popup.on("open", () => {
+      refreshId = window.setInterval(() => {
+        const { units, allUnits, allStations, relocations } = liveRef.current;
+        popup.setDOMContent(
+          buildStationPopupContent(station, units, allUnits, allStations, relocations)
+        );
+      }, POPUP_REFRESH_MS);
+    });
+    popup.on("close", () => window.clearInterval(refreshId));
 
     const marker = new Marker({ element })
       .setLngLat([station.longitude, station.latitude])
-      .setPopup(popup) // clicking the marker toggles the popup
+      .setPopup(popup)
       .addTo(map);
 
     return () => {
+      window.clearInterval(refreshId);
       marker.remove();
       popup.remove();
     };
-  }, [map, station, units, allUnits, allStations, relocations, showChiefQuarters, showUnitIcons]);
+    // Only recreate the marker when the station identity or display toggles change.
+    // Dynamic data (units, relocations) flows through liveRef instead.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map, station, showChiefQuarters, showUnitIcons]);
 
   return null;
 }
