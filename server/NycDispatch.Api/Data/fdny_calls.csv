@@ -1,11 +1,369 @@
-id,name,weight,radius,assignment_id
-medical-emergency,Medical Emergency,34,40,one_engine
-vehicle-accident,Vehicle Accident,30,60,one_engine_one_ladder
-structure-fire,Structure Fire,22,150,standard
-alarm-activation,Alarm Activation,20,50,one_engine_one_ladder
-gas-leak,Gas Leak,12,120,one_engine_one_ladder
-rescue,Rescue,8,80,one_engine_one_ladder
-brush-fire,Brush Fire,6,200,one_engine_one_ladder
-hazmat-incident,HazMat Incident,4,250,standard
-water-rescue,Water Rescue,3,150,one_engine_one_ladder
-building-collapse,Building Collapse,2,200,standard
+id,category,name,radius,base_assignment,spawn_borough
+basic-engine-1,engine-only-response,Brush Fire,30,one_engine,City-wide
+basic-engine-2,engine-only-response,Tree Fire,30,one_engine,City-wide
+basic-engine-3,engine-only-response,Garbage Can Fire,30,one_engine,City-wide
+basic-engine-4,engine-only-response,Small Brush Fire in Vacant Lot,30,one_engine,City-wide
+basic-engine-5,engine-only-response,Brush Fire in Park,30,one_engine,City-wide
+basic-engine-6,engine-only-response,Brush Fire on the Street,30,one_engine,City-wide
+basic-engine-7,engine-only-response,Grass Fire in Median Strip,30,one_engine,City-wide
+basic-engine-8,engine-only-response,Grass Fire in Backyard,30,one_engine,City-wide
+basic-engine-9,engine-only-response,Mulch Fire Around Trees,30,one_engine,City-wide
+basic-engine-10,engine-only-response,Shrub Fire Outside Building,30,one_engine,City-wide
+basic-engine-11,engine-only-response,Hedge Fire,30,one_engine,City-wide
+basic-engine-12,engine-only-response,Bamboo Fire,30,one_engine,City-wide
+basic-engine-13,engine-only-response,Small Forested Area Fire,30,one_engine,City-wide
+basic-engine-14,engine-only-response,Fire in Marsh Grass,30,one_engine,City-wide
+basic-engine-15,engine-only-response,Fire in Vegetation,30,one_engine,City-wide
+basic-engine-16,engine-only-response,Fire in Abandoned Field,30,one_engine,City-wide
+basic-engine-17,engine-only-response,Fire in Community Garden,30,one_engine,City-wide
+basic-engine-18,engine-only-response,Fire in Playground Vegetation,30,one_engine,City-wide
+basic-engine-19,engine-only-response,Fire in Roadside Brush,30,one_engine,City-wide
+basic-engine-20,engine-only-response,Fire in Dry Reeds,30,one_engine,City-wide
+basic-engine-21,engine-only-response,Fire in Overgrown Vacant Property,30,one_engine,City-wide
+basic-engine-22,engine-only-response,Trash Can Fire,30,one_engine,City-wide
+basic-engine-23,engine-only-response,Dumpster Fire,30,one_engine,City-wide
+basic-engine-24,engine-only-response,Commercial Dumpster Fire,30,one_engine,City-wide
+basic-engine-25,engine-only-response,Residential Garbage Pile Fire,30,one_engine,City-wide
+basic-engine-26,engine-only-response,Leaf Pile Fire,30,one_engine,City-wide
+basic-engine-27,engine-only-response,Construction Debris Fire,30,one_engine,City-wide
+basic-engine-28,engine-only-response,Mattress Fire Outdoors,30,one_engine,City-wide
+basic-engine-29,engine-only-response,Pallet Fire,30,one_engine,City-wide
+basic-engine-30,engine-only-response,Tire Pile Fire,30,one_engine,City-wide
+basic-engine-31,engine-only-response,Cardboard Pile Fire,30,one_engine,City-wide
+basic-engine-32,engine-only-response,Newspaper Pile Fire,30,one_engine,City-wide
+basic-engine-33,engine-only-response,Furniture Discarded Curbside on Fire,30,one_engine,City-wide
+basic-engine-34,engine-only-response,Recycling Container Fire,30,one_engine,City-wide
+basic-engine-35,engine-only-response,Bulk Refuse Fire,30,one_engine,City-wide
+basic-engine-36,engine-only-response,Appliance Discarded Outdoors on Fire,30,one_engine,City-wide
+basic-engine-37,engine-only-response,Christmas Tree Disposal Fire,30,one_engine,City-wide
+basic-engine-38,engine-only-response,Shopping Cart Contents on Fire,30,one_engine,City-wide
+basic-engine-39,engine-only-response,Wood Pile Fire,30,one_engine,City-wide
+basic-engine-40,engine-only-response,Yard Waste Fire,30,one_engine,City-wide
+basic-engine-41,engine-only-response,Illegal Dumping Fire,30,one_engine,City-wide
+basic-engine-42,engine-only-response,Fence Fire,30,one_engine,City-wide
+basic-engine-43,engine-only-response,Utility Pole Fire,30,one_engine,City-wide
+basic-engine-44,engine-only-response,Telephone Pole Fire,30,one_engine,City-wide
+basic-engine-45,engine-only-response,Signboard Fire,30,one_engine,City-wide
+basic-engine-46,engine-only-response,Mailbox Fire,30,one_engine,City-wide
+basic-engine-47,engine-only-response,Bus Shelter Fire,30,one_engine,City-wide
+basic-engine-48,engine-only-response,Portable Toilet Fire,30,one_engine,City-wide
+basic-engine-49,engine-only-response,Park Bench Fire,30,one_engine,City-wide
+basic-engine-50,engine-only-response,Playground Equipment Fire,30,one_engine,City-wide
+basic-engine-51,engine-only-response,Construction Cone Fire,30,one_engine,City-wide
+basic-engine-52,engine-only-response,Traffic Barrier Fire,30,one_engine,City-wide
+basic-engine-53,engine-only-response,Exterior Decorative Lighting Fire,30,one_engine,City-wide
+basic-engine-54,engine-only-response,Outdoor Storage Bin Fire,30,one_engine,City-wide
+basic-engine-55,engine-only-response,Detached Shed Contents Fire,30,one_engine,City-wide
+basic-engine-56,engine-only-response,Outdoor Couch Fire,30,one_engine,City-wide
+basic-engine-57,engine-only-response,Fire in Abandoned Shopping Cart,30,one_engine,City-wide
+basic-engine-58,engine-only-response,Fire in Discarded Clothing Pile,30,one_engine,City-wide
+basic-engine-59,engine-only-response,Fire in Recycling Bags,30,one_engine,City-wide
+basic-engine-60,engine-only-response,Fire Involving Exterior Tarps,30,one_engine,City-wide
+basic-engine-61,engine-only-response,Downed Electrical Wire on Street,30,one_engine,City-wide
+basic-engine-62,engine-only-response,Downed Wire on Parked Vehicle,30,one_engine,City-wide
+basic-engine-63,engine-only-response,Wire Arcing on Sidewalk,30,one_engine,City-wide
+basic-engine-64,engine-only-response,Wire Sparking in Tree,30,one_engine,City-wide
+basic-engine-65,engine-only-response,Transformer Wire Down,30,one_engine,City-wide
+basic-engine-66,engine-only-response,Telephone Wire Down,30,one_engine,City-wide
+basic-engine-67,engine-only-response,Cable TV Wire Down,30,one_engine,City-wide
+basic-engine-68,engine-only-response,Wire Hanging Low Across Roadway,30,one_engine,City-wide
+basic-engine-69,engine-only-response,Pole-to-House Service Wire Down,30,one_engine,City-wide
+basic-engine-70,engine-only-response,Wire Down in Backyard,30,one_engine,City-wide
+basic-engine-71,engine-only-response,Wire Down on Fence,30,one_engine,City-wide
+basic-engine-72,engine-only-response,Wire Smoking,30,one_engine,City-wide
+basic-engine-73,engine-only-response,Wire Down During Windstorm,30,one_engine,City-wide
+basic-engine-74,engine-only-response,Wire Down Across Driveway,30,one_engine,City-wide
+basic-engine-75,engine-only-response,Wire Touching Metal Railing,30,one_engine,City-wide
+basic-engine-76,engine-only-response,Wire Down in Playground,30,one_engine,City-wide
+basic-engine-77,engine-only-response,Wire Down on Bus Stop,30,one_engine,City-wide
+basic-engine-78,engine-only-response,Multiple Wires Down After Storm,30,one_engine,City-wide
+basic-engine-79,engine-only-response,Unknown Wire Condition Investigation,30,one_engine,City-wide
+basic-engine-80,engine-only-response,Refrigerator Refrigerant Leak,30,one_engine,City-wide
+basic-engine-81,engine-only-response,Air Conditioner Refrigerant Leak,30,one_engine,City-wide
+basic-engine-82,engine-only-response,Heat Pump Refrigerant Leak,30,one_engine,City-wide
+basic-engine-83,engine-only-response,Window AC Unit Leak,30,one_engine,City-wide
+basic-engine-84,engine-only-response,Central AC Refrigerant Odor,30,one_engine,City-wide
+basic-engine-85,engine-only-response,Leaking Refrigerant Line in Basement,30,one_engine,City-wide
+basic-engine-86,engine-only-response,Refrigerant Release From Mini-Split System,30,one_engine,City-wide
+basic-engine-87,engine-only-response,Refrigerant Leak After Appliance Damage,30,one_engine,City-wide
+basic-engine-88,engine-only-response,Refrigerant Leak in Apartment Kitchen,30,one_engine,City-wide
+basic-engine-89,engine-only-response,Residential HVAC Refrigerant Investigation,30,one_engine,City-wide
+basic-engine-90,engine-only-response,Activated Medical Alert Pendant,30,one_engine,City-wide
+basic-engine-91,engine-only-response,Medical Alert Bracelet Activation,30,one_engine,City-wide
+basic-engine-92,engine-only-response,Central Station Panic Alarm for Elderly Resident,30,one_engine,City-wide
+basic-engine-93,engine-only-response,Welfare Check Requested by Medical Monitoring Company,30,one_engine,City-wide
+basic-engine-94,engine-only-response,Carbon Monoxide Detector Activation With Ill Person,30,one_engine,City-wide
+basic-engine-95,engine-only-response,Unknown Medical Emergency Reported by Alarm Company,30,one_engine,City-wide
+basic-ladder-1,ladder-only-response,Stuck Elevator,30,one_ladder,City-wide
+basic-ladder-2,ladder-only-response,Water Leak,30,one_ladder,City-wide
+basic-ladder-3,ladder-only-response,Lock out,30,one_ladder,City-wide
+basic-ladder-4,ladder-only-response,Water Leak in Apartment Ceiling,30,one_ladder,City-wide
+basic-ladder-5,ladder-only-response,Water Leak in Basement,30,one_ladder,City-wide
+basic-ladder-6,ladder-only-response,Water Leak From Burst Pipe,30,one_ladder,City-wide
+basic-ladder-7,ladder-only-response,Water Leak in Commercial Occupancy,30,one_ladder,City-wide
+basic-ladder-8,ladder-only-response,Water Leak Affecting Electrical Equipment,30,one_ladder,City-wide
+basic-ladder-9,ladder-only-response,Water Leak From Sprinkler System,30,one_ladder,City-wide
+basic-ladder-10,ladder-only-response,Water Leak in Vacant Building,30,one_ladder,City-wide
+basic-ladder-11,ladder-only-response,Water Leak From Roof Drain Backup,30,one_ladder,City-wide
+basic-ladder-12,ladder-only-response,Water Leak Through Window Frame,30,one_ladder,City-wide
+basic-ladder-13,ladder-only-response,Water Leak in Elevator Shaft,30,one_ladder,City-wide
+basic-ladder-14,ladder-only-response,Water Leak in Boiler Room,30,one_ladder,City-wide
+basic-ladder-15,ladder-only-response,Water Leak in Utility Closet,30,one_ladder,City-wide
+basic-ladder-16,ladder-only-response,Water Leak in Crawl Space,30,one_ladder,City-wide
+basic-ladder-17,ladder-only-response,Water Leak in Mechanical Room,30,one_ladder,City-wide
+basic-ladder-18,ladder-only-response,Water Leak Affecting Multiple Apartments,30,one_ladder,City-wide
+basic-ladder-19,ladder-only-response,Water Leak From Washing Machine Hose,30,one_ladder,City-wide
+basic-ladder-20,ladder-only-response,Water Leak From Water Heater,30,one_ladder,City-wide
+basic-ladder-21,ladder-only-response,Water Leak in Hallway,30,one_ladder,City-wide
+basic-ladder-22,ladder-only-response,Water Leak From Broken Fixture,30,one_ladder,City-wide
+basic-ladder-23,ladder-only-response,Water Leak Investigation,30,one_ladder,City-wide
+basic-ladder-24,ladder-only-response,Tree Down Blocking Street,30,one_ladder,City-wide
+basic-ladder-25,ladder-only-response,Large Limb Blocking Roadway,30,one_ladder,City-wide
+basic-ladder-26,ladder-only-response,Tree Down on Sidewalk,30,one_ladder,City-wide
+basic-ladder-27,ladder-only-response,Tree Down on Parked Vehicle,30,one_ladder,City-wide
+basic-ladder-28,ladder-only-response,Tree Down on Fence,30,one_ladder,City-wide
+basic-ladder-29,ladder-only-response,Tree Down After Storm,30,one_ladder,City-wide
+basic-ladder-30,ladder-only-response,Tree Leaning Into Street,30,one_ladder,City-wide
+basic-ladder-31,ladder-only-response,Tree Limb Hanging Over Roadway,30,one_ladder,City-wide
+basic-ladder-32,ladder-only-response,Tree Limb Hanging Over Sidewalk,30,one_ladder,City-wide
+basic-ladder-33,ladder-only-response,Fallen Branch Blocking Driveway,30,one_ladder,City-wide
+basic-ladder-34,ladder-only-response,Tree Down Across Alley,30,one_ladder,City-wide
+basic-ladder-35,ladder-only-response,Tree Branch Entangled in Utility Wires,30,one_ladder,City-wide
+basic-ladder-36,ladder-only-response,Tree Blocking Fire Hydrant,30,one_ladder,City-wide
+basic-ladder-37,ladder-only-response,Tree Down in Playground,30,one_ladder,City-wide
+basic-ladder-38,ladder-only-response,Tree Down on Bus Stop,30,one_ladder,City-wide
+basic-ladder-39,ladder-only-response,Tree Blocking Building Entrance,30,one_ladder,City-wide
+basic-ladder-40,ladder-only-response,Tree Limb Resting on Roof,30,one_ladder,City-wide
+basic-ladder-41,ladder-only-response,Tree Branch Obstructing Traffic Signal,30,one_ladder,City-wide
+basic-ladder-42,ladder-only-response,Tree Down in Park,30,one_ladder,City-wide
+basic-ladder-43,ladder-only-response,Multiple Branches Down After Storm,30,one_ladder,City-wide
+basic-ladder-44,ladder-only-response,Loose Cornice on Residential Building,30,one_ladder,City-wide
+basic-ladder-45,ladder-only-response,Hanging Cornice on Commercial Building,30,one_ladder,City-wide
+basic-ladder-46,ladder-only-response,Loose Facade Material,30,one_ladder,City-wide
+basic-ladder-47,ladder-only-response,Hanging Brick From Exterior Wall,30,one_ladder,City-wide
+basic-ladder-48,ladder-only-response,Loose Stone Above Sidewalk,30,one_ladder,City-wide
+basic-ladder-49,ladder-only-response,Falling Masonry Hazard,30,one_ladder,City-wide
+basic-ladder-50,ladder-only-response,Hanging Decorative Trim,30,one_ladder,City-wide
+basic-ladder-51,ladder-only-response,Loose Window Air Conditioner,30,one_ladder,City-wide
+basic-ladder-52,ladder-only-response,Hanging Sign Above Street,30,one_ladder,City-wide
+basic-ladder-53,ladder-only-response,Loose Awning,30,one_ladder,City-wide
+basic-ladder-54,ladder-only-response,Hanging Gutter Section,30,one_ladder,City-wide
+basic-ladder-55,ladder-only-response,Loose Roof Shingles,30,one_ladder,City-wide
+basic-ladder-56,ladder-only-response,Loose Flashing on Roof,30,one_ladder,City-wide
+basic-ladder-57,ladder-only-response,Hanging Satellite Dish,30,one_ladder,City-wide
+basic-ladder-58,ladder-only-response,Loose Exterior Paneling,30,one_ladder,City-wide
+basic-ladder-59,ladder-only-response,Loose Chimney Cap,30,one_ladder,City-wide
+basic-ladder-60,ladder-only-response,Hanging Window Frame,30,one_ladder,City-wide
+basic-ladder-61,ladder-only-response,Loose Fire Escape Component,30,one_ladder,City-wide
+basic-ladder-62,ladder-only-response,Falling Ice Hazard,30,one_ladder,City-wide
+basic-ladder-63,ladder-only-response,Exterior Debris Hanging From Building,30,one_ladder,City-wide
+basic-ladder-64,ladder-only-response,Occupied Elevator Stuck Between Floors,30,one_ladder,City-wide
+basic-ladder-65,ladder-only-response,Occupied Elevator Stuck at Lobby Level,30,one_ladder,City-wide
+basic-ladder-66,ladder-only-response,Occupied Freight Elevator Stuck,30,one_ladder,City-wide
+basic-ladder-67,ladder-only-response,Occupied Elevator With Power Failure,30,one_ladder,City-wide
+basic-ladder-68,ladder-only-response,Occupied Elevator With Door Malfunction,30,one_ladder,City-wide
+basic-ladder-69,ladder-only-response,Occupied Elevator in High-Rise Building,30,one_ladder,City-wide
+basic-ladder-70,ladder-only-response,Occupied Elevator in Residential Building,30,one_ladder,City-wide
+basic-ladder-71,ladder-only-response,Occupied Elevator in Commercial Building,30,one_ladder,City-wide
+basic-ladder-72,ladder-only-response,Occupied Elevator With Disabled Passenger,30,one_ladder,City-wide
+basic-ladder-73,ladder-only-response,Occupied Elevator With Child Trapped,30,one_ladder,City-wide
+basic-ladder-74,ladder-only-response,Occupied Elevator With Medical Emergency,30,one_ladder,City-wide
+basic-ladder-75,ladder-only-response,Occupied Elevator in Parking Garage,30,one_ladder,City-wide
+basic-ladder-76,ladder-only-response,Occupied Elevator With Smoke Odor,30,one_ladder,City-wide
+basic-ladder-77,ladder-only-response,Occupied Elevator With Mechanical Failure,30,one_ladder,City-wide
+basic-ladder-78,ladder-only-response,Occupied Elevator Entrapment Investigation,30,one_ladder,City-wide
+basic-ladder-79,ladder-only-response,Residential Lockout,30,one_ladder,City-wide
+basic-ladder-80,ladder-only-response,Child Locked Inside Apartment,30,one_ladder,City-wide
+basic-ladder-81,ladder-only-response,Child Locked Inside Vehicle,30,one_ladder,City-wide
+basic-ladder-82,ladder-only-response,Elderly Person Locked Inside Residence,30,one_ladder,City-wide
+basic-ladder-83,ladder-only-response,Disabled Occupant Locked Inside Home,30,one_ladder,City-wide
+basic-ladder-84,ladder-only-response,Lockout With Stove Left On,30,one_ladder,City-wide
+basic-ladder-85,ladder-only-response,Lockout With Water Running,30,one_ladder,City-wide
+basic-ladder-86,ladder-only-response,Lockout With Pet in Distress,30,one_ladder,City-wide
+basic-ladder-87,ladder-only-response,Occupant Locked in Bathroom,30,one_ladder,City-wide
+basic-ladder-88,ladder-only-response,Occupant Locked in Bedroom,30,one_ladder,City-wide
+basic-ladder-89,ladder-only-response,Occupant Trapped Behind Jammed Door,30,one_ladder,City-wide
+basic-ladder-90,ladder-only-response,Lockout Due to Broken Lock,30,one_ladder,City-wide
+basic-ladder-91,ladder-only-response,Lockout Due to Lost Keys,30,one_ladder,City-wide
+basic-ladder-92,ladder-only-response,Commercial Lockout,30,one_ladder,City-wide
+basic-ladder-93,ladder-only-response,Lock-In Due to Malfunctioning Security Gate,30,one_ladder,City-wide
+basic-ladder-94,ladder-only-response,Ring Removal Assistance,30,one_ladder,City-wide
+basic-ladder-95,ladder-only-response,Person Stuck in Playground Equipment,30,one_ladder,City-wide
+basic-ladder-96,ladder-only-response,Head Stuck in Railing,30,one_ladder,City-wide
+basic-ladder-97,ladder-only-response,Hand Stuck in Machinery,30,one_ladder,City-wide
+basic-ladder-98,ladder-only-response,Removal of Loose Debris From Roof,30,one_ladder,City-wide
+basic-ladder-99,ladder-only-response,Window Boarding Assistance,30,one_ladder,City-wide
+basic-ladder-100,ladder-only-response,Securing Storm-Damaged Structure,30,one_ladder,City-wide
+basic-ladder-101,ladder-only-response,Opening Jammed Fire Escape Door,30,one_ladder,City-wide
+basic-ladder-102,ladder-only-response,Investigation of Unusual Odor Requiring Access,30,one_ladder,City-wide
+basic-ladder-103,ladder-only-response,Assistance Requiring Ground Ladder or Hand Tools,30,one_ladder,City-wide
+basic-response-1,basic-response-call,Car Fire,30,one_engine_one_ladder,City-wide
+basic-response-2,basic-response-call,Car Accident,30,one_engine_one_ladder,City-wide
+basic-response-3,basic-response-call,Truck Accident,30,one_engine_one_ladder,City-wide
+basic-response-4,basic-response-call,Automatic Alarm,30,one_engine_one_ladder,City-wide
+basic-response-5,basic-response-call,Struck Pedestrian,30,one_engine_one_ladder,City-wide
+basic-response-6,basic-response-call,Passenger Car Fire,30,one_engine_one_ladder,City-wide
+basic-response-7,basic-response-call,SUV Fire,30,one_engine_one_ladder,City-wide
+basic-response-8,basic-response-call,Pickup Truck Fire,30,one_engine_one_ladder,City-wide
+basic-response-9,basic-response-call,Van Fire,30,one_engine_one_ladder,City-wide
+basic-response-10,basic-response-call,Taxi Fire,30,one_engine_one_ladder,City-wide
+basic-response-11,basic-response-call,Bus Fire,30,one_engine_one_ladder,City-wide
+basic-response-12,basic-response-call,Motorcycle Fire,30,one_engine_one_ladder,City-wide
+basic-response-13,basic-response-call,Electric Vehicle Fire,30,one_engine_one_ladder,City-wide
+basic-response-14,basic-response-call,Vehicle Fire in Parking Lot,30,one_engine_one_ladder,City-wide
+basic-response-15,basic-response-call,Vehicle Fire on Roadway,30,one_engine_one_ladder,City-wide
+basic-response-16,basic-response-call,Pedestrian Struck by Passenger Vehicle,30,one_engine_one_ladder,City-wide
+basic-response-17,basic-response-call,Pedestrian Struck by Bus,30,one_engine_one_ladder,City-wide
+basic-response-18,basic-response-call,Pedestrian Struck by Bicycle,30,one_engine_one_ladder,City-wide
+basic-response-19,basic-response-call,Pedestrian Struck by Motorcycle,30,one_engine_one_ladder,City-wide
+basic-response-20,basic-response-call,Pedestrian Struck at Intersection,30,one_engine_one_ladder,City-wide
+basic-response-21,basic-response-call,Pedestrian Struck in Crosswalk,30,one_engine_one_ladder,City-wide
+basic-response-22,basic-response-call,Child Struck by Vehicle,30,one_engine_one_ladder,City-wide
+basic-response-23,basic-response-call,Multiple Pedestrians Struck,30,one_engine_one_ladder,City-wide
+basic-response-24,basic-response-call,Pedestrian Trapped Under Vehicle,30,one_engine_one_ladder,City-wide
+basic-response-25,basic-response-call,Pedestrian Struck on Highway,30,one_engine_one_ladder,City-wide
+basic-response-26,basic-response-call,Two-Car Collision,30,one_engine_one_ladder,City-wide
+basic-response-27,basic-response-call,Three-Car Collision,30,one_engine_one_ladder,City-wide
+basic-response-28,basic-response-call,Rear-End Collision,30,one_engine_one_ladder,City-wide
+basic-response-29,basic-response-call,Side-Impact Collision,30,one_engine_one_ladder,City-wide
+basic-response-30,basic-response-call,Head-On Collision,30,one_engine_one_ladder,City-wide
+basic-response-31,basic-response-call,Vehicle Into Pole,30,one_engine_one_ladder,City-wide
+basic-response-32,basic-response-call,Vehicle Into Tree,30,one_engine_one_ladder,City-wide
+basic-response-33,basic-response-call,Vehicle Into Building,30,one_engine_one_ladder,City-wide
+basic-response-34,basic-response-call,Vehicle Into Fence,30,one_engine_one_ladder,City-wide
+basic-response-35,basic-response-call,Vehicle Into Fire Hydrant,30,one_engine_one_ladder,City-wide
+basic-response-36,basic-response-call,Vehicle Into Traffic Signal,30,one_engine_one_ladder,City-wide
+basic-response-37,basic-response-call,Vehicle Into Parked Car,30,one_engine_one_ladder,City-wide
+basic-response-38,basic-response-call,Vehicle Overturn,30,one_engine_one_ladder,City-wide
+basic-response-39,basic-response-call,Vehicle on Side,30,one_engine_one_ladder,City-wide
+basic-response-40,basic-response-call,Vehicle in Ditch,30,one_engine_one_ladder,City-wide
+basic-response-41,basic-response-call,Vehicle Entrapment,30,one_engine_one_ladder,City-wide
+basic-response-42,basic-response-call,Multi-Vehicle Collision,30,one_engine_one_ladder,City-wide
+basic-response-43,basic-response-call,Collision With Fuel Leak,30,one_engine_one_ladder,City-wide
+basic-response-44,basic-response-call,Collision Blocking Roadway,30,one_engine_one_ladder,City-wide
+basic-response-45,basic-response-call,Collision With Injured Occupants,30,one_engine_one_ladder,City-wide
+basic-response-46,basic-response-call,Sparks Reported on Elevated Structure,30,one_engine_one_ladder,City-wide
+basic-response-47,basic-response-call,Automatic Fire Alarm in Private Residence,30,one_engine_one_ladder,City-wide
+basic-response-48,basic-response-call,Smoke Detector Activation in Apartment,30,one_engine_one_ladder,City-wide
+basic-response-49,basic-response-call,Smoke Detector Activation in Private Dwelling,30,one_engine_one_ladder,City-wide
+basic-response-50,basic-response-call,Carbon Monoxide Alarm Activation in Residence,30,one_engine_one_ladder,City-wide
+basic-response-51,basic-response-call,Combination Smoke and CO Alarm Activation,30,one_engine_one_ladder,City-wide
+basic-response-52,basic-response-call,Heat Detector Activation in Residence,30,one_engine_one_ladder,City-wide
+basic-response-53,basic-response-call,Residential Fire Alarm With No Contact,30,one_engine_one_ladder,City-wide
+basic-response-54,basic-response-call,Alarm Activation Due to Burnt Food,30,one_engine_one_ladder,City-wide
+basic-response-55,basic-response-call,Alarm Activation With Odor of Smoke,30,one_engine_one_ladder,City-wide
+basic-response-56,basic-response-call,Multiple Alarm Devices Activated in Residence,30,one_engine_one_ladder,City-wide
+basic-response-57,basic-response-call,Gasoline Leak on Street,30,one_engine_one_ladder,City-wide
+basic-response-58,basic-response-call,Gasoline Spill From Vehicle Tank,30,one_engine_one_ladder,City-wide
+basic-response-59,basic-response-call,Diesel Spill on Roadway,30,one_engine_one_ladder,City-wide
+basic-response-60,basic-response-call,Fuel Leak After Motor Vehicle Collision,30,one_engine_one_ladder,City-wide
+basic-response-61,basic-response-call,Fuel Spill at Intersection,30,one_engine_one_ladder,City-wide
+basic-response-62,basic-response-call,Fuel Spill in Parking Lot,30,one_engine_one_ladder,City-wide
+basic-response-63,basic-response-call,Fuel Leak From Commercial Truck,30,one_engine_one_ladder,City-wide
+basic-response-64,basic-response-call,Fuel Spill Blocking Traffic Lane,30,one_engine_one_ladder,City-wide
+basic-response-65,basic-response-call,Unknown Petroleum Product on Street,30,one_engine_one_ladder,City-wide
+basic-response-66,basic-response-call,Large Fuel Spill Investigation,30,one_engine_one_ladder,City-wide
+basic-response-67,basic-response-call,Water Main Break Affecting Street,30,one_engine_one_ladder,City-wide
+basic-response-68,basic-response-call,Steam Leak From Street Grating,30,one_engine_one_ladder,City-wide
+basic-response-69,basic-response-call,Smoke From Manhole,30,one_engine_one_ladder,City-wide
+basic-response-70,basic-response-call,Transformer Explosion in Street,30,one_engine_one_ladder,City-wide
+basic-response-71,basic-response-call,Vehicle Into Utility Pole,30,one_engine_one_ladder,City-wide
+basic-response-72,basic-response-call,Downed Traffic Signal,30,one_engine_one_ladder,City-wide
+basic-response-73,basic-response-call,Sinkhole in Roadway,30,one_engine_one_ladder,City-wide
+basic-response-74,basic-response-call,Debris Blocking Roadway,30,one_engine_one_ladder,City-wide
+basic-response-75,basic-response-call,Construction Accident in Street,30,one_engine_one_ladder,City-wide
+basic-response-76,basic-response-call,Street Flooding,30,one_engine_one_ladder,City-wide
+basic-response-77,basic-response-call,Vehicle Into Building With Minor Damage,30,one_engine_one_ladder,City-wide
+basic-response-78,basic-response-call,Vehicle Into Storefront,30,one_engine_one_ladder,City-wide
+basic-response-79,basic-response-call,Street Sign Knocked Down,30,one_engine_one_ladder,City-wide
+basic-response-80,basic-response-call,Tractor Trailer Stuck Under Bridge,30,one_engine_one_ladder,City-wide
+basic-response-81,basic-response-call,Tractor Trailer Into Overpass,30,one_engine_one_ladder,City-wide
+basic-response-82,basic-response-call,Bus Collision,30,one_engine_one_ladder,City-wide
+basic-response-83,basic-response-call,School Bus Collision,30,one_engine_one_ladder,City-wide
+basic-response-84,basic-response-call,Vehicle Into Guardrail,30,one_engine_one_ladder,City-wide
+basic-response-85,basic-response-call,Accident Involving Bicycle Rider,30,one_engine_one_ladder,City-wide
+basic-response-86,basic-response-call,Occupied Elevator With Injured Passenger,30,one_engine_one_ladder,City-wide
+basic-response-87,basic-response-call,Occupied Elevator With Ill Passenger,30,one_engine_one_ladder,City-wide
+basic-response-88,basic-response-call,Elevator Entrapment With Smoke Odor,30,one_engine_one_ladder,City-wide
+basic-response-89,basic-response-call,Elevator Stuck Following Power Failure,30,one_engine_one_ladder,City-wide
+basic-response-90,basic-response-call,Elevator Entrapment With Panic Attack,30,one_engine_one_ladder,City-wide
+basic-response-91,basic-response-call,Escalator Accident With Injured Person,30,one_engine_one_ladder,City-wide
+basic-response-92,basic-response-call,Child Trapped in Elevator With Injury,30,one_engine_one_ladder,City-wide
+basic-response-93,basic-response-call,Wheelchair Occupant Trapped in Elevator,30,one_engine_one_ladder,City-wide
+basic-response-94,basic-response-call,Elevator Entrapment in High-Rise Building With Medical Emergency,30,one_engine_one_ladder,City-wide
+basic-response-95,basic-response-call,Mechanical Entrapment Requiring Tools and Patient Care,30,one_engine_one_ladder,City-wide
+structure-fire-1,structure-normal-fire,House Fire,150,standard,City-wide
+structure-fire-2,structure-normal-fire,Restaurant Fire,175,standard,City-wide
+structure-fire-3,structure-normal-fire,Fire Alarm Activation,175,standard,City-wide
+structure-fire-4,structure-normal-fire,Structure Fire,175,standard,City-wide
+structure-fire-5,structure-normal-fire,Garage Fire,175,standard,City-wide
+structure-fire-6,structure-normal-fire,Office Fire,175,standard,City-wide
+structure-fire-7,structure-normal-fire,Apartment Fire in Kitchen,175,standard,City-wide
+structure-fire-8,structure-normal-fire,Bedroom Fire in Private Dwelling,175,standard,City-wide
+structure-fire-9,structure-normal-fire,Living Room Fire in Apartment,175,standard,City-wide
+structure-fire-10,structure-normal-fire,Bathroom Fire in Apartment,175,standard,City-wide
+structure-fire-11,structure-normal-fire,Electrical Fire in Wall Outlet,175,standard,City-wide
+structure-fire-12,structure-normal-fire,Microwave Fire in Apartment Kitchen,175,standard,City-wide
+structure-fire-13,structure-normal-fire,Stove Fire,175,standard,City-wide
+structure-fire-14,structure-normal-fire,Oven Fire in Residential Unit,175,standard,City-wide
+structure-fire-15,structure-normal-fire,Hallway Fire in Multiple Dwelling,175,standard,City-wide
+structure-fire-16,structure-normal-fire,Fire in Basement Storage Area,175,standard,City-wide
+structure-fire-17,structure-normal-fire,Compactor Room Fire in Residential Building,175,standard,City-wide
+structure-fire-18,structure-normal-fire,Trash Room Fire in Apartment Building,175,standard,City-wide
+structure-fire-19,structure-normal-fire,Lobby Fire in Mixed Occupancy,175,standard,City-wide
+structure-fire-20,structure-normal-fire,Fire in Stairwell Landing,175,standard,City-wide
+structure-fire-21,structure-normal-fire,Fire in Utility Closet in Residential Building,175,standard,City-wide
+structure-fire-22,structure-normal-fire,Attic Fire in Private Home,175,standard,City-wide
+structure-fire-23,structure-normal-fire,Porch Fire Extending to Exterior Wall,175,standard,City-wide
+structure-fire-24,structure-normal-fire,Garage Fire Attached to Residence,175,standard,City-wide
+structure-fire-25,structure-normal-fire,Detached Garage Fire,175,standard,City-wide
+structure-fire-26,structure-normal-fire,Fire in Rear Extension of Private Dwelling,175,standard,City-wide
+structure-fire-27,structure-normal-fire,Retail Store Electrical Fire,175,standard,City-wide
+structure-fire-28,structure-normal-fire,Clothing Store Fire in Stock Room,175,standard,City-wide
+structure-fire-29,structure-normal-fire,Restaurant Kitchen Fire,175,standard,City-wide
+structure-fire-30,structure-normal-fire,Fast Food Grill Fire,175,standard,City-wide
+structure-fire-31,structure-normal-fire,Bakery Oven Fire,175,standard,City-wide
+structure-fire-32,structure-normal-fire,Office Fire in Copier Area,175,standard,City-wide
+structure-fire-33,structure-normal-fire,Convenience Store Fire in Storage Area,175,standard,City-wide
+structure-fire-34,structure-normal-fire,Pharmacy Back Room Fire,175,standard,City-wide
+structure-fire-35,structure-normal-fire,Grocery Store Dumpster Area Extension Fire,175,standard,City-wide
+structure-fire-36,structure-normal-fire,Bar Fire in Seating Area,175,standard,City-wide
+structure-fire-37,structure-normal-fire,Transformer Fire With Smoke Condition,175,standard,City-wide
+structure-fire-38,structure-normal-fire,Electrical Panel Fire in Apartment Building,175,standard,City-wide
+structure-fire-39,structure-normal-fire,Fuse Box Fire in Residence,175,standard,City-wide
+structure-fire-40,structure-normal-fire,Street Pole Fire Near Building Exposure,175,standard,City-wide
+structure-fire-41,structure-normal-fire,Service Wire Fire Entering Building,175,standard,City-wide
+structure-fire-42,structure-normal-fire,Ceiling Light Fixture Fire,175,standard,City-wide
+structure-fire-43,structure-normal-fire,Elevator Machine Room Electrical Fire,175,standard,City-wide
+structure-fire-44,structure-normal-fire,Boiler Electrical Control Fire,175,standard,City-wide
+structure-fire-45,structure-normal-fire,Air Conditioning Unit Fire on Roof,175,standard,City-wide
+structure-fire-46,structure-normal-fire,Electrical Fire in Basement Panel Room,175,standard,City-wide
+structure-fire-47,structure-normal-fire,Smoke Condition in Apartment Hallway,175,standard,City-wide
+structure-fire-48,structure-normal-fire,Smoke in Multiple Dwelling,175,standard,City-wide
+structure-fire-49,structure-normal-fire,Odor of Smoke in Residential Building,175,standard,City-wide
+structure-fire-50,structure-normal-fire,Electrical Burning Smell in Apartment Building,175,standard,City-wide
+structure-fire-51,structure-normal-fire,Smoke Condition in Commercial Building Basement,175,standard,City-wide
+structure-fire-52,structure-normal-fire,Unknown Smoke Condition in School Building,175,standard,City-wide
+structure-fire-53,structure-normal-fire,Smoke From HVAC System in Office Building,175,standard,City-wide
+structure-fire-54,structure-normal-fire,Light Smoke Condition in Hotel Corridor,175,standard,City-wide
+structure-fire-55,structure-normal-fire,Smoke Condition From Compactor Room,175,standard,City-wide
+structure-fire-56,structure-normal-fire,Reported Fire With No Visible Fire on Arrival,175,standard,City-wide
+structure-fire-57,structure-normal-fire,Fire in Vacant Apartment Unit,175,standard,City-wide
+structure-fire-58,structure-normal-fire,Fire in Vacant Commercial Storefront,175,standard,City-wide
+structure-fire-59,structure-normal-fire,Fire in Abandoned Building (Accessible),175,standard,City-wide
+structure-fire-60,structure-normal-fire,Fire in Parking Garage Vehicle,175,standard,City-wide
+structure-fire-61,structure-normal-fire,Fire in Rooftop Equipment Room,175,standard,City-wide
+structure-fire-62,structure-normal-fire,Fire in Exterior Facade Extension,175,standard,City-wide
+structure-fire-63,structure-normal-fire,Fire in Loading Dock Area,175,standard,City-wide
+structure-fire-64,structure-normal-fire,Fire in Storage Shed Adjacent to Building,175,standard,City-wide
+structure-fire-65,structure-normal-fire,Fire in Utility Tunnel Entrance (Accessible Conditions),175,standard,City-wide
+structure-fire-66,structure-normal-fire,Apartment Fire Extending to Adjacent Unit Door,175,standard,City-wide
+structure-fire-67,structure-normal-fire,Kitchen Fire Extending Into Cabinets and Walls,175,standard,City-wide
+structure-fire-68,structure-normal-fire,Basement Fire Extending to First Floor Floorboards,175,standard,City-wide
+structure-fire-69,structure-normal-fire,Exterior Fire Extending to Window Frame,175,standard,City-wide
+structure-fire-70,structure-normal-fire,Dumpster Fire Extending to Rear Wall of Building,175,standard,City-wide
+structure-fire-71,structure-normal-fire,Vehicle Fire Extending to Nearby Fence and Siding,175,standard,City-wide
+structure-fire-72,structure-normal-fire,Trash Fire Extending to Exterior Scaffolding,175,standard,City-wide
+structure-fire-73,structure-normal-fire,Shed Fire Extending to Adjacent Fence Line,175,standard,City-wide
+structure-fire-74,structure-normal-fire,Porch Fire Extending Into Rear Wall of House,175,standard,City-wide
+structure-fire-75,structure-normal-fire,Commercial Fire Extending Into Storage Mezzanine,175,standard,City-wide

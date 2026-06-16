@@ -61,6 +61,8 @@ interface DispatchStore {
   dispatching: boolean;
   /** When true, calls are automatically dispatched units to meet their assignment requirements. */
   autoDispatch: boolean;
+  /** When true, units are automatically relocated to maintain city-wide coverage balance. */
+  autoRelocation: boolean;
   /** Simulation speed multiplier (1 = real time). */
   simSpeed: number;
 
@@ -71,6 +73,7 @@ interface DispatchStore {
   clearSelection: () => void;
   togglePaths: () => void;
   toggleAutoDispatch: () => void;
+  toggleAutoRelocation: () => void;
   setSimSpeed: (multiplier: number) => void;
   dispatchUnits: (call: Incident, units: Unit[]) => Promise<void>;
   /** Transitions a unit from "dispatched" (turnout) to "enroute" (driving). */
@@ -198,6 +201,7 @@ export const useDispatchStore = create<DispatchStore>()(
   showPaths: true,
   dispatching: false,
   autoDispatch: false,
+  autoRelocation: false,
   simSpeed: 1,
 
   selectCall: (callId) => set({ selectedCallId: callId }),
@@ -217,6 +221,8 @@ export const useDispatchStore = create<DispatchStore>()(
   togglePaths: () => set((state) => ({ showPaths: !state.showPaths })),
   toggleAutoDispatch: () =>
     set((state) => ({ autoDispatch: !state.autoDispatch })),
+  toggleAutoRelocation: () =>
+    set((state) => ({ autoRelocation: !state.autoRelocation })),
 
   // Rebase each active leg's start time (and call resolve timers) so on-screen
   // positions and countdowns stay continuous across the speed change.
@@ -591,6 +597,7 @@ export const useDispatchStore = create<DispatchStore>()(
       partialize: (state) => ({
         showPaths: state.showPaths,
         autoDispatch: state.autoDispatch,
+        autoRelocation: state.autoRelocation,
         simSpeed: state.simSpeed,
       }),
     }

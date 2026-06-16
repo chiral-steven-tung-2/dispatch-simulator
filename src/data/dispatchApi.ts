@@ -1,4 +1,4 @@
-import type { Station, NypdStation, Unit, CallType, Assignment } from "../models";
+import type { Station, NypdStation, Unit, CallType, CallSpawnCategory, Assignment } from "../models";
 
 // Base URL of the C# backend. Override via VITE_API_BASE_URL if needed.
 const API_BASE_URL =
@@ -26,6 +26,10 @@ export const fetchUnits = (): Promise<Unit[]> =>
 // Catalog of call types used to spawn random calls on the client.
 export const fetchCallTypes = (): Promise<CallType[]> =>
   getJson<CallType[]>("/api/call-types");
+
+// Category spawn probabilities used by the two-step spawn selection.
+export const fetchCallSpawnCategories = (): Promise<CallSpawnCategory[]> =>
+  getJson<CallSpawnCategory[]>("/api/call-spawn-categories");
 
 // Mandatory-response assignments (staffing levels and escalation chain).
 export const fetchAssignments = (): Promise<Assignment[]> =>

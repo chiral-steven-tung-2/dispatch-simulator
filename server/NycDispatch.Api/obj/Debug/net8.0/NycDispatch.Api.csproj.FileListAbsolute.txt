@@ -88,3 +88,4 @@ C:\MyDocuments\dispatch-game\server\NycDispatch.Api\obj\Debug\net8.0\NycDispatch
 C:\MyDocuments\dispatch-game\server\NycDispatch.Api\obj\Debug\net8.0\NycDispatch.Api.genruntimeconfig.cache
 C:\MyDocuments\dispatch-game\server\NycDispatch.Api\obj\Debug\net8.0\ref\NycDispatch.Api.dll
 C:\MyDocuments\dispatch-game\server\NycDispatch.Api\bin\Debug\net8.0\Data\fdny_assignments.csv
+C:\MyDocuments\dispatch-game\server\NycDispatch.Api\bin\Debug\net8.0\Data\fdny_call_spawn.csv

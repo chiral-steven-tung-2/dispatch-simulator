@@ -1,0 +1,5 @@
+id,category,probability
+1,engine-only-response,0.57
+2,ladder-only-response,0.1
+3,basic-response-call,0.22
+4,structure-normal-fire,0.11

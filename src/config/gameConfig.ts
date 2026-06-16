@@ -79,6 +79,20 @@ export const GAME_CONFIG = {
   /** Selectable simulation-speed multipliers (1 = real time). */
   simSpeeds: [1, 2, 3, 5, 10, 20, 30, 60],
 
+  /** FDNY auto-relocation: coverage-aware unit balancing. */
+  autoRelocation: {
+    /** How often (real ms) to evaluate whether a relocation is needed. */
+    checkIntervalMs: 25_000,
+    /** Exponential decay half-distance (m) for coverage scoring. */
+    decayMeters: 3_000,
+    /** Coverage score below which a station area is considered deficient. */
+    deficiencyThreshold: 1.5,
+    /** Coverage score above which a station is eligible to donate a unit. */
+    surplusThreshold: 3.5,
+    /** Max simultaneous auto-relocations to prevent OSRM flooding and churn. */
+    maxConcurrentRelocations: 3,
+  },
+
   /** NYPD patrol car simulation. */
   nypdPatrol: {
     /** Simulated "On Assignment" share of each precinct's fleet. */

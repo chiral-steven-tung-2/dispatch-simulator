@@ -9,6 +9,7 @@ import { useDispatchData } from "../hooks/useDispatchData";
 import { useCallSpawner } from "../hooks/useCallSpawner";
 import { useResolveTicker } from "../hooks/useResolveTicker";
 import { useAutoDispatcher } from "../hooks/useAutoDispatcher";
+import { useAutoRelocator } from "../hooks/useAutoRelocator";
 import { useNypdActivityTicker } from "../hooks/useNypdActivityTicker";
 import { useDispatchStore } from "../stores/dispatchStore";
 import { useIncidentStore } from "../stores/incidentStore";
@@ -44,6 +45,8 @@ export default function HomePage() {
   const togglePaths = useDispatchStore((s) => s.togglePaths);
   const autoDispatch = useDispatchStore((s) => s.autoDispatch);
   const toggleAutoDispatch = useDispatchStore((s) => s.toggleAutoDispatch);
+  const autoRelocation = useDispatchStore((s) => s.autoRelocation);
+  const toggleAutoRelocation = useDispatchStore((s) => s.toggleAutoRelocation);
   const simSpeed = useDispatchStore((s) => s.simSpeed);
   const setSimSpeed = useDispatchStore((s) => s.setSimSpeed);
   const spawnCall = useIncidentStore((s) => s.spawnCall);
@@ -56,6 +59,7 @@ export default function HomePage() {
   useCallSpawner();
   useResolveTicker();
   useAutoDispatcher();
+  useAutoRelocator();
   useNypdActivityTicker();
 
   return (
@@ -124,6 +128,8 @@ export default function HomePage() {
         onToggleAutoSpawn={toggleAutoSpawn}
         autoDispatch={autoDispatch}
         onToggleAutoDispatch={toggleAutoDispatch}
+        autoRelocation={autoRelocation}
+        onToggleAutoRelocation={toggleAutoRelocation}
         showNotifications={showNotifications}
         onToggleNotifications={toggleNotifications}
         showPaths={showPaths}
@@ -310,6 +316,8 @@ function SettingsPanel({
   onToggleAutoSpawn,
   autoDispatch,
   onToggleAutoDispatch,
+  autoRelocation,
+  onToggleAutoRelocation,
   showNotifications,
   onToggleNotifications,
   showPaths,
@@ -339,6 +347,8 @@ function SettingsPanel({
   onToggleAutoSpawn: () => void;
   autoDispatch: boolean;
   onToggleAutoDispatch: () => void;
+  autoRelocation: boolean;
+  onToggleAutoRelocation: () => void;
   showNotifications: boolean;
   onToggleNotifications: () => void;
   showPaths: boolean;
@@ -406,6 +416,17 @@ function SettingsPanel({
                   onChange={onToggleAutoDispatch}
                   label=""
                   activeColor="green"
+                />
+              </SettingRow>
+              <SettingRow
+                label="Auto-relocate"
+                hint="Balance FDNY coverage across the city"
+              >
+                <ToggleSwitch
+                  checked={autoRelocation}
+                  onChange={onToggleAutoRelocation}
+                  label=""
+                  activeColor="amber"
                 />
               </SettingRow>
               <SettingRow

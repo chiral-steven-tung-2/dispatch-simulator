@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { Assignment, CallType, Incident, IncidentStatus } from "../models";
-import { fetchAssignments, fetchCallTypes } from "../data/dispatchApi";
+import type { Assignment, CallSpawnCategory, CallType, Incident, IncidentStatus } from "../models";
+import { fetchAssignments, fetchCallSpawnCategories, fetchCallTypes } from "../data/dispatchApi";
 import { makeRandomCall } from "../utils/spawn";
 import { useStationStore } from "./stationStore";
 
@@ -11,8 +11,10 @@ interface IncidentStore {
   /** Live calls — generated at runtime, not loaded from the backend. */
   incidents: Incident[];
   notifications: CallNotification[];
-  /** Catalog of call types (with spawn weights) loaded from the backend. */
+  /** Catalog of call types loaded from the backend. */
   callTypes: CallType[];
+  /** Spawn-category probabilities loaded from the backend. */
+  callSpawnCategories: CallSpawnCategory[];
   /** Catalog of mandatory-response assignments and their escalation chain. */
   assignments: Assignment[];
   status: LoadStatus;
@@ -58,6 +60,7 @@ export const useIncidentStore = create<IncidentStore>()(
   incidents: [],
   notifications: [],
   callTypes: [],
+  callSpawnCategories: [],
   assignments: [],
   status: "idle",
   error: null,
@@ -66,23 +69,24 @@ export const useIncidentStore = create<IncidentStore>()(
   load: async () => {
     set({ status: "loading", error: null });
     try {
-      const [callTypes, assignments] = await Promise.all([
+      const [callTypes, callSpawnCategories, assignments] = await Promise.all([
         fetchCallTypes(),
+        fetchCallSpawnCategories(),
         fetchAssignments(),
       ]);
-      set({ callTypes, assignments, status: "ready" });
+      set({ callTypes, callSpawnCategories, assignments, status: "ready" });
     } catch (err) {
       set({ status: "error", error: (err as Error).message });
     }
   },
 
   spawnCall: () => {
-    const callTypes = get().callTypes;
+    const { callTypes, callSpawnCategories } = get();
     const stations = useStationStore.getState().stations;
     if (callTypes.length === 0 || stations.length === 0) {
       return;
     }
-    const call = makeRandomCall(callTypes, stations);
+    const call = makeRandomCall(callTypes, callSpawnCategories, stations);
     const notification: CallNotification = {
       id: `call-notification-${call.id}`,
       callId: call.id,

@@ -1,19 +1,20 @@
-import type { CallType, Station } from "../models";
+import type { CallSpawnCategory, CallType, Station } from "../models";
 import type { LngLat } from "./geo";
 import { randomLandPoint } from "../data/nycLand";
 import { GAME_CONFIG } from "../config/gameConfig";
 
-/** Picks an item using its `weight` as relative probability. */
-export function pickWeighted<T extends { weight: number }>(items: T[]): T {
-  const total = items.reduce((sum, item) => sum + Math.max(0, item.weight), 0);
+/**
+ * Picks a spawn category by probability. Probabilities are normalised so they
+ * don't need to sum exactly to 1.
+ */
+function pickCategory(categories: CallSpawnCategory[]): string {
+  const total = categories.reduce((s, c) => s + c.probability, 0);
   let roll = Math.random() * total;
-  for (const item of items) {
-    roll -= Math.max(0, item.weight);
-    if (roll <= 0) {
-      return item;
-    }
+  for (const c of categories) {
+    roll -= c.probability;
+    if (roll <= 0) return c.category;
   }
-  return items[items.length - 1];
+  return categories[categories.length - 1].category;
 }
 
 /**
@@ -30,9 +31,26 @@ export function randomCallLocation(stations: Station[]): LngLat {
   return [station.longitude, station.latitude];
 }
 
-/** Builds a fresh waiting call from a weighted-random type at a random location. */
-export function makeRandomCall(callTypes: CallType[], stations: Station[]) {
-  const type = pickWeighted(callTypes);
+/**
+ * Builds a fresh waiting call using the two-step spawn system:
+ * 1. Pick a category from `callSpawnCategories` by probability.
+ * 2. Pick uniformly at random from all call types in that category.
+ * Falls back to uniform selection across all types if categories are empty.
+ */
+export function makeRandomCall(
+  callTypes: CallType[],
+  callSpawnCategories: CallSpawnCategory[],
+  stations: Station[]
+) {
+  let pool = callTypes;
+  if (callSpawnCategories.length > 0) {
+    const category = pickCategory(callSpawnCategories);
+    const inCategory = callTypes.filter((ct) => ct.category === category);
+    if (inCategory.length > 0) {
+      pool = inCategory;
+    }
+  }
+  const type = pool[Math.floor(Math.random() * pool.length)];
   const [longitude, latitude] = randomCallLocation(stations);
   return {
     id: `call-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,

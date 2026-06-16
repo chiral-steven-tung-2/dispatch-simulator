@@ -15,6 +15,7 @@ public class DispatchData
     public IReadOnlyList<NycDispatch.Api.Models.NypdStation> NypdStations { get; }
     public IReadOnlyList<Vehicle> Vehicles { get; }
     public IReadOnlyList<CallType> CallTypes { get; }
+    public IReadOnlyList<CallSpawnCategory> CallSpawnCategories { get; }
     public IReadOnlyList<Assignment> Assignments { get; }
 
     public DispatchData(IWebHostEnvironment env)
@@ -56,9 +57,17 @@ public class DispatchData
         {
             Id = row["id"],
             Name = row["name"],
-            Weight = ParseDouble(row["weight"]),
+            Category = row["category"],
             Radius = ParseDouble(row["radius"]),
-            AssignmentId = row["assignment_id"],
+            AssignmentId = row["base_assignment"],
+            SpawnBorough = row["spawn_borough"],
+        });
+
+        CallSpawnCategories = LoadCsv(Path.Combine(dir, "fdny_call_spawn.csv"), row => new CallSpawnCategory
+        {
+            Id = row["id"],
+            Category = row["category"],
+            Probability = ParseDouble(row["probability"]),
         });
 
         Assignments = LoadCsv(Path.Combine(dir, "fdny_assignments.csv"), row => new Assignment
