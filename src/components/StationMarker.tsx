@@ -58,6 +58,8 @@ export default function StationMarker({
 
     let refreshId: number | undefined;
     popup.on("open", () => {
+      const { units, allUnits, allStations, relocations } = liveRef.current;
+      popup.setDOMContent(buildStationPopupContent(station, units, allUnits, allStations, relocations));
       refreshId = window.setInterval(() => {
         const { units, allUnits, allStations, relocations } = liveRef.current;
         popup.setDOMContent(

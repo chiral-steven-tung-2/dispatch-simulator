@@ -129,6 +129,9 @@ function CallCard({
   const assignment = useIncidentStore((s) =>
     s.assignments.find((a) => a.id === incident.assignmentId)
   );
+  const appliedModifiers = useIncidentStore((s) =>
+    s.modifiers.filter((m) => incident.activeModifiers.includes(m.id))
+  );
 
   return (
     <button
@@ -160,6 +163,19 @@ function CallCard({
           ? "No units assigned"
           : `${onSceneCount} on scene · ${respondingCount} responding`}
       </p>
+
+      {appliedModifiers.length > 0 && (
+        <div className="mt-1.5 flex flex-wrap gap-1">
+          {appliedModifiers.map((m) => (
+            <span
+              key={m.id}
+              className="inline-block rounded bg-orange-900/60 px-1.5 py-0.5 text-[11px] font-medium text-orange-300"
+            >
+              {m.name}
+            </span>
+          ))}
+        </div>
+      )}
 
       <ResolveCountdown incident={incident} />
 
@@ -202,7 +218,7 @@ function ResolveCountdown({ incident }: { incident: Incident }) {
     return null;
   }
   const simSpeed = useDispatchStore.getState().simSpeed;
-  const remaining = remainingResolveMs(incident.resolveStartedAt, simSpeed);
+  const remaining = remainingResolveMs(incident.resolveStartedAt, simSpeed, incident.resolveTimeGameMs);
   return (
     <p className="mt-1 text-xs font-semibold text-sky-400">
       ⏱ Resolving in {formatGameDuration(remaining)}

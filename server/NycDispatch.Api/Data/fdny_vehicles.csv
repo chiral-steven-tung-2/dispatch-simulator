@@ -47,8 +47,9 @@ fdny-battalion-3,Battalion 3,Battalion,Available,FDNY-E94L48B3,2
 fdny-battalion-6,Battalion 6,Battalion,Available,FDNY-L3B6,2
 fdny-battalion-22,Battalion 22,Battalion,Available,FDNY-L79B22,2
 fdny-battalion-20,Battalion 20,Battalion,Available,FDNY-S61B20,2
-fdny-battalion-rescue,Rescue Battalion,Battalion,Available,FDNY-SOC,2
-fdny-hazmat-battalion,HazMat Battalion,Battalion,Available,FDNY-Randall,2
+fdny-battalion-rescue,Rescue Battalion,Battalion Rescue,Available,FDNY-SOC,2
+fdny-hazmat-battalion,HazMat Battalion,Battalion HazMat,Available,FDNY-Randall,2
+fdny-safety-battalion,Safety Battalion,Battalion Safety,Available,FDNY-Randall,2
 fdny-brush-1,Brush Fire 1,Brush,Available,FDNY-E164L84,3
 fdny-brush-2,Brush Fire 2,Brush,Available,FDNY-E166L86,3
 fdny-brush-3,Brush Fire 3,Brush,Available,FDNY-E156,3
@@ -269,10 +270,10 @@ fdny-engine-96,Engine 96,Engine,Available,FDNY-E96L54,4
 fdny-engine-97,Engine 97,Engine,Available,FDNY-E97,4
 fdny-engine-9,Engine 9,Engine,Available,FDNY-E9L6,4
 fdny-fc-1,Field Comm. 1,Field Comm.,Available,FDNY-E233L176,2
-fdny-htmu-165,HTMU 165,HazMat,Available,FDNY-E165L85,6
-fdny-htmu-250,HTMU 250,HazMat,Available,FDNY-E250,6
-fdny-htmu-274,HTMU 274,HazMat,Available,FDNY-E274B52,6
-fdny-htmu-44,HTMU 44,HazMat,Available,FDNY-E44,6
+fdny-htmu-165,HTMU 165,HTMU,Available,FDNY-E165L85,6
+fdny-htmu-250,HTMU 250,HTMU,Available,FDNY-E250,6
+fdny-htmu-274,HTMU 274,HTMU,Available,FDNY-E274B52,6
+fdny-htmu-44,HTMU 44,HTMU,Available,FDNY-E44,6
 fdny-hazmat-1,HazMat 1,HazMat,Available,FDNY-S288HM1,6
 fdny-dsu-1,DSU 1,HazMat Support,Available,FDNY-DSU,2
 fdny-high-rise-1,High Rise 1,High Rise,Available,FDNY-E3L12B7,2
@@ -280,7 +281,9 @@ fdny-high-rise-2,High Rise 2,High Rise,Available,FDNY-E39L16,2
 fdny-imt-1,IMT Planning Vehicle 1,IMT,Available,FDNY-E262,2
 fdny-mcp1,Mobile Command Post 1,MCP,Available,FDNY-E233L176,2
 fdny-mcp2,Mobile Command Post 2,MCP,Available,FDNY-E93L45B13,2
-fdny-msu,Mask Service Unit,MSU,Available,FDNY-Randall,2
+fdny-msu-1,Mask Service Unit 1,MSU,Available,FDNY-Randall,1
+fdny-msu-2,Mask Service Unit 2,MSU,Available,FDNY-Randall,1
+fdny-msu-3,Mask Service Unit 3,MSU,Available,FDNY-Randall,1
 fdny-purple-163,Purple-K 163,Purple-K,Available,FDNY-E163L83,2
 fdny-purple-228,Purple-K 228,Purple-K,Available,FDNY-E228,2
 fdny-purple-33,Purple-K 33,Purple-K,Available,FDNY-E33L9,2
@@ -381,6 +384,14 @@ fdny-squad-288,Squad 288,Squad,Available,FDNY-S288HM1,5
 fdny-squad-41,Squad 41,Squad,Available,FDNY-S41,5
 fdny-squad-61,Squad 61,Squad,Available,FDNY-S61B20,5
 fdny-squad-8,Squad 8,Squad,Available,FDNY-S8,5
+fdny-squad-1-piece-2,Squad 1 2nd Piece,Squad2,Available,FDNY-S1,2
+fdny-squad-18-piece-2,Squad 18 2nd Piece,Squad2,Available,FDNY-S18,2
+fdny-squad-252-piece-2,Squad 252 2nd Piece,Squad2,Available,FDNY-S252,2
+fdny-squad-270-piece-2,Squad 270 2nd Piece,Squad2,Available,FDNY-S270D13,2
+fdny-squad-288-piece-2,Squad 288 2nd Piece,Squad2,Available,FDNY-S288HM1,2
+fdny-squad-41-piece-2,Squad 41 2nd Piece,Squad2,Available,FDNY-S41,2
+fdny-squad-61-piece-2,Squad 61 2nd Piece,Squad2,Available,FDNY-S61B20,2
+fdny-squad-8-piece-2,Squad 8 2nd Piece,Squad2,Available,FDNY-S8,2
 fdny-thawing-76,Thawing Apparatus 76,Thawing Apparatus,Available,FDNY-E76L22B11,2
 fdny-thawing-97,Thawing Apparatus 97,Thawing Apparatus,Available,FDNY-E97,2
 fdny-thawing-151,Thawing Apparatus 151,Thawing Apparatus,Available,FDNY-E151L76,2

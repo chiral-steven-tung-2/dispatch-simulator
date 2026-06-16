@@ -12,6 +12,7 @@ import {
   REQUIREMENT_KEYS,
   UNIT_TYPE_CATEGORY,
   countOnSceneByCategory,
+  effectiveNeed,
 } from "../utils/assignment";
 import { GAME_CONFIG } from "../config/gameConfig";
 import type { Unit } from "../models";
@@ -62,7 +63,7 @@ export function useAutoDispatcher(): void {
         const toDispatch: Unit[] = [];
 
         for (const key of REQUIREMENT_KEYS) {
-          let need = assignment[key] - (counts[key] ?? 0);
+          let need = effectiveNeed(assignment, key, incident.extraRequirements, incident.requiredUnits) - (counts[key] ?? 0);
           if (need <= 0) {
             continue;
           }

@@ -4,3 +4,4 @@ export type { Unit, UnitStatus } from "./Unit";
 export type { Incident, IncidentStatus } from "./Incident";
 export type { CallType, CallSpawnCategory } from "./CallType";
 export type { Assignment, AssignmentRequirements } from "./Assignment";
+export type { Modifier } from "./Modifier";

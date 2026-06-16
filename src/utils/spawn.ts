@@ -18,11 +18,17 @@ function pickCategory(categories: CallSpawnCategory[]): string {
 }
 
 /**
- * A random on-land location somewhere in NYC. Uses the borough land polygon; if
- * rejection sampling somehow fails, falls back to a random firehouse location
- * (which is always on land).
+ * A random location for a call. For borough-specific calls, picks from
+ * stations in that borough (no per-borough polygon data exists yet).
+ * For city-wide calls, uses the NYC land polygon with a station fallback.
  */
-export function randomCallLocation(stations: Station[]): LngLat {
+export function randomCallLocation(stations: Station[], borough?: string): LngLat {
+  if (borough && borough !== "City-wide") {
+    const pool = stations.filter((s) => s.borough === borough);
+    const source = pool.length > 0 ? pool : stations;
+    const station = source[Math.floor(Math.random() * source.length)];
+    return [station.longitude, station.latitude];
+  }
   const onLand = randomLandPoint();
   if (onLand) {
     return onLand;
@@ -51,15 +57,19 @@ export function makeRandomCall(
     }
   }
   const type = pool[Math.floor(Math.random() * pool.length)];
-  const [longitude, latitude] = randomCallLocation(stations);
+  const [longitude, latitude] = randomCallLocation(stations, type.spawnBorough);
   return {
     id: `call-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
     name: type.name,
     latitude,
     longitude,
     status: "Waiting" as const,
+    callCategory: type.category,
     radiusMeters: GAME_CONFIG.callArea.startRadiusMeters,
     maxRadiusMeters: type.radius,
     assignmentId: type.assignmentId,
+    activeModifiers: [],
+    extraRequirements: {},
+    requiredUnits: {},
   };
 }

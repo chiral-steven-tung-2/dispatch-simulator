@@ -1,0 +1,3 @@
+modifier_id,name,trigger_assignment,call_categories,probability,modifier_type,engine,ladder,rescue,squad,squad2piece,battalion,division,rac,satellite,tsu,msu,fieldcomm,mcp,hazmat,HTMU,hazmatsupport,hazmatbattalion,rescuebattalion,safetybattalion,brush,collapse,purplek,imt,highrise,thawing
+1,HazMat Incident,signal_1075,structure-normal-fire,0.3,required,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0
+2,Additional Ladders,signal_1076,structure-normal-fire,0.5,additional,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0

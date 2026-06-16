@@ -30,6 +30,14 @@ export const GAME_CONFIG = {
     checkIntervalGameMs: 60_000,
   },
 
+  /** Scene modifiers — extra units special-called as a fire escalates. */
+  modifier: {
+    /** Minimum game-time (ms) after an alarm upgrade before modifiers are rolled. */
+    minCheckDelayGameMs: 120_000,
+    /** Maximum game-time (ms) after an alarm upgrade before modifiers are rolled. */
+    maxCheckDelayGameMs: 300_000,
+  },
+
   /** Auto-dispatcher (simulator mode). */
   autoDispatch: {
     /** How often (real ms) to check for calls needing more units. */
@@ -111,4 +119,11 @@ export const GAME_CONFIG = {
 export function randomTurnoutMs(): number {
   const { minGameMs, maxGameMs } = GAME_CONFIG.turnout;
   return minGameMs + Math.random() * (maxGameMs - minGameMs);
+}
+
+/** Real ms until modifiers are rolled after an alarm upgrade, given current sim-speed. */
+export function randomModifierCheckDelayMs(simSpeed: number): number {
+  const { minCheckDelayGameMs, maxCheckDelayGameMs } = GAME_CONFIG.modifier;
+  const gameMs = minCheckDelayGameMs + Math.random() * (maxCheckDelayGameMs - minCheckDelayGameMs);
+  return gameMs / simSpeed;
 }

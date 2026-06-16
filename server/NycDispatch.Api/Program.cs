@@ -52,4 +52,7 @@ app.MapGet("/api/call-spawn-categories", (DispatchData data) => Results.Ok(data.
 // Mandatory-response assignments (staffing levels and escalation chain)
 app.MapGet("/api/assignments", (DispatchData data) => Results.Ok(data.Assignments));
 
+// Scene modifiers — extra units that can be special-called as a fire escalates
+app.MapGet("/api/modifiers", (DispatchData data) => Results.Ok(data.Modifiers));
+
 app.Run();

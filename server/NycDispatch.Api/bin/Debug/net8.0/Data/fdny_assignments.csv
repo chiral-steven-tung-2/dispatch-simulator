@@ -1,12 +1,12 @@
-assignment_id,name,upgrade_probability,upgrade_to,engines,trucks,rescues,squads,battalions,divisions,rac,satellite,tsu,hazmat
-one_engine,1 Engine,0,,1,0,0,0,0,0,0,0,0,0
-one_ladder,1 Ladder,0,,0,1,0,0,0,0,0,0,0,0
-one_engine_one_ladder,1 Engine 1 Ladder,0,,1,1,0,0,0,0,0,0,0,0
-standard,Standard,0.95,signal_1075,2,2,0,0,1,0,0,0,0,0
-signal_1075,Signal 10-75,0.8,all_hands,4,3,1,1,2,1,1,0,0,0
-all_hands,All Hands,0.8,second_alarm,5,4,1,1,2,1,1,0,0,0
-second_alarm,Second Alarm,0.5,third_alarm,8,5,1,1,5,1,1,1,1,0
-third_alarm,Third Alarm,0.25,fourth_alarm,12,7,1,1,6,1,1,1,1,0
-fourth_alarm,Fourth Alarm,0.125,fifth_alarm,16,9,1,1,6,1,1,1,1,0
-fifth_alarm,Fifth Alarm,0.05,sixth_alarm,20,11,1,1,6,1,1,1,1,0
-sixth_alarm,Sixth Alarm,0,None,24,13,1,1,7,1,1,1,1,0
+assignment_id,name,upgrade_probability,upgrade_to,min_resolve_s,max_resolve_s,engine,ladder,rescue,squad,squad2piece,battalion,division,rac,satellite,tsu,msu,fieldcomm,mcp,hazmat,HTMU,hazmatsupport,hazmatbattalion,rescuebattalion,safetybattalion,brush,collapse,purplek,imt,highrise,thawing
+one_engine,1 Engine,0,,180,480,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+one_ladder,1 Ladder,0,,180,480,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+one_engine_one_ladder,1 Engine 1 Ladder,0,,180,480,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+standard,Standard,0.9,signal_1075,180,480,2,2,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+signal_1075,Signal 10-75,0.8,all_hands,180,480,4,3,1,1,0,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+all_hands,All Hands,0.08,second_alarm,180,480,5,4,1,1,0,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+second_alarm,Second Alarm,0.25,third_alarm,180,480,8,5,1,1,0,5,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+third_alarm,Third Alarm,0.2,fourth_alarm,180,480,12,7,1,1,0,6,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+fourth_alarm,Fourth Alarm,0.4,fifth_alarm,180,480,16,9,1,1,0,6,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+fifth_alarm,Fifth Alarm,0.05,sixth_alarm,180,480,20,11,1,1,0,6,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+sixth_alarm,Sixth Alarm,0,None,180,480,24,13,1,1,0,7,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0

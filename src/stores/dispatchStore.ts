@@ -572,12 +572,14 @@ export const useDispatchStore = create<DispatchStore>()(
     const onSceneUnits = get().dispatches.filter(
       (d) => d.callId === callId && d.phase === "onScene"
     );
-    const staffed = isAssignmentStaffed(assignment, onSceneUnits);
+    const staffed = isAssignmentStaffed(assignment, onSceneUnits, incident.extraRequirements, incident.requiredUnits);
 
     if (staffed && incident.assignmentMetAt == null) {
       incidentStore.setAssignmentMet(callId, true);
       if (incident.resolveStartedAt == null) {
-        incidentStore.startResolveTimer(callId);
+        const resolveTimeGameMs =
+          (assignment.minResolveS + Math.random() * (assignment.maxResolveS - assignment.minResolveS)) * 1000;
+        incidentStore.startResolveTimer(callId, resolveTimeGameMs);
       }
       if (assignment.upgradeTo && assignment.upgradeProbability > 0) {
         incidentStore.setNextUpgradeCheck(

@@ -113,7 +113,7 @@ export default function IncidentMarker({ map, incident }: IncidentMarkerProps) {
         return;
       }
       const simSpeed = useDispatchStore.getState().simSpeed;
-      const remaining = remainingResolveMs(current.resolveStartedAt, simSpeed);
+      const remaining = remainingResolveMs(current.resolveStartedAt, simSpeed, current.resolveTimeGameMs);
       badge.textContent = `⏱ ${formatGameDuration(remaining)}`;
       badge.style.display = "block";
     };

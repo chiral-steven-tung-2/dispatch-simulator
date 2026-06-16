@@ -13,17 +13,19 @@ export default function CallNotifications() {
   return (
     <div className="fixed right-4 top-20 z-30 flex w-full max-w-sm flex-col gap-2 pointer-events-none">
       {notifications.map((notification) => (
-        <button
+        <div
           key={notification.id}
-          type="button"
-          onClick={() => {
-            focusCall(notification.callId);
-            dismissNotification(notification.id);
-          }}
-          className="pointer-events-auto rounded-xl border border-sky-500/40 bg-slate-950/95 p-4 text-left shadow-2xl shadow-sky-950/40 transition hover:border-sky-400 hover:bg-slate-900"
+          className="pointer-events-auto rounded-xl border border-sky-500/40 bg-slate-950/95 shadow-2xl shadow-sky-950/40"
         >
-          <div className="flex items-start justify-between gap-3">
-            <div>
+          <div className="flex items-start gap-3 p-4">
+            <button
+              type="button"
+              onClick={() => {
+                focusCall(notification.callId);
+                dismissNotification(notification.id);
+              }}
+              className="flex-1 text-left transition hover:opacity-80"
+            >
               <div
                 className={`text-xs font-semibold uppercase tracking-wide ${
                   notification.kind === "upgrade" ? "text-amber-400" : "text-sky-400"
@@ -35,14 +37,19 @@ export default function CallNotifications() {
                 {notification.title}
               </div>
               <div className="mt-1 text-xs text-slate-400">
-                {notification.status} · Click to jump to the call location
+                {notification.status} · Click to open call
               </div>
-            </div>
-            <span className="rounded-full border border-sky-500/30 bg-sky-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-sky-300">
-              View
-            </span>
+            </button>
+            <button
+              type="button"
+              onClick={() => dismissNotification(notification.id)}
+              className="mt-0.5 shrink-0 rounded-full p-1 text-slate-500 transition hover:bg-slate-800 hover:text-slate-200"
+              aria-label="Dismiss"
+            >
+              ✕
+            </button>
           </div>
-        </button>
+        </div>
       ))}
     </div>
   );

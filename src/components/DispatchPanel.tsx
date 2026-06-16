@@ -20,10 +20,11 @@ import { haversineMeters, formatDistance, type LngLat } from "../utils/geo";
 import { remainingResolveMs, formatGameDuration } from "../utils/resolve";
 import {
   countOnSceneByCategory,
+  effectiveNeed,
   CATEGORY_LABELS,
   REQUIREMENT_KEYS,
 } from "../utils/assignment";
-import type { Assignment, Incident } from "../models";
+import type { Assignment, AssignmentRequirements, Incident } from "../models";
 import { statusColor } from "./unitDisplay";
 import { colorForPhase, phaseLabel } from "./movingUnitMarker";
 
@@ -460,8 +461,13 @@ export default function DispatchPanel() {
                 <ResolveCountdown call={call} />
               </div>
 
-              {assignment && (
-                <AssignmentStaffing assignment={assignment} units={assigned} />
+              {assignment && call && (
+                <AssignmentStaffing
+                  assignment={assignment}
+                  units={assigned}
+                  extra={call.extraRequirements}
+                  required={call.requiredUnits}
+                />
               )}
             </div>
 
@@ -735,17 +741,23 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 function AssignmentStaffing({
   assignment,
   units,
+  extra,
+  required,
 }: {
   assignment: Assignment;
   units: DispatchRecord[];
+  extra?: Partial<AssignmentRequirements>;
+  required?: Partial<AssignmentRequirements>;
 }) {
   const onScene = units.filter((u) => u.phase === "onScene");
   const counts = countOnSceneByCategory(onScene);
-  const requirements = REQUIREMENT_KEYS.filter((key) => assignment[key] > 0);
+  const requirements = REQUIREMENT_KEYS.filter(
+    (key) => effectiveNeed(assignment, key, extra, required) > 0
+  );
   if (requirements.length === 0) return null;
 
   const allMet = requirements.every(
-    (key) => (counts[key] ?? 0) >= assignment[key]
+    (key) => (counts[key] ?? 0) >= effectiveNeed(assignment, key, extra, required)
   );
 
   return (
@@ -762,7 +774,8 @@ function AssignmentStaffing({
       <div className="flex flex-wrap gap-x-3 gap-y-1">
         {requirements.map((key) => {
           const have = counts[key] ?? 0;
-          const need = assignment[key];
+          const need = effectiveNeed(assignment, key, extra, required);
+          const modBonus = need - assignment[key];
           const met = have >= need;
           return (
             <div key={key} className="flex items-center gap-1.5">
@@ -778,6 +791,9 @@ function AssignmentStaffing({
                 className={`text-xs font-mono ${met ? "text-emerald-400" : "text-slate-400"}`}
               >
                 {have}/{need} {CATEGORY_LABELS[key]}
+                {modBonus > 0 && (
+                  <span className="ml-1 text-orange-400">+{modBonus}</span>
+                )}
               </span>
             </div>
           );
@@ -800,7 +816,7 @@ function ResolveCountdown({ call }: { call: Incident }) {
   if (call.resolveStartedAt == null || call.status === "Resolved") return null;
 
   const simSpeed = useDispatchStore.getState().simSpeed;
-  const remaining = remainingResolveMs(call.resolveStartedAt, simSpeed);
+  const remaining = remainingResolveMs(call.resolveStartedAt, simSpeed, call.resolveTimeGameMs);
   return (
     <div className="shrink-0 rounded border border-sky-800 bg-sky-900/30 px-3 py-1.5 text-right">
       <div className="text-xs font-semibold uppercase tracking-wide text-sky-500">

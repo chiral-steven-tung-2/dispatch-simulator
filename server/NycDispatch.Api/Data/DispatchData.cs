@@ -17,6 +17,7 @@ public class DispatchData
     public IReadOnlyList<CallType> CallTypes { get; }
     public IReadOnlyList<CallSpawnCategory> CallSpawnCategories { get; }
     public IReadOnlyList<Assignment> Assignments { get; }
+    public IReadOnlyList<Modifier> Modifiers { get; }
 
     public DispatchData(IWebHostEnvironment env)
     {
@@ -76,16 +77,70 @@ public class DispatchData
             Name = row["name"],
             UpgradeProbability = ParseDouble(row["upgrade_probability"]),
             UpgradeTo = ParseUpgradeTo(row["upgrade_to"]),
-            Engines = ParseInt(row["engines"]),
-            Trucks = ParseInt(row["trucks"]),
-            Rescues = ParseInt(row["rescues"]),
-            Squads = ParseInt(row["squads"]),
-            Battalions = ParseInt(row["battalions"]),
-            Divisions = ParseInt(row["divisions"]),
-            Rac = ParseInt(row["rac"]),
-            Satellite = ParseInt(row["satellite"]),
-            Tsu = ParseInt(row["tsu"]),
-            Hazmat = ParseInt(row["hazmat"]),
+            MinResolveS = ParseInt(row["min_resolve_s"]),
+            MaxResolveS = ParseInt(row["max_resolve_s"]),
+            Engine = ParseIntSafe(row, "engine"),
+            Ladder = ParseIntSafe(row, "ladder"),
+            Rescue = ParseIntSafe(row, "rescue"),
+            Squad = ParseIntSafe(row, "squad"),
+            Squad2piece = ParseIntSafe(row, "squad2piece"),
+            Battalion = ParseIntSafe(row, "battalion"),
+            Division = ParseIntSafe(row, "division"),
+            Rac = ParseIntSafe(row, "rac"),
+            Satellite = ParseIntSafe(row, "satellite"),
+            Tsu = ParseIntSafe(row, "tsu"),
+            Msu = ParseIntSafe(row, "msu"),
+            Fieldcomm = ParseIntSafe(row, "fieldcomm"),
+            Mcp = ParseIntSafe(row, "mcp"),
+            Hazmat = ParseIntSafe(row, "hazmat"),
+            Htmu = ParseIntSafe(row, "HTMU"),
+            Hazmatsupport = ParseIntSafe(row, "hazmatsupport"),
+            Hazmatbattalion = ParseIntSafe(row, "hazmatbattalion"),
+            Rescuebattalion = ParseIntSafe(row, "rescuebattalion"),
+            Safetybattalion = ParseIntSafe(row, "safetybattalion"),
+            Brush = ParseIntSafe(row, "brush"),
+            Collapse = ParseIntSafe(row, "collapse"),
+            Purplek = ParseIntSafe(row, "purplek"),
+            Imt = ParseIntSafe(row, "imt"),
+            Highrise = ParseIntSafe(row, "highrise"),
+            Thawing = ParseIntSafe(row, "thawing"),
+        });
+
+        Modifiers = LoadCsv(Path.Combine(dir, "fdny_modifiers.csv"), row => new Modifier
+        {
+            Id = row.TryGetValue("modifier_id", out var mid) ? mid.Trim() : row["id"],
+            Name = row["name"],
+            TriggerAssignment = row["trigger_assignment"],
+            CallCategories = row.TryGetValue("call_categories", out var cats)
+                ? cats.Split('|', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList()
+                : new List<string>(),
+            Probability = ParseDouble(row["probability"]),
+            ModifierType = row.TryGetValue("modifier_type", out var mt) ? mt.Trim() : "additional",
+            Engine = ParseIntSafe(row, "engine"),
+            Ladder = ParseIntSafe(row, "ladder"),
+            Rescue = ParseIntSafe(row, "rescue"),
+            Squad = ParseIntSafe(row, "squad"),
+            Squad2piece = ParseIntSafe(row, "squad2piece"),
+            Battalion = ParseIntSafe(row, "battalion"),
+            Division = ParseIntSafe(row, "division"),
+            Rac = ParseIntSafe(row, "rac"),
+            Satellite = ParseIntSafe(row, "satellite"),
+            Tsu = ParseIntSafe(row, "tsu"),
+            Msu = ParseIntSafe(row, "msu"),
+            Fieldcomm = ParseIntSafe(row, "fieldcomm"),
+            Mcp = ParseIntSafe(row, "mcp"),
+            Hazmat = ParseIntSafe(row, "hazmat"),
+            Htmu = ParseIntSafe(row, "HTMU"),
+            Hazmatsupport = ParseIntSafe(row, "hazmatsupport"),
+            Hazmatbattalion = ParseIntSafe(row, "hazmatbattalion"),
+            Rescuebattalion = ParseIntSafe(row, "rescuebattalion"),
+            Safetybattalion = ParseIntSafe(row, "safetybattalion"),
+            Brush = ParseIntSafe(row, "brush"),
+            Collapse = ParseIntSafe(row, "collapse"),
+            Purplek = ParseIntSafe(row, "purplek"),
+            Imt = ParseIntSafe(row, "imt"),
+            Highrise = ParseIntSafe(row, "highrise"),
+            Thawing = ParseIntSafe(row, "thawing"),
         });
     }
 
@@ -94,6 +149,10 @@ public class DispatchData
 
     private static int ParseInt(string value) =>
         int.Parse(value.Trim(), CultureInfo.InvariantCulture);
+
+    /// <summary>Returns 0 if the column is absent from this CSV row.</summary>
+    private static int ParseIntSafe(IReadOnlyDictionary<string, string> row, string key) =>
+        row.TryGetValue(key, out var value) ? ParseInt(value) : 0;
 
     /// <summary>The CSV uses "None" or an empty cell to mark the top of the escalation chain.</summary>
     private static string? ParseUpgradeTo(string value)

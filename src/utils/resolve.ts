@@ -2,15 +2,18 @@ import { GAME_CONFIG } from "../config/gameConfig";
 
 /**
  * Remaining game-time (ms) before a call resolves, given when on-scene work
- * began (real timestamp) and the current sim-speed. Clamped at 0.
+ * began (real timestamp), the current sim-speed, and how long this call takes
+ * to work. Falls back to the global default if resolveTimeGameMs is omitted.
+ * Clamped at 0.
  */
 export function remainingResolveMs(
   resolveStartedAt: number,
   simSpeed: number,
+  resolveTimeGameMs: number = GAME_CONFIG.resolve.onSceneWorkGameMs,
   now: number = performance.now()
 ): number {
   const elapsedGame = (now - resolveStartedAt) * simSpeed;
-  return Math.max(0, GAME_CONFIG.resolve.onSceneWorkGameMs - elapsedGame);
+  return Math.max(0, resolveTimeGameMs - elapsedGame);
 }
 
 /** Formats a game-time duration in ms as M:SS. */

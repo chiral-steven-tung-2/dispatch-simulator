@@ -1,3 +1,5 @@
+import type { AssignmentRequirements } from "./Assignment";
+
 export type IncidentStatus = "Waiting" | "Active" | "Resolved";
 
 export interface Incident {
@@ -6,6 +8,8 @@ export interface Incident {
   latitude: number;
   longitude: number;
   status: IncidentStatus;
+  /** Spawn category of the call type (e.g. "structure-normal-fire"). Used to filter modifiers. */
+  callCategory: string;
   /** Current response-perimeter radius (m); grows as units arrive on scene. */
   radiusMeters: number;
   /** Maximum perimeter radius (m) — from the call type. Growth caps here. */
@@ -25,4 +29,19 @@ export interface Incident {
   assignmentMetAt?: number;
   /** performance.now() timestamp of the next upgrade-probability roll. */
   nextUpgradeCheckAt?: number;
+  /** Ids of modifiers that have already fired for this incident. */
+  activeModifiers: string[];
+  /** Extra unit counts from "additional" modifiers — stacked on top of the alarm assignment. */
+  extraRequirements: Partial<AssignmentRequirements>;
+  /** Minimum unit counts from "required" modifiers — floor applied after assignment + extras. */
+  requiredUnits: Partial<AssignmentRequirements>;
+  /**
+   * Randomised game-time (ms) this call takes to resolve once fully staffed.
+   * Determined per assignment level when the resolve timer starts.
+   */
+  resolveTimeGameMs?: number;
+  /** performance.now() timestamp when deferred modifier rolls should fire. */
+  nextModifierCheckAt?: number;
+  /** Assignment id whose modifiers are pending roll at nextModifierCheckAt. */
+  modifierCheckAssignment?: string;
 }
