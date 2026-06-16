@@ -100,7 +100,11 @@ export function createStationElement(
   el.style.filter = "drop-shadow(0 1px 2px rgba(0,0,0,0.55))";
   el.style.transform = "scale(var(--marker-scale, 1))";
   el.style.transformOrigin = "center";
-  el.innerHTML = houseSvg(active ? ACTIVE_COLORS : EMPTY_COLORS);
+  const houseEl = document.createElement("div");
+  houseEl.dataset.role = "house";
+  houseEl.style.display = "contents";
+  houseEl.innerHTML = houseSvg(active ? ACTIVE_COLORS : EMPTY_COLORS);
+  el.appendChild(houseEl);
 
   const chief = chiefLevelFor(units);
   if (chief !== "none" && showChiefQuarters) {
@@ -129,6 +133,13 @@ export function createStationElement(
   }
 
   return el;
+}
+
+/** Swaps the house glyph between active (red) and empty (gray) without
+ *  touching the badge or tag-row children. */
+export function updateStationElementActive(el: HTMLDivElement, active: boolean): void {
+  const house = el.querySelector<HTMLDivElement>('[data-role="house"]');
+  if (house) house.innerHTML = houseSvg(active ? ACTIVE_COLORS : EMPTY_COLORS);
 }
 
 /** Row of apparatus tags hung just below the house (out of flow, so the house

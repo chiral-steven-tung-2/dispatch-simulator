@@ -3,7 +3,7 @@ import { Marker, Popup, type Map as MapLibreMap } from "maplibre-gl";
 import type { Station, Unit } from "../models";
 import type { RelocationRecord } from "../stores/relocationStore";
 import { buildStationPopupContent } from "./stationPopup";
-import { chiefLevelFor, createStationElement } from "./stationMarkerElement";
+import { chiefLevelFor, createStationElement, updateStationElementActive } from "./stationMarkerElement";
 
 interface StationMarkerProps {
   map: MapLibreMap;
@@ -33,6 +33,9 @@ export default function StationMarker({
   const liveRef = useRef({ units, allUnits, allStations, relocations });
   liveRef.current = { units, allUnits, allStations, relocations };
 
+  // Ref to the marker element so the active-state effect can update it in-place.
+  const elementRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     const { units: u, allUnits: au, allStations: as_, relocations: rel } = liveRef.current;
 
@@ -41,6 +44,7 @@ export default function StationMarker({
       (u) => u.currentStationId === station.id && u.status === "Available"
     );
     const element = createStationElement(u, showChiefQuarters, showUnitIcons, hasUnitPresent);
+    elementRef.current = element;
     element.title =
       chief === "division"
         ? `${station.name} — Division HQ`
@@ -77,6 +81,16 @@ export default function StationMarker({
     // Dynamic data (units, relocations) flows through liveRef instead.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map, station, showChiefQuarters, showUnitIcons]);
+
+  // Update the house glyph color whenever unit availability changes, without
+  // recreating the marker (which would close any open popup).
+  useEffect(() => {
+    if (!elementRef.current) return;
+    const active = allUnits.some(
+      (u) => u.currentStationId === station.id && u.status === "Available"
+    );
+    updateStationElementActive(elementRef.current, active);
+  }, [allUnits, station.id]);
 
   return null;
 }
