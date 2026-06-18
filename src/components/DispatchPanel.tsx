@@ -12,10 +12,6 @@ import {
 import { useIncidentStore } from "../stores/incidentStore";
 import { useUnitStore } from "../stores/unitStore";
 import { useStationStore } from "../stores/stationStore";
-import { useNypdStationStore } from "../stores/nypdStationStore";
-import { useSettingsStore } from "../stores/settingsStore";
-import { getOnAssignmentFraction } from "../stores/nypdActivityStore";
-import { getPrecinctUnitStatus } from "../utils/nypdPatrol";
 import { haversineMeters, formatDistance, type LngLat } from "../utils/geo";
 import { remainingResolveMs, formatGameDuration } from "../utils/resolve";
 import {
@@ -27,6 +23,7 @@ import {
 import type { Assignment, AssignmentRequirements, Incident } from "../models";
 import { statusColor } from "./unitDisplay";
 import { colorForPhase, phaseLabel } from "./movingUnitMarker";
+import { usePatrolStore } from "../stores/patrolStore";
 
 type Agency = "fdny" | "nypd";
 
@@ -39,23 +36,12 @@ interface FireUnit {
   distanceMeters: number;
 }
 
-interface NypdPrecinct {
-  stationId: string;
-  stationName: string;
-  availableRmps: number;
-  distanceMeters: number;
-}
-
-interface NypdNotified {
-  stationId: string;
-  stationName: string;
-  rmpCount: number;
-}
 
 export default function DispatchPanel() {
   const selectedCallId = useDispatchStore((s) => s.selectedCallId);
   const clearSelection = useDispatchStore((s) => s.clearSelection);
   const dispatchUnits = useDispatchStore((s) => s.dispatchUnits);
+  const dispatchForCall = useDispatchStore((s) => s.dispatchForCall);
   const returnToQuarters = useDispatchStore((s) => s.returnToQuarters);
   const dispatching = useDispatchStore((s) => s.dispatching);
   const dispatches = useDispatchStore((s) => s.dispatches);
@@ -66,12 +52,11 @@ export default function DispatchPanel() {
   const units = useUnitStore((s) => s.units);
   const stations = useStationStore((s) => s.stations);
   const relocations = useRelocationStore((s) => s.relocations);
-  const nypdStations = useNypdStationStore((s) => s.stations);
+  const patrolRecords = usePatrolStore((s) => s.records);
 
   const [agency, setAgency] = useState<Agency>("fdny");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [selectedNypd, setSelectedNypd] = useState<Set<string>>(new Set());
-  const [nypdNotified, setNypdNotified] = useState<NypdNotified[]>([]);
   const [unitSearch, setUnitSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState<string | null>(null);
 
@@ -121,6 +106,7 @@ export default function DispatchPanel() {
       stations.find((s) => s.id === id)?.name ?? id;
     const result: FireUnit[] = [];
     for (const unit of units) {
+      if (unit.type === "Patrol Car") continue;
       const dispatch = dispatches.find((d) => d.unitId === unit.id);
       if (dispatch && dispatch.phase !== "returning") continue;
 
@@ -161,33 +147,52 @@ export default function DispatchPanel() {
     return result.sort((a, b) => a.distanceMeters - b.distanceMeters);
   }, [call, units, stations, dispatches, relocations, simSpeed]);
 
-  // Available NYPD precincts sorted by distance (synthesized from station data).
-  const policeAvailable = useMemo<NypdPrecinct[]>(() => {
+  // Available NYPD patrol car units sorted by distance.
+  const policeAvailable = useMemo<FireUnit[]>(() => {
     if (!call) return [];
     const target: LngLat = [call.longitude, call.latitude];
-    const patrolPercent = useSettingsStore.getState().patrolPercent;
-    const notifiedIds = new Set(nypdNotified.map((n) => n.stationId));
-    return nypdStations
-      .map((station) => {
-        const fraction = getOnAssignmentFraction(station.id);
-        const status = getPrecinctUnitStatus(
-          station.assignedPatrolCars,
-          fraction,
-          patrolPercent
-        );
-        return {
-          stationId: station.id,
-          stationName: station.name,
-          availableRmps: status.atPrecinct,
-          distanceMeters: haversineMeters(
-            [station.longitude, station.latitude],
-            target
-          ),
-        };
-      })
-      .filter((s) => s.availableRmps > 0 && !notifiedIds.has(s.stationId))
-      .sort((a, b) => a.distanceMeters - b.distanceMeters);
-  }, [call, nypdStations, nypdNotified]);
+    const result: FireUnit[] = [];
+    for (const unit of units) {
+      if (unit.type !== "Patrol Car") continue;
+      const dispatch = dispatches.find((d) => d.unitId === unit.id);
+      if (dispatch && dispatch.phase !== "returning") continue;
+
+      let from: LngLat;
+      let locationLabel: string;
+      let dotColor: string;
+
+      if (dispatch?.phase === "returning") {
+        from = dispatchCurrentPoint(dispatch, simSpeed);
+        locationLabel = "Returning to quarters";
+        dotColor = colorForPhase("returning");
+      } else if (unit.status === "Available") {
+        const patrolPos = usePatrolStore.getState().getCurrentPoint(unit.id, simSpeed);
+        if (patrolPos) {
+          from = patrolPos;
+          locationLabel = "On Patrol";
+          dotColor = statusColor("Available");
+        } else {
+          const station = stations.find((s) => s.id === unit.currentStationId);
+          if (!station) continue;
+          from = [station.longitude, station.latitude];
+          locationLabel = station.name;
+          dotColor = statusColor("Available");
+        }
+      } else {
+        continue;
+      }
+
+      result.push({
+        id: unit.id,
+        callsign: unit.callsign,
+        type: unit.type,
+        locationLabel,
+        dotColor,
+        distanceMeters: haversineMeters(from, target),
+      });
+    }
+    return result.sort((a, b) => a.distanceMeters - b.distanceMeters);
+  }, [call, units, stations, dispatches, simSpeed, patrolRecords]);
 
   const availableTypes = useMemo(
     () => [...new Set(fireAvailable.map((u) => u.type))].sort(),
@@ -209,19 +214,20 @@ export default function DispatchPanel() {
 
   const filteredPolice = useMemo(() => {
     const query = unitSearch.trim().toLowerCase();
-    return policeAvailable.filter(
-      (s) =>
-        !query ||
-        s.stationName.toLowerCase().includes(query) ||
-        String(s.availableRmps).includes(query)
-    );
+    return policeAvailable.filter((u) => {
+      if (!query) return true;
+      return (
+        u.callsign.toLowerCase().includes(query) ||
+        u.type.toLowerCase().includes(query) ||
+        u.locationLabel.toLowerCase().includes(query)
+      );
+    });
   }, [policeAvailable, unitSearch]);
 
   // Reset all state when the selected call changes.
   useEffect(() => {
     setSelected(new Set());
     setSelectedNypd(new Set());
-    setNypdNotified([]);
     setUnitSearch("");
     setTypeFilter(null);
     setAgency("fdny");
@@ -257,15 +263,15 @@ export default function DispatchPanel() {
 
   const allPoliceSelected =
     filteredPolice.length > 0 &&
-    filteredPolice.every((s) => selectedNypd.has(s.stationId));
+    filteredPolice.every((u) => selectedNypd.has(u.id));
   const toggleAllPolice = () =>
     setSelectedNypd((prev) => {
       if (allPoliceSelected) {
         const next = new Set(prev);
-        filteredPolice.forEach((s) => next.delete(s.stationId));
+        filteredPolice.forEach((u) => next.delete(u.id));
         return next;
       }
-      return new Set([...prev, ...filteredPolice.map((s) => s.stationId)]);
+      return new Set([...prev, ...filteredPolice.map((u) => u.id)]);
     });
 
   const onDispatchFire = () => {
@@ -274,15 +280,9 @@ export default function DispatchPanel() {
     setSelected(new Set());
   };
 
-  const onNotifyNypd = () => {
-    const entries = policeAvailable
-      .filter((s) => selectedNypd.has(s.stationId))
-      .map((s) => ({
-        stationId: s.stationId,
-        stationName: s.stationName,
-        rmpCount: s.availableRmps,
-      }));
-    setNypdNotified((prev) => [...prev, ...entries]);
+  const onDispatchNypd = () => {
+    const toSend = units.filter((u) => selectedNypd.has(u.id));
+    void dispatchUnits(call, toSend);
     setSelectedNypd(new Set());
   };
 
@@ -349,7 +349,7 @@ export default function DispatchPanel() {
                 type="text"
                 value={unitSearch}
                 onChange={(e) => setUnitSearch(e.target.value)}
-                placeholder={agency === "fdny" ? "Search callsign or type…" : "Search precinct…"}
+                placeholder={agency === "fdny" ? "Search callsign or type…" : "Search callsign or location…"}
                 className="w-full rounded border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-slate-200 placeholder:text-slate-600 focus:border-slate-500 focus:outline-none"
               />
             </div>
@@ -374,7 +374,7 @@ export default function DispatchPanel() {
               <span>
                 {agency === "fdny"
                   ? `${filteredFire.length} available`
-                  : `${filteredPolice.length} precincts`}
+                  : `${filteredPolice.length} available`}
                 {" · "}by distance
               </span>
               {currentList.length > 0 && (
@@ -398,37 +398,51 @@ export default function DispatchPanel() {
                   onToggle={toggleFire}
                 />
               ) : (
-                <PolicePrecinctList
-                  precincts={filteredPolice}
+                <FireUnitList
+                  units={filteredPolice}
                   selected={selectedNypd}
                   onToggle={toggleNypd}
+                  accent="blue"
                 />
               )}
             </div>
 
             {/* Dispatch / notify footer */}
-            <div className="shrink-0 border-t border-slate-800 p-2">
+            <div className="shrink-0 border-t border-slate-800 p-2 space-y-1.5">
               {agency === "fdny" ? (
+                <>
+                  <button
+                    onClick={onDispatchFire}
+                    disabled={selected.size === 0 || dispatching}
+                    className="w-full rounded bg-red-700 px-3 py-2 text-sm font-bold text-white hover:bg-red-600 disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-slate-600"
+                  >
+                    {dispatching
+                      ? "Routing…"
+                      : selected.size === 0
+                      ? "Select units to dispatch"
+                      : `Dispatch ${selected.size} unit${selected.size === 1 ? "" : "s"}`}
+                  </button>
+                  {selectedCallId && (
+                    <button
+                      onClick={() => void dispatchForCall(selectedCallId)}
+                      disabled={dispatching}
+                      className="w-full rounded border border-slate-600 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      ⚡ Quick-staff assignment
+                    </button>
+                  )}
+                </>
+              ) : (
                 <button
-                  onClick={onDispatchFire}
-                  disabled={selected.size === 0 || dispatching}
-                  className="w-full rounded bg-red-700 px-3 py-2 text-sm font-bold text-white hover:bg-red-600 disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-slate-600"
+                  onClick={onDispatchNypd}
+                  disabled={selectedNypd.size === 0 || dispatching}
+                  className="w-full rounded bg-blue-800 px-3 py-2 text-sm font-bold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-slate-600"
                 >
                   {dispatching
                     ? "Routing…"
-                    : selected.size === 0
+                    : selectedNypd.size === 0
                     ? "Select units to dispatch"
-                    : `Dispatch ${selected.size} unit${selected.size === 1 ? "" : "s"}`}
-                </button>
-              ) : (
-                <button
-                  onClick={onNotifyNypd}
-                  disabled={selectedNypd.size === 0}
-                  className="w-full rounded bg-blue-800 px-3 py-2 text-sm font-bold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-slate-600"
-                >
-                  {selectedNypd.size === 0
-                    ? "Select precincts to notify"
-                    : `Notify ${selectedNypd.size} precinct${selectedNypd.size === 1 ? "" : "s"}`}
+                    : `Dispatch ${selectedNypd.size} unit${selectedNypd.size === 1 ? "" : "s"}`}
                 </button>
               )}
             </div>
@@ -451,19 +465,23 @@ export default function DispatchPanel() {
                         {assigned.length} unit{assigned.length === 1 ? "" : "s"}
                         {totalPersonnel > 0 && (
                           <span className="text-slate-400">
-                            {" · "}{totalPersonnel} FF
+                            {" · "}{totalPersonnel} Personnel
                           </span>
                         )}
                       </span>
                     )}
                   </div>
                 </div>
-                <ResolveCountdown call={call} />
+                <ResolveCountdown
+                  call={call}
+                  hasUnitsOnScene={assigned.some((d) => d.phase === "onScene")}
+                />
               </div>
 
               {assignment && call && (
                 <AssignmentStaffing
                   assignment={assignment}
+                  allAssignments={assignments}
                   units={assigned}
                   extra={call.extraRequirements}
                   required={call.requiredUnits}
@@ -473,20 +491,20 @@ export default function DispatchPanel() {
 
             {/* Responding units */}
             <div className="flex-1 overflow-y-auto px-5 py-3">
-              {assigned.length === 0 && nypdNotified.length === 0 ? (
+              {assigned.length === 0 ? (
                 <p className="py-6 text-center text-sm italic text-slate-600">
                   No units responding yet
                 </p>
               ) : (
                 <div className="space-y-3">
                   {/* FDNY responders */}
-                  {assigned.length > 0 && (
+                  {assigned.filter((d) => d.type !== "Patrol Car").length > 0 && (
                     <div>
                       <SectionLabel>
-                        FDNY Responding ({assigned.length})
+                        FDNY Responding ({assigned.filter((d) => d.type !== "Patrol Car").length})
                       </SectionLabel>
                       <ul className="mt-1.5 grid grid-cols-2 gap-1.5 xl:grid-cols-3">
-                        {assigned.map((d) => (
+                        {assigned.filter((d) => d.type !== "Patrol Car").map((d) => (
                           <AssignedRow
                             key={d.id}
                             record={d}
@@ -499,31 +517,21 @@ export default function DispatchPanel() {
                     </div>
                   )}
 
-                  {/* NYPD notified */}
-                  {nypdNotified.length > 0 && (
+                  {/* NYPD responders */}
+                  {assigned.filter((d) => d.type === "Patrol Car").length > 0 && (
                     <div>
                       <SectionLabel>
-                        NYPD Notified ({nypdNotified.length} precincts)
+                        NYPD Responding ({assigned.filter((d) => d.type === "Patrol Car").length})
                       </SectionLabel>
                       <ul className="mt-1.5 grid grid-cols-2 gap-1.5 xl:grid-cols-3">
-                        {nypdNotified.map((n) => (
-                          <li
-                            key={n.stationId}
-                            className="flex items-center gap-2 rounded border border-slate-800 bg-slate-900/50 px-2.5 py-2 text-xs"
-                          >
-                            <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-blue-500" />
-                            <span className="flex-1 min-w-0">
-                              <span className="block truncate font-medium text-white">
-                                {n.stationName}
-                              </span>
-                              <span className="text-slate-500">
-                                {n.rmpCount} RMP{n.rmpCount === 1 ? "" : "s"}
-                              </span>
-                            </span>
-                            <span className="shrink-0 font-semibold text-blue-400">
-                              ✓
-                            </span>
-                          </li>
+                        {assigned.filter((d) => d.type === "Patrol Car").map((d) => (
+                          <AssignedRow
+                            key={d.id}
+                            record={d}
+                            simSpeed={simSpeed}
+                            busy={dispatching}
+                            onReturn={() => void returnToQuarters(d.id)}
+                          />
                         ))}
                       </ul>
                     </div>
@@ -537,9 +545,7 @@ export default function DispatchPanel() {
               <div className="shrink-0 border-t border-slate-800 bg-slate-900/40 px-5 py-2 text-xs text-slate-400">
                 {currentSelectedCount} unit
                 {currentSelectedCount === 1 ? "" : "s"} selected —{" "}
-                {agency === "fdny"
-                  ? "click Dispatch in the panel on the left"
-                  : "click Notify in the panel on the left"}
+                click Dispatch in the panel on the left
               </div>
             )}
           </div>
@@ -605,10 +611,12 @@ function FireUnitList({
   units,
   selected,
   onToggle,
+  accent = "red",
 }: {
   units: { id: string; callsign: string; type: string; locationLabel: string; dotColor: string; distanceMeters: number }[];
   selected: Set<string>;
   onToggle: (id: string) => void;
+  accent?: "red" | "blue";
 }) {
   if (units.length === 0) {
     return (
@@ -617,6 +625,8 @@ function FireUnitList({
       </p>
     );
   }
+  const selectedCls = accent === "blue" ? "border-blue-700 bg-blue-700/10" : "border-red-700 bg-red-700/10";
+  const checkboxCls = accent === "blue" ? "h-3.5 w-3.5 accent-blue-500" : "h-3.5 w-3.5 accent-red-500";
   return (
     <ul className="space-y-1">
       {units.map((u) => {
@@ -626,7 +636,7 @@ function FireUnitList({
             <label
               className={`flex cursor-pointer items-center gap-2.5 rounded border px-2.5 py-2 text-xs ${
                 isSelected
-                  ? "border-red-700 bg-red-700/10"
+                  ? selectedCls
                   : "border-slate-800 hover:border-slate-700 hover:bg-slate-900"
               }`}
             >
@@ -634,7 +644,7 @@ function FireUnitList({
                 type="checkbox"
                 checked={isSelected}
                 onChange={() => onToggle(u.id)}
-                className="h-3.5 w-3.5 accent-red-500"
+                className={checkboxCls}
               />
               <span
                 className="inline-block h-2 w-2 shrink-0 rounded-full"
@@ -660,58 +670,6 @@ function FireUnitList({
   );
 }
 
-function PolicePrecinctList({
-  precincts,
-  selected,
-  onToggle,
-}: {
-  precincts: NypdPrecinct[];
-  selected: Set<string>;
-  onToggle: (id: string) => void;
-}) {
-  if (precincts.length === 0) {
-    return (
-      <p className="p-4 text-center text-xs italic text-slate-600">
-        No precincts available
-      </p>
-    );
-  }
-  return (
-    <ul className="space-y-1">
-      {precincts.map((s) => {
-        const isSelected = selected.has(s.stationId);
-        return (
-          <li key={s.stationId}>
-            <label
-              className={`flex cursor-pointer items-center gap-2.5 rounded border px-2.5 py-2 text-xs ${
-                isSelected
-                  ? "border-blue-700 bg-blue-700/10"
-                  : "border-slate-800 hover:border-slate-700 hover:bg-slate-900"
-              }`}
-            >
-              <input
-                type="checkbox"
-                checked={isSelected}
-                onChange={() => onToggle(s.stationId)}
-                className="h-3.5 w-3.5 accent-blue-500"
-              />
-              <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-blue-500" />
-              <span className="flex-1 min-w-0">
-                <span className="font-semibold text-white">{s.stationName}</span>
-                <span className="block text-slate-500">
-                  {s.availableRmps} RMP{s.availableRmps === 1 ? "" : "s"} available
-                </span>
-              </span>
-              <span className="shrink-0 font-mono text-slate-400">
-                {formatDistance(s.distanceMeters)}
-              </span>
-            </label>
-          </li>
-        );
-      })}
-    </ul>
-  );
-}
 
 function CallStatusChip({ status }: { status: string }) {
   const COLOR: Record<string, string> = {
@@ -740,15 +698,18 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 function AssignmentStaffing({
   assignment,
+  allAssignments,
   units,
   extra,
   required,
 }: {
   assignment: Assignment;
+  allAssignments: Assignment[];
   units: DispatchRecord[];
   extra?: Partial<AssignmentRequirements>;
   required?: Partial<AssignmentRequirements>;
 }) {
+  const [showChain, setShowChain] = useState(false);
   const onScene = units.filter((u) => u.phase === "onScene");
   const counts = countOnSceneByCategory(onScene);
   const requirements = REQUIREMENT_KEYS.filter(
@@ -760,6 +721,20 @@ function AssignmentStaffing({
     (key) => (counts[key] ?? 0) >= effectiveNeed(assignment, key, extra, required)
   );
 
+  // Build upgrade chain starting from the current assignment.
+  const upgradeChain = useMemo(() => {
+    const chain: Assignment[] = [assignment];
+    const byId = new Map(allAssignments.map((a) => [a.id, a]));
+    let cur = assignment;
+    while (cur.upgradeTo) {
+      const next = byId.get(cur.upgradeTo);
+      if (!next || chain.some((c) => c.id === next.id)) break;
+      chain.push(next);
+      cur = next;
+    }
+    return chain;
+  }, [assignment, allAssignments]);
+
   return (
     <div>
       <div className="mb-1.5 flex items-center gap-2">
@@ -770,7 +745,31 @@ function AssignmentStaffing({
         {allMet && (
           <span className="text-xs font-semibold text-emerald-400">✓ Met</span>
         )}
+        {upgradeChain.length > 1 && (
+          <button
+            type="button"
+            onClick={() => setShowChain((v) => !v)}
+            className="ml-auto text-[11px] text-slate-500 hover:text-slate-300"
+            aria-label="Toggle upgrade chain"
+          >
+            {showChain ? "▲ chain" : "▼ chain"}
+          </button>
+        )}
       </div>
+      {showChain && upgradeChain.length > 1 && (
+        <ol className="mb-2 space-y-0.5 rounded border border-slate-700 bg-slate-900/60 px-2.5 py-2 text-[11px]">
+          {upgradeChain.map((a, i) => (
+            <li key={a.id} className="flex items-center gap-1.5">
+              <span className={i === 0 ? "font-bold text-amber-300" : "text-slate-300"}>
+                {i === 0 ? "▶ " : "  ↳ "}{a.name}
+              </span>
+              {a.upgradeProbability > 0 && i < upgradeChain.length - 1 && (
+                <span className="ml-auto text-slate-500">{Math.round(a.upgradeProbability * 100)}% chance</span>
+              )}
+            </li>
+          ))}
+        </ol>
+      )}
       <div className="flex flex-wrap gap-x-3 gap-y-1">
         {requirements.map((key) => {
           const have = counts[key] ?? 0;
@@ -803,7 +802,13 @@ function AssignmentStaffing({
   );
 }
 
-function ResolveCountdown({ call }: { call: Incident }) {
+function ResolveCountdown({
+  call,
+  hasUnitsOnScene,
+}: {
+  call: Incident;
+  hasUnitsOnScene: boolean;
+}) {
   const [, tick] = useReducer((n: number) => n + 1, 0);
   const resolving = call.resolveStartedAt != null && call.status !== "Resolved";
 
@@ -813,7 +818,23 @@ function ResolveCountdown({ call }: { call: Incident }) {
     return () => window.clearInterval(id);
   }, [resolving]);
 
-  if (call.resolveStartedAt == null || call.status === "Resolved") return null;
+  if (call.status === "Resolved") return null;
+
+  if (call.resolveStartedAt == null) {
+    if (hasUnitsOnScene && call.assignmentMetAt == null && call.status === "Active") {
+      return (
+        <div className="shrink-0 rounded border border-amber-800 bg-amber-900/20 px-3 py-1.5 text-right">
+          <div className="text-xs font-semibold uppercase tracking-wide text-amber-500">
+            Paused
+          </div>
+          <div className="text-xs font-bold text-amber-400">
+            Awaiting units
+          </div>
+        </div>
+      );
+    }
+    return null;
+  }
 
   const simSpeed = useDispatchStore.getState().simSpeed;
   const remaining = remainingResolveMs(call.resolveStartedAt, simSpeed, call.resolveTimeGameMs);
@@ -842,7 +863,7 @@ function AssignedRow({
 }) {
   const onScene = record.phase === "onScene";
   const label = phaseLabel(record.phase);
-  const arrival = formatArrival(record, simSpeed);
+  const subLabel = formatArrivalSub(record, simSpeed);
 
   return (
     <li className="flex flex-col gap-1 rounded border border-slate-800 bg-slate-900/50 px-2.5 py-2 text-xs">
@@ -857,7 +878,8 @@ function AssignedRow({
       </div>
       <div className="flex items-center justify-between gap-1 pl-3.5">
         <span className="truncate text-slate-500">
-          {label}{arrival && <span className="ml-1 text-slate-400">{arrival}</span>}
+          {label}
+          {subLabel && <span className="ml-1 text-slate-400">{subLabel}</span>}
         </span>
         <button
           onClick={onReturn}
@@ -871,10 +893,18 @@ function AssignedRow({
   );
 }
 
-function formatArrival(record: DispatchRecord, simSpeed: number): string {
+function formatArrivalSub(record: DispatchRecord, simSpeed: number): string {
+  if (record.phase === "dispatched") {
+    const elapsed = (performance.now() - record.startedAt) * simSpeed;
+    const turnoutRemaining = Math.max(0, record.turnoutMs - elapsed);
+    if (turnoutRemaining > 0) {
+      return `leaving in ${formatGameDuration(turnoutRemaining)}`;
+    }
+    return "";
+  }
   const remaining = remainingArrivalMs(record, simSpeed);
-  if (remaining == null) return "";
-  return remaining <= 0 ? "" : `~${formatGameDuration(remaining)}`;
+  if (remaining == null || remaining <= 0) return "";
+  return `~${formatGameDuration(remaining)}`;
 }
 
 function XIcon() {

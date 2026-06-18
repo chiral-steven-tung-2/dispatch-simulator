@@ -1,15 +1,19 @@
 import { useEffect, useRef } from "react";
 import {
   Marker,
+  Popup,
   type Map as MapLibreMap,
   type GeoJSONSource,
 } from "maplibre-gl";
 import type { Feature, FeatureCollection, LineString } from "geojson";
 import { useDispatchStore } from "../stores/dispatchStore";
 import { useSettingsStore } from "../stores/settingsStore";
+import { useStationStore } from "../stores/stationStore";
+import { useIncidentStore } from "../stores/incidentStore";
 import { pointAlong, remainingPath } from "../utils/geo";
 import { createMovingUnitElement, colorForPhase } from "./movingUnitMarker";
 import { GAME_CONFIG } from "../config/gameConfig";
+import { buildPoliceUnitPopupContent } from "./policeUnitPopup";
 
 interface DispatchLayerProps {
   map: MapLibreMap;
@@ -27,11 +31,14 @@ const EMPTY_FC: FeatureCollection<LineString> = {
   features: [],
 };
 
+const PATROL_BLUE = "#1d4ed8";
+
 export default function DispatchLayer({ map }: DispatchLayerProps) {
   const dispatches = useDispatchStore((s) => s.dispatches);
   const showPaths = useDispatchStore((s) => s.showPaths);
   const markersRef = useRef<globalThis.Map<string, Marker>>(new globalThis.Map());
   const draggableSetup = useRef<Set<string>>(new Set());
+  const policePopupRef = useRef<Popup | null>(null);
 
   // Add the route source + line layer once.
   useEffect(() => {
@@ -83,10 +90,40 @@ export default function DispatchLayer({ map }: DispatchLayerProps) {
     }
 
     for (const d of dispatches) {
+      const isPatrol = d.type === "Patrol Car";
       let marker = markers.get(d.id);
       if (!marker) {
-        const element = createMovingUnitElement(d.callsign);
-        element.style.backgroundColor = colorForPhase(d.phase);
+        let element: HTMLDivElement;
+        if (isPatrol) {
+          element = document.createElement("div");
+          element.style.cssText =
+            `width:8px;height:8px;border-radius:50%;background-color:${PATROL_BLUE};border:1.5px solid rgba(255,255,255,0.8);box-shadow:0 1px 3px rgba(0,0,0,0.4);pointer-events:auto;cursor:pointer;`;
+          element.addEventListener("click", () => {
+            const record = useDispatchStore.getState().dispatches.find((r) => r.id === d.id);
+            const m = markersRef.current.get(d.id);
+            if (!record || !m) return;
+            if (!policePopupRef.current) {
+              policePopupRef.current = new Popup({ offset: 12, closeButton: true, maxWidth: "220px" });
+            }
+            const precinctName =
+              useStationStore.getState().stations.find((s) => s.id === record.stationId)?.name ??
+              record.stationId;
+            const callName =
+              useIncidentStore.getState().incidents.find((i) => i.id === record.callId)?.name ??
+              record.callId;
+            const status =
+              record.phase === "returning"
+                ? { kind: "returning" as const, precinctName }
+                : { kind: "dispatched" as const, phase: record.phase, callName };
+            policePopupRef.current
+              .setDOMContent(buildPoliceUnitPopupContent(record.callsign, precinctName, status))
+              .setLngLat(m.getLngLat())
+              .addTo(map);
+          });
+        } else {
+          element = createMovingUnitElement(d.callsign);
+          element.style.backgroundColor = colorForPhase(d.phase);
+        }
         marker = new Marker({ element })
           .setLngLat(d.route[0] ?? [0, 0])
           .addTo(map);
@@ -94,12 +131,10 @@ export default function DispatchLayer({ map }: DispatchLayerProps) {
       }
 
       if (d.phase === "onScene") {
-        // Position at the parked spot and let the user drag it around. The pill
-        // is normally pointer-events:none, so enable interaction while parked.
         const parked = d.parkPoint ?? d.route[d.route.length - 1] ?? [0, 0];
         const el = marker.getElement();
         marker.setLngLat(parked);
-        el.style.backgroundColor = colorForPhase(d.phase);
+        if (!isPatrol) el.style.backgroundColor = colorForPhase(d.phase);
         el.style.cursor = "grab";
         el.style.pointerEvents = "auto";
         if (!marker.isDraggable()) {
@@ -133,12 +168,16 @@ export default function DispatchLayer({ map }: DispatchLayerProps) {
     }
   }, [map, showPaths]);
 
-  // Show/hide fire vehicle markers when the toggle changes.
+  // Show/hide markers: FDNY follows showFireVehicles, patrol cars follow showPoliceVehicles.
   useEffect(() => {
     const applyVisibility = () => {
-      const show = useSettingsStore.getState().showFireVehicles;
-      for (const marker of markersRef.current.values()) {
-        marker.getElement().style.display = show ? "" : "none";
+      const showFire = useSettingsStore.getState().showFireVehicles;
+      const showPolice = useSettingsStore.getState().showPoliceVehicles;
+      const currentDispatches = useDispatchStore.getState().dispatches;
+      for (const [id, marker] of markersRef.current) {
+        const record = currentDispatches.find((d) => d.id === id);
+        const isPatrol = record?.type === "Patrol Car";
+        marker.getElement().style.display = (isPatrol ? showPolice : showFire) ? "" : "none";
       }
     };
     applyVisibility();
@@ -173,7 +212,8 @@ export default function DispatchLayer({ map }: DispatchLayerProps) {
 
         if (d.phase === "dispatched") {
           // Turnout: the unit is still at quarters, getting ready to roll.
-          marker.getElement().style.backgroundColor = colorForPhase(d.phase);
+          if (d.type !== "Patrol Car")
+            marker.getElement().style.backgroundColor = colorForPhase(d.phase);
           const elapsedGameMs = (now - d.startedAt) * simSpeed;
           if (elapsedGameMs >= d.turnoutMs) {
             store.getState().beginEnroute(d.id);
@@ -183,7 +223,8 @@ export default function DispatchLayer({ map }: DispatchLayerProps) {
 
         const fraction = frac(d);
         marker.setLngLat(pointAlong(d.route, d.progression, fraction));
-        marker.getElement().style.backgroundColor = colorForPhase(d.phase);
+        if (d.type !== "Patrol Car")
+          marker.getElement().style.backgroundColor = colorForPhase(d.phase);
 
         if (fraction >= 1) {
           if (d.phase === "enroute") {
@@ -227,6 +268,7 @@ export default function DispatchLayer({ map }: DispatchLayerProps) {
   useEffect(() => {
     const markers = markersRef.current;
     return () => {
+      policePopupRef.current?.remove();
       for (const marker of markers.values()) {
         marker.remove();
       }

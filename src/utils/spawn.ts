@@ -65,6 +65,7 @@ export function makeRandomCall(
     longitude,
     status: "Waiting" as const,
     callCategory: type.category,
+    spawnedAt: performance.now(),
     radiusMeters: GAME_CONFIG.callArea.startRadiusMeters,
     maxRadiusMeters: type.radius,
     assignmentId: type.assignmentId,

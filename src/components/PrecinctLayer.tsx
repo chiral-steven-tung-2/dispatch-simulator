@@ -1,9 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Popup, type Map as MapLibreMap, type MapLayerMouseEvent } from "maplibre-gl";
 import { nypdPrecincts } from "../data/nypdPrecincts";
-import { useNypdStationStore } from "../stores/nypdStationStore";
 import { useSettingsStore } from "../stores/settingsStore";
-import { buildNypdStationPopupContent } from "./nypdStationPopup";
 
 interface PrecinctLayerProps {
   map: MapLibreMap;
@@ -13,12 +11,8 @@ const SOURCE = "nypd-precincts";
 const FILL_LAYER = "nypd-precincts-fill";
 const LINE_LAYER = "nypd-precincts-outline";
 
-const PRECINCT_COLOR = "#1e3a8a"; // navy, matches the NYPD marker
+const PRECINCT_COLOR = "#1e3a8a";
 
-/** How often (real ms) to refresh the live status breakdown while a popup is open. */
-const POPUP_REFRESH_MS = 2000;
-
-/** Draws real NYPD precinct boundary polygons and opens a status popup on click. */
 export default function PrecinctLayer({ map }: PrecinctLayerProps) {
   const showPrecinctBoundaries = useSettingsStore((s) => s.showPrecinctBoundaries);
   const popupRef = useRef<Popup | null>(null);
@@ -33,10 +27,7 @@ export default function PrecinctLayer({ map }: PrecinctLayerProps) {
         id: FILL_LAYER,
         type: "fill",
         source: SOURCE,
-        paint: {
-          "fill-color": PRECINCT_COLOR,
-          "fill-opacity": 0.05,
-        },
+        paint: { "fill-color": PRECINCT_COLOR, "fill-opacity": 0.05 },
       });
     }
     if (!map.getLayer(LINE_LAYER)) {
@@ -59,56 +50,59 @@ export default function PrecinctLayer({ map }: PrecinctLayerProps) {
   // Toggle visibility.
   useEffect(() => {
     const visibility = showPrecinctBoundaries ? "visible" : "none";
-    if (map.getLayer(FILL_LAYER)) {
-      map.setLayoutProperty(FILL_LAYER, "visibility", visibility);
-    }
-    if (map.getLayer(LINE_LAYER)) {
-      map.setLayoutProperty(LINE_LAYER, "visibility", visibility);
-    }
+    if (map.getLayer(FILL_LAYER)) map.setLayoutProperty(FILL_LAYER, "visibility", visibility);
+    if (map.getLayer(LINE_LAYER)) map.setLayoutProperty(LINE_LAYER, "visibility", visibility);
   }, [map, showPrecinctBoundaries]);
 
-  // Hover cursor + click-to-open status popup.
+  // Hover-only tooltip showing the precinct name after 2 s of stillness.
   useEffect(() => {
-    const onMouseEnter = () => {
-      map.getCanvas().style.cursor = "pointer";
-    };
-    const onMouseLeave = () => {
-      map.getCanvas().style.cursor = "";
-    };
-    const onClick = (e: MapLayerMouseEvent) => {
-      const feature = e.features?.[0];
-      const stationId = feature?.properties?.stationId as string | undefined;
-      if (!stationId) {
-        return;
-      }
-      const station = useNypdStationStore
-        .getState()
-        .stations.find((s) => s.id === stationId);
-      if (!station) {
-        return;
-      }
+    let hoverTimer: number | undefined;
 
+    const getPopup = () => {
+      if (!popupRef.current) {
+        popupRef.current = new Popup({ closeButton: false, closeOnClick: false, offset: 8 });
+      }
+      return popupRef.current;
+    };
+
+    const onMouseMove = (e: MapLayerMouseEvent) => {
+      const name = e.features?.[0]?.properties?.precinct as string | undefined;
+      if (!name) return;
+
+      // Reset the timer on every move — only show after the cursor settles.
+      window.clearTimeout(hoverTimer);
       popupRef.current?.remove();
-      const popup = new Popup({ offset: 12, closeButton: true })
-        .setLngLat(e.lngLat)
-        .setDOMContent(buildNypdStationPopupContent(station))
-        .addTo(map);
-      popupRef.current = popup;
 
-      const refreshId = window.setInterval(() => {
-        popup.setDOMContent(buildNypdStationPopupContent(station));
-      }, POPUP_REFRESH_MS);
-      popup.on("close", () => window.clearInterval(refreshId));
+      const lngLat = e.lngLat;
+      hoverTimer = window.setTimeout(() => {
+        const el = document.createElement("div");
+        el.style.cssText =
+          "display:flex;align-items:center;gap:6px;padding:5px 9px;background:#1e3a8a;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.35);";
+        const badge = document.createElement("span");
+        badge.textContent = "NYPD";
+        badge.style.cssText =
+          "font-size:9px;font-weight:700;letter-spacing:0.05em;color:#93c5fd;background:rgba(255,255,255,0.12);border-radius:3px;padding:1px 4px;";
+        const label = document.createElement("span");
+        label.textContent = name;
+        label.style.cssText = "font-size:12px;font-weight:600;color:#ffffff;white-space:nowrap;";
+        el.appendChild(badge);
+        el.appendChild(label);
+        getPopup().setLngLat(lngLat).setDOMContent(el).addTo(map);
+      }, 1000);
     };
 
-    map.on("mouseenter", FILL_LAYER, onMouseEnter);
+    const onMouseLeave = () => {
+      window.clearTimeout(hoverTimer);
+      popupRef.current?.remove();
+    };
+
+    map.on("mousemove", FILL_LAYER, onMouseMove);
     map.on("mouseleave", FILL_LAYER, onMouseLeave);
-    map.on("click", FILL_LAYER, onClick);
 
     return () => {
-      map.off("mouseenter", FILL_LAYER, onMouseEnter);
+      window.clearTimeout(hoverTimer);
+      map.off("mousemove", FILL_LAYER, onMouseMove);
       map.off("mouseleave", FILL_LAYER, onMouseLeave);
-      map.off("click", FILL_LAYER, onClick);
       popupRef.current?.remove();
     };
   }, [map]);

@@ -1,0 +1,7 @@
+id,category,probability
+1,aided-case,0.25
+2,noise-dispute,0.20
+3,suspicious,0.15
+4,traffic-accident,0.15
+5,robbery-assault,0.15
+6,crime-in-progress,0.10

@@ -1,0 +1,51 @@
+id,category,name,radius,base_assignment,spawn_borough
+nypd-aided-1,aided-case,Person Unconscious on Sidewalk,15,nypd_two_cars,City-wide
+nypd-aided-2,aided-case,Person Down in Building Lobby,15,nypd_two_cars,City-wide
+nypd-aided-3,aided-case,Elderly Person Unresponsive,15,nypd_two_cars,City-wide
+nypd-aided-4,aided-case,Injured Person - Fall From Height,15,nypd_two_cars,City-wide
+nypd-aided-5,aided-case,Drug Overdose,15,nypd_two_cars,City-wide
+nypd-aided-6,aided-case,Child in Medical Distress,15,nypd_two_cars,City-wide
+nypd-aided-7,aided-case,Person Collapsed in Subway Station,15,nypd_two_cars,City-wide
+nypd-aided-8,aided-case,Cardiac Arrest Reported,15,nypd_two_cars,City-wide
+nypd-aided-9,aided-case,Pedestrian Struck by Vehicle,15,nypd_two_cars,City-wide
+nypd-aided-10,aided-case,Altered Mental State on Street,15,nypd_two_cars,City-wide
+nypd-noise-1,noise-dispute,Loud Music from Apartment,10,nypd_one_car,City-wide
+nypd-noise-2,noise-dispute,Noise Complaint - Construction Work,10,nypd_one_car,City-wide
+nypd-noise-3,noise-dispute,Dispute in Building Hallway,10,nypd_one_car,City-wide
+nypd-noise-4,noise-dispute,Loud Party Complaint,10,nypd_one_car,City-wide
+nypd-noise-5,noise-dispute,Domestic Disturbance - Noise,10,nypd_one_car,City-wide
+nypd-noise-6,noise-dispute,Bar Disturbance Complaint,10,nypd_one_car,City-wide
+nypd-noise-7,noise-dispute,Street Argument - Verbal,10,nypd_one_car,City-wide
+nypd-noise-8,noise-dispute,Neighbor Dispute,10,nypd_one_car,City-wide
+nypd-noise-9,noise-dispute,Loud Vehicle - Excessive Horn,10,nypd_one_car,City-wide
+nypd-noise-10,noise-dispute,Commercial Noise Complaint,10,nypd_one_car,City-wide
+nypd-suspicious-1,suspicious,Suspicious Person Loitering,10,nypd_one_car,City-wide
+nypd-suspicious-2,suspicious,Trespassing in Vacant Building,10,nypd_one_car,City-wide
+nypd-suspicious-3,suspicious,Person Acting Erratically,10,nypd_one_car,City-wide
+nypd-suspicious-4,suspicious,Suspicious Package Reported,10,nypd_one_car,City-wide
+nypd-suspicious-5,suspicious,Suspicious Vehicle Parked,10,nypd_one_car,City-wide
+nypd-suspicious-6,suspicious,Possible Drug Activity,10,nypd_one_car,City-wide
+nypd-suspicious-7,suspicious,Prowler in Building Rear,10,nypd_one_car,City-wide
+nypd-suspicious-8,suspicious,Unknown Person in Backyard,10,nypd_one_car,City-wide
+nypd-traffic-1,traffic-accident,Two-Vehicle Collision,20,nypd_two_cars,City-wide
+nypd-traffic-2,traffic-accident,Vehicle into Parked Car,20,nypd_two_cars,City-wide
+nypd-traffic-3,traffic-accident,Bicycle vs. Vehicle Accident,20,nypd_two_cars,City-wide
+nypd-traffic-4,traffic-accident,Hit and Run - Pedestrian Struck,20,nypd_two_cars,City-wide
+nypd-traffic-5,traffic-accident,Delivery Truck Collision,20,nypd_two_cars,City-wide
+nypd-traffic-6,traffic-accident,Taxi Cab Collision,20,nypd_two_cars,City-wide
+nypd-traffic-7,traffic-accident,Single Vehicle vs. Barrier,20,nypd_two_cars,City-wide
+nypd-traffic-8,traffic-accident,Motorcyclist Down,20,nypd_two_cars,City-wide
+nypd-assault-1,robbery-assault,Street Robbery in Progress,15,nypd_two_cars,City-wide
+nypd-assault-2,robbery-assault,Assault in Progress,15,nypd_two_cars,City-wide
+nypd-assault-3,robbery-assault,Domestic Violence Call,15,nypd_two_cars,City-wide
+nypd-assault-4,robbery-assault,Bar Fight,15,nypd_two_cars,City-wide
+nypd-assault-5,robbery-assault,Robbery - Just Occurred,15,nypd_two_cars,City-wide
+nypd-assault-6,robbery-assault,Assault with Weapon,15,nypd_two_cars,City-wide
+nypd-assault-7,robbery-assault,Purse Snatching,15,nypd_two_cars,City-wide
+nypd-assault-8,robbery-assault,Person Stabbed,15,nypd_two_cars,City-wide
+nypd-crime-1,crime-in-progress,Burglary in Progress,25,nypd_three_cars,City-wide
+nypd-crime-2,crime-in-progress,Auto Theft in Progress,25,nypd_three_cars,City-wide
+nypd-crime-3,crime-in-progress,Break-in at Residence,25,nypd_three_cars,City-wide
+nypd-crime-4,crime-in-progress,Shots Fired,25,nypd_three_cars,City-wide
+nypd-crime-5,crime-in-progress,Armed Robbery in Progress,25,nypd_three_cars,City-wide
+nypd-crime-6,crime-in-progress,Carjacking in Progress,25,nypd_three_cars,City-wide

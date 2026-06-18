@@ -31,6 +31,7 @@ export const UNIT_TYPE_CATEGORY: Record<string, keyof AssignmentRequirements> = 
   IMT: "imt",
   "High Rise": "highrise",
   "Thawing Apparatus": "thawing",
+  "Patrol Car": "patrolCar",
 };
 
 export const REQUIREMENT_KEYS = Object.keys({
@@ -59,6 +60,7 @@ export const REQUIREMENT_KEYS = Object.keys({
   imt: 0,
   highrise: 0,
   thawing: 0,
+  patrolCar: 0,
 } satisfies AssignmentRequirements) as (keyof AssignmentRequirements)[];
 
 /** Display labels for each assignment-requirement category. */
@@ -88,6 +90,7 @@ export const CATEGORY_LABELS: Record<keyof AssignmentRequirements, string> = {
   imt: "IMT",
   highrise: "High Rise",
   thawing: "Thawing",
+  patrolCar: "Patrol Cars",
 };
 
 /** Counts on-scene units by assignment-requirement category. */

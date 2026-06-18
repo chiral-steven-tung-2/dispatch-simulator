@@ -90,3 +90,7 @@ C:\MyDocuments\dispatch-game\server\NycDispatch.Api\obj\Debug\net8.0\ref\NycDisp
 C:\MyDocuments\dispatch-game\server\NycDispatch.Api\bin\Debug\net8.0\Data\fdny_assignments.csv
 C:\MyDocuments\dispatch-game\server\NycDispatch.Api\bin\Debug\net8.0\Data\fdny_call_spawn.csv
 C:\MyDocuments\dispatch-game\server\NycDispatch.Api\bin\Debug\net8.0\Data\fdny_modifiers.csv
+C:\MyDocuments\dispatch-game\server\NycDispatch.Api\bin\Debug\net8.0\Data\nypd_assignments.csv
+C:\MyDocuments\dispatch-game\server\NycDispatch.Api\bin\Debug\net8.0\Data\nypd_calls.csv
+C:\MyDocuments\dispatch-game\server\NycDispatch.Api\bin\Debug\net8.0\Data\nypd_call_spawn.csv
+C:\MyDocuments\dispatch-game\server\NycDispatch.Api\bin\Debug\net8.0\Data\nypd_vehicles.csv

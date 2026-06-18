@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NycDispatch.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9fcfcf969b2776132fdb6e2f2fd7bc0f5ea85d24")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+280c67296f770ee4b76962812e9ee5230d2cc109")]
 [assembly: System.Reflection.AssemblyProductAttribute("NycDispatch.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NycDispatch.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -5,6 +5,8 @@ export type IncidentStatus = "Waiting" | "Active" | "Resolved";
 export interface Incident {
   id: string;
   name: string;
+  /** performance.now() when the call was first created. Used for response-time metrics. */
+  spawnedAt: number;
   latitude: number;
   longitude: number;
   status: IncidentStatus;

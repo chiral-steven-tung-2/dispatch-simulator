@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useReducer } from "react";
+import { useEffect, useMemo, useReducer, useState } from "react";
 import { useIncidentStore } from "../stores/incidentStore";
 import {
   useDispatchStore,
@@ -7,6 +7,12 @@ import {
 } from "../stores/dispatchStore";
 import { remainingResolveMs, formatGameDuration } from "../utils/resolve";
 import { colorForPhase, phaseLabel } from "./movingUnitMarker";
+import {
+  REQUIREMENT_KEYS,
+  CATEGORY_LABELS,
+  countOnSceneByCategory,
+  effectiveNeed,
+} from "../utils/assignment";
 import type { Incident, IncidentStatus } from "../models";
 
 interface CallsPanelProps {
@@ -27,6 +33,8 @@ const STATUS_RANK: Record<IncidentStatus, number> = {
   Resolved: 2,
 };
 
+type StatusFilter = "all" | "Waiting" | "Active";
+
 /** Slide-in dashboard listing every live call and its responding units. */
 export default function CallsPanel({ open, onClose }: CallsPanelProps) {
   const incidents = useIncidentStore((s) => s.incidents);
@@ -34,34 +42,41 @@ export default function CallsPanel({ open, onClose }: CallsPanelProps) {
   const focusCall = useDispatchStore((s) => s.focusCall);
   const simSpeed = useDispatchStore((s) => s.simSpeed);
 
+  const [query, setQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+
+  // Reset filters when panel closes.
+  useEffect(() => {
+    if (!open) { setQuery(""); setStatusFilter("all"); }
+  }, [open]);
+
   // Re-render once a second while open so resolve countdowns stay live.
   const [, tick] = useReducer((n: number) => n + 1, 0);
   useEffect(() => {
-    if (!open) {
-      return;
-    }
+    if (!open) return;
     const id = window.setInterval(tick, 1000);
     return () => window.clearInterval(id);
   }, [open]);
 
-  const calls = useMemo(
-    () =>
-      incidents
-        .filter((i) => i.status !== "Resolved")
-        .map((incident) => ({
-          incident,
-          units: dispatches.filter((d) => d.callId === incident.id),
-        }))
-        .sort(
-          (a, b) =>
-            STATUS_RANK[a.incident.status] - STATUS_RANK[b.incident.status]
-        ),
-    [incidents, dispatches]
+  const calls = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return incidents
+      .filter((i) => i.status !== "Resolved")
+      .filter((i) => statusFilter === "all" || i.status === statusFilter)
+      .filter((i) => !q || i.name.toLowerCase().includes(q))
+      .map((incident) => ({
+        incident,
+        units: dispatches.filter((d) => d.callId === incident.id),
+      }))
+      .sort((a, b) => STATUS_RANK[a.incident.status] - STATUS_RANK[b.incident.status]);
+  }, [incidents, dispatches, query, statusFilter]);
+
+  const totalActive = useMemo(
+    () => incidents.filter((i) => i.status !== "Resolved").length,
+    [incidents]
   );
 
-  if (!open) {
-    return null;
-  }
+  if (!open) return null;
 
   return (
     <div className="fixed inset-0 z-20 flex justify-end">
@@ -72,26 +87,47 @@ export default function CallsPanel({ open, onClose }: CallsPanelProps) {
       />
 
       <aside className="relative flex h-full w-full max-w-md flex-col bg-slate-800 text-slate-100 shadow-xl">
-        <header className="flex items-center justify-between border-b border-slate-700 px-5 py-4">
-          <h2 className="text-lg font-bold">
-            Active Calls{" "}
-            <span className="text-sm font-normal text-slate-400">
-              ({calls.length})
-            </span>
-          </h2>
-          <button
-            onClick={onClose}
-            className="rounded px-2 py-1 text-slate-400 hover:bg-slate-700 hover:text-white"
-            aria-label="Close calls panel"
-          >
-            ✕
-          </button>
+        <header className="border-b border-slate-700 px-5 py-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-bold">
+              Active Calls{" "}
+              <span className="text-sm font-normal text-slate-400">
+                ({totalActive})
+              </span>
+            </h2>
+            <button
+              onClick={onClose}
+              className="rounded px-2 py-1 text-slate-400 hover:bg-slate-700 hover:text-white"
+              aria-label="Close calls panel"
+            >
+              ✕
+            </button>
+          </div>
+          {/* Search + filter row */}
+          <div className="mt-3 flex gap-2">
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search calls…"
+              className="min-w-0 flex-1 rounded border border-slate-600 bg-slate-900 px-2.5 py-1.5 text-sm placeholder-slate-500 focus:border-slate-400 focus:outline-none"
+            />
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
+              className="rounded border border-slate-600 bg-slate-900 px-2 py-1.5 text-sm focus:outline-none"
+            >
+              <option value="all">All</option>
+              <option value="Waiting">Waiting</option>
+              <option value="Active">Active</option>
+            </select>
+          </div>
         </header>
 
         <div className="flex-1 space-y-3 overflow-y-auto p-4">
           {calls.length === 0 ? (
             <p className="p-4 text-sm italic text-slate-500">
-              No active calls.
+              {query || statusFilter !== "all" ? "No calls match the filter." : "No active calls."}
             </p>
           ) : (
             calls.map(({ incident, units }) => (
@@ -133,6 +169,16 @@ function CallCard({
     s.modifiers.filter((m) => incident.activeModifiers.includes(m.id))
   );
 
+  // Which unit categories are still unmet (committed units count toward staffing).
+  const unmetCategories = useMemo(() => {
+    if (!assignment || incident.assignmentMetAt != null) return [];
+    const counts = countOnSceneByCategory(units);
+    return REQUIREMENT_KEYS.filter((key) => {
+      const need = effectiveNeed(assignment, key, incident.extraRequirements, incident.requiredUnits);
+      return need > 0 && (counts[key] ?? 0) < need;
+    }).map((key) => CATEGORY_LABELS[key]);
+  }, [assignment, units, incident.assignmentMetAt, incident.extraRequirements, incident.requiredUnits]);
+
   return (
     <button
       onClick={onSelect}
@@ -152,9 +198,12 @@ function CallCard({
       {assignment && (
         <p className="mt-1 text-xs font-medium text-amber-400">
           {assignment.name}
-          {incident.assignmentMetAt == null && incident.status === "Active" && (
-            <span className="ml-1 text-slate-400">· awaiting full assignment</span>
-          )}
+        </p>
+      )}
+
+      {unmetCategories.length > 0 && (
+        <p className="mt-0.5 text-xs text-slate-400">
+          Awaiting: {unmetCategories.join(", ")}
         </p>
       )}
 
@@ -177,7 +226,7 @@ function CallCard({
         </div>
       )}
 
-      <ResolveCountdown incident={incident} />
+      <ResolveCountdown incident={incident} hasUnitsOnScene={onSceneCount > 0} />
 
       {units.length > 0 && (
         <ul className="mt-2 space-y-1 border-t border-slate-700 pt-2">
@@ -213,10 +262,26 @@ function ArrivalCountdown(record: DispatchRecord, simSpeed: number): string {
   return remaining <= 0 ? "On scene" : `Arrives in ${formatGameDuration(remaining)}`;
 }
 
-function ResolveCountdown({ incident }: { incident: Incident }) {
-  if (incident.resolveStartedAt == null || incident.status === "Resolved") {
+function ResolveCountdown({
+  incident,
+  hasUnitsOnScene,
+}: {
+  incident: Incident;
+  hasUnitsOnScene: boolean;
+}) {
+  if (incident.status === "Resolved") return null;
+
+  if (incident.resolveStartedAt == null) {
+    if (hasUnitsOnScene && incident.assignmentMetAt == null && incident.status === "Active") {
+      return (
+        <p className="mt-1 text-xs font-semibold text-amber-400">
+          ⏸ Awaiting additional units
+        </p>
+      );
+    }
     return null;
   }
+
   const simSpeed = useDispatchStore.getState().simSpeed;
   const remaining = remainingResolveMs(incident.resolveStartedAt, simSpeed, incident.resolveTimeGameMs);
   return (

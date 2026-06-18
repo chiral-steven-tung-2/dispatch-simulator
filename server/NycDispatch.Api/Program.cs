@@ -55,4 +55,7 @@ app.MapGet("/api/assignments", (DispatchData data) => Results.Ok(data.Assignment
 // Scene modifiers — extra units that can be special-called as a fire escalates
 app.MapGet("/api/modifiers", (DispatchData data) => Results.Ok(data.Modifiers));
 
+// NYPD patrol cars — generated dynamically from precinct assigned_patrol_cars counts
+app.MapGet("/api/nypd-vehicles", (DispatchData data) => Results.Ok(data.NypdVehicles));
+
 app.Run();

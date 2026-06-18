@@ -122,7 +122,17 @@ export function useAutoRelocator(): void {
       const inFlightTo = new Set(relocations.map((r) => r.toStationId));
       const pair = findRelocationPair(units, stations, inFlightTo);
       if (pair) {
+        const fromStation = stations.find((s) => s.id === pair.unit.currentStationId);
+        const toStation = stations.find((s) => s.id === pair.toStationId);
         void useRelocationStore.getState().relocateUnit(pair.unit, pair.toStationId);
+        useRelocationStore.getState().addRelocationLog({
+          id: `log-${pair.unit.id}-${Date.now()}`,
+          unitCallsign: pair.unit.callsign,
+          unitType: pair.unit.type,
+          fromStationName: fromStation?.name ?? pair.unit.currentStationId,
+          toStationName: toStation?.name ?? pair.toStationId,
+          at: performance.now(),
+        });
       }
     }, CHECK_MS);
 

@@ -18,7 +18,7 @@ import RelocationLayer from "./RelocationLayer";
 import LandLayer from "./LandLayer";
 import CallAreaLayer from "./CallAreaLayer";
 import PrecinctLayer from "./PrecinctLayer";
-import PatrolLayer from "./PatrolLayer";
+import PatrolMovementLayer from "./PatrolMovementLayer";
 
 interface MapViewProps {
   showFdnyStations: boolean;
@@ -110,10 +110,12 @@ export default function MapView({
       {map && <LandLayer map={map} />}
       {map && <CallAreaLayer map={map} />}
       {map && showNypdStations && <PrecinctLayer map={map} />}
-      {map && showNypdStations && <PatrolLayer map={map} />}
+      {map && <PatrolMovementLayer map={map} />}
 
       {map && showFdnyStations &&
-        stations.map((station) => (
+        stations
+          .filter((s) => !nypdStations.some((n) => n.id === s.id))
+          .map((station) => (
           <StationMarker
             key={station.id}
             map={map}

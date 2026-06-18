@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MapView from "../components/MapView";
 import StationsPanel from "../components/StationsPanel";
 import CallsPanel from "../components/CallsPanel";
+import CallHistoryPanel from "../components/CallHistoryPanel";
+import ActivityLogPanel from "../components/ActivityLogPanel";
 import DispatchPanel from "../components/DispatchPanel";
 import CallNotifications from "../components/CallNotifications";
 import UnitSearch from "../components/UnitSearch";
@@ -10,7 +12,7 @@ import { useCallSpawner } from "../hooks/useCallSpawner";
 import { useResolveTicker } from "../hooks/useResolveTicker";
 import { useAutoDispatcher } from "../hooks/useAutoDispatcher";
 import { useAutoRelocator } from "../hooks/useAutoRelocator";
-import { useNypdActivityTicker } from "../hooks/useNypdActivityTicker";
+import { usePatrolMovement } from "../hooks/usePatrolMovement";
 import { useDispatchStore } from "../stores/dispatchStore";
 import { useIncidentStore } from "../stores/incidentStore";
 import { useSettingsStore } from "../stores/settingsStore";
@@ -20,7 +22,16 @@ export default function HomePage() {
   const { loading, error } = useDispatchData();
   const [stationsOpen, setStationsOpen] = useState(false);
   const [callsOpen, setCallsOpen] = useState(false);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [activityOpen, setActivityOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+
+  const closeAll = () => { setStationsOpen(false); setCallsOpen(false); setHistoryOpen(false); setActivityOpen(false); setSettingsOpen(false); };
+  const openStations = () => { closeAll(); setStationsOpen(true); };
+  const openCalls = () => { closeAll(); setCallsOpen(true); };
+  const openHistory = () => { closeAll(); setHistoryOpen(true); };
+  const openActivity = () => { closeAll(); setActivityOpen(true); };
+  const openSettings = () => { closeAll(); setSettingsOpen(true); };
   const showFdnyStations = useSettingsStore((s) => s.showFdnyStations);
   const showNypdStations = useSettingsStore((s) => s.showNypdStations);
   const showChiefQuarters = useSettingsStore((s) => s.showChiefQuarters);
@@ -29,8 +40,9 @@ export default function HomePage() {
   const showPrecinctBoundaries = useSettingsStore((s) => s.showPrecinctBoundaries);
   const showFireVehicles = useSettingsStore((s) => s.showFireVehicles);
   const showPoliceVehicles = useSettingsStore((s) => s.showPoliceVehicles);
-  const patrolPercent = useSettingsStore((s) => s.patrolPercent);
   const markerScale = useSettingsStore((s) => s.markerScale);
+  const patrolRatio = useSettingsStore((s) => s.patrolRatio);
+  const setPatrolRatio = useSettingsStore((s) => s.setPatrolRatio);
   const toggleFdnyStations = useSettingsStore((s) => s.toggleFdnyStations);
   const toggleNypdStations = useSettingsStore((s) => s.toggleNypdStations);
   const toggleChiefQuarters = useSettingsStore((s) => s.toggleChiefQuarters);
@@ -39,7 +51,6 @@ export default function HomePage() {
   const togglePrecinctBoundaries = useSettingsStore((s) => s.togglePrecinctBoundaries);
   const toggleFireVehicles = useSettingsStore((s) => s.toggleFireVehicles);
   const togglePoliceVehicles = useSettingsStore((s) => s.togglePoliceVehicles);
-  const setPatrolPercent = useSettingsStore((s) => s.setPatrolPercent);
   const setMarkerScale = useSettingsStore((s) => s.setMarkerScale);
   const showPaths = useDispatchStore((s) => s.showPaths);
   const togglePaths = useDispatchStore((s) => s.togglePaths);
@@ -60,7 +71,29 @@ export default function HomePage() {
   useResolveTicker();
   useAutoDispatcher();
   useAutoRelocator();
-  useNypdActivityTicker();
+  usePatrolMovement();
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement || e.target instanceof HTMLTextAreaElement) return;
+      if (e.key === " " || e.code === "Space") {
+        e.preventDefault();
+        if (!loading) spawnCall();
+      } else if (e.key === "Escape") {
+        setStationsOpen(false);
+        setCallsOpen(false);
+        setHistoryOpen(false);
+        setActivityOpen(false);
+        setSettingsOpen(false);
+      } else if (e.key === "c" || e.key === "C") {
+        setCallsOpen((v) => { if (!v) { setStationsOpen(false); setHistoryOpen(false); setActivityOpen(false); setSettingsOpen(false); } return !v; });
+      } else if (e.key === "s" || e.key === "S") {
+        setStationsOpen((v) => { if (!v) { setCallsOpen(false); setHistoryOpen(false); setActivityOpen(false); setSettingsOpen(false); } return !v; });
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [loading, spawnCall]);
 
   return (
     <div className="flex h-full w-full flex-col bg-slate-900 text-slate-100">
@@ -72,17 +105,29 @@ export default function HomePage() {
           </h1>
           <Divider />
           <button
-            onClick={() => setStationsOpen(true)}
+            onClick={openStations}
             className="rounded-md border border-slate-600 px-3 py-1.5 text-sm font-medium hover:bg-slate-700"
           >
             Stations
           </button>
           <button
-            onClick={() => setCallsOpen(true)}
+            onClick={openCalls}
             className="rounded-md border border-slate-600 px-3 py-1.5 text-sm font-medium hover:bg-slate-700"
           >
             Calls{" "}
             <span className="text-slate-400">({activeCallCount})</span>
+          </button>
+          <button
+            onClick={openHistory}
+            className="rounded-md border border-slate-600 px-3 py-1.5 text-sm font-medium hover:bg-slate-700"
+          >
+            History
+          </button>
+          <button
+            onClick={openActivity}
+            className="rounded-md border border-slate-600 px-3 py-1.5 text-sm font-medium hover:bg-slate-700"
+          >
+            Activity
           </button>
           <button
             onClick={spawnCall}
@@ -99,7 +144,7 @@ export default function HomePage() {
           <Divider />
           <StatusBadge loading={loading} error={error} />
           <button
-            onClick={() => setSettingsOpen(true)}
+            onClick={openSettings}
             className="flex items-center gap-1.5 rounded-md border border-slate-600 px-3 py-1.5 text-sm font-medium hover:bg-slate-700"
           >
             <GearGlyph /> Settings
@@ -121,6 +166,8 @@ export default function HomePage() {
         onClose={() => setStationsOpen(false)}
       />
       <CallsPanel open={callsOpen} onClose={() => setCallsOpen(false)} />
+      <CallHistoryPanel open={historyOpen} onClose={() => setHistoryOpen(false)} />
+      <ActivityLogPanel open={activityOpen} onClose={() => setActivityOpen(false)} />
       <SettingsPanel
         open={settingsOpen}
         onClose={() => setSettingsOpen(false)}
@@ -148,10 +195,10 @@ export default function HomePage() {
         onToggleFireVehicles={toggleFireVehicles}
         showPoliceVehicles={showPoliceVehicles}
         onTogglePoliceVehicles={togglePoliceVehicles}
-        patrolPercent={patrolPercent}
-        onPatrolPercentChange={setPatrolPercent}
         markerScale={markerScale}
         onMarkerScaleChange={setMarkerScale}
+        patrolRatio={patrolRatio}
+        onPatrolRatioChange={setPatrolRatio}
       />
       <DispatchPanel />
     </div>
@@ -336,10 +383,10 @@ function SettingsPanel({
   onToggleFireVehicles,
   showPoliceVehicles,
   onTogglePoliceVehicles,
-  patrolPercent,
-  onPatrolPercentChange,
   markerScale,
   onMarkerScaleChange,
+  patrolRatio,
+  onPatrolRatioChange,
 }: {
   open: boolean;
   onClose: () => void;
@@ -367,10 +414,10 @@ function SettingsPanel({
   onToggleFireVehicles: () => void;
   showPoliceVehicles: boolean;
   onTogglePoliceVehicles: () => void;
-  patrolPercent: number;
-  onPatrolPercentChange: (percent: number) => void;
   markerScale: number;
   onMarkerScaleChange: (scale: number) => void;
+  patrolRatio: number;
+  onPatrolRatioChange: (ratio: number) => void;
 }) {
   if (!open) {
     return null;
@@ -428,25 +475,6 @@ function SettingsPanel({
                   label=""
                   activeColor="amber"
                 />
-              </SettingRow>
-              <SettingRow
-                label="Patrol coverage"
-                hint="% of each precinct's fleet sent out on patrol"
-              >
-                <div className="flex items-center gap-2">
-                  <input
-                    type="range"
-                    min={0}
-                    max={100}
-                    step={5}
-                    value={patrolPercent}
-                    onChange={(e) => onPatrolPercentChange(Number(e.target.value))}
-                    className="w-28"
-                  />
-                  <span className="w-10 text-right text-xs text-slate-400">
-                    {patrolPercent}%
-                  </span>
-                </div>
               </SettingRow>
             </SettingsSection>
 
@@ -573,6 +601,26 @@ function SettingsPanel({
                   activeColor="blue"
                 />
               </LegendRow>
+              <div className="rounded-lg border border-slate-700 bg-slate-900/50 px-3 py-2.5 text-sm">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-slate-300">Cars on patrol</span>
+                  <span className="text-xs font-semibold text-blue-400">
+                    {Math.round(patrolRatio * 100)}%
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min={0}
+                  max={1}
+                  step={0.01}
+                  value={patrolRatio}
+                  onChange={(e) => onPatrolRatioChange(Number(e.target.value))}
+                  className="w-full accent-blue-500"
+                />
+                <p className="mt-1 text-xs text-slate-500">
+                  Share of each precinct's assigned cars actively patrolling
+                </p>
+              </div>
             </LegendSection>
 
             <LegendSection title="Calls">

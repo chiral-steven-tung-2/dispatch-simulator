@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import type { Unit, UnitStatus } from "../models";
-import { fetchUnits } from "../data/dispatchApi";
+import { fetchUnits, fetchNypdVehicles } from "../data/dispatchApi";
 
 type LoadStatus = "idle" | "loading" | "ready" | "error";
 
@@ -21,11 +21,27 @@ export const useUnitStore = create<UnitStore>((set) => ({
   load: async () => {
     set({ status: "loading", error: null });
     try {
-      const units = (await fetchUnits()).map((unit) => ({
+      const [fdnyVehicles, nypdVehicles] = await Promise.all([
+        fetchUnits(),
+        fetchNypdVehicles(),
+      ]);
+
+      const fdnyUnits: Unit[] = fdnyVehicles.map((unit) => ({
         ...unit,
         currentStationId: unit.stationId,
       }));
-      set({ units, status: "ready" });
+
+      const nypdUnits: Unit[] = nypdVehicles.map((v) => ({
+        id: v.id,
+        callsign: v.callsign,
+        type: v.type,
+        status: v.status as UnitStatus,
+        stationId: v.stationId,
+        currentStationId: v.stationId,
+        ffCount: v.ffCount,
+      }));
+
+      set({ units: [...fdnyUnits, ...nypdUnits], status: "ready" });
     } catch (err) {
       set({ status: "error", error: (err as Error).message });
     }

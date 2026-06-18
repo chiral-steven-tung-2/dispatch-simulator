@@ -101,18 +101,6 @@ export const GAME_CONFIG = {
     maxConcurrentRelocations: 3,
   },
 
-  /** NYPD patrol car simulation. */
-  nypdPatrol: {
-    /** Simulated "On Assignment" share of each precinct's fleet. */
-    onAssignment: {
-      /** Minimum fraction (0-1) of the fleet shown as on assignment. */
-      minFraction: 0.05,
-      /** Maximum fraction (0-1) of the fleet shown as on assignment. */
-      maxFraction: 0.15,
-      /** How often (real ms) the on-assignment fraction is re-rolled per precinct. */
-      updateIntervalMs: 15_000,
-    },
-  },
 } as const;
 
 /** Picks a random turnout duration (game-ms) between the configured min/max. */

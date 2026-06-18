@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import {
   useDispatchStore,
-  dispatchableOrigin,
+  dispatchCurrentPoint,
+  type DispatchRecord,
 } from "../stores/dispatchStore";
 import { useIncidentStore } from "../stores/incidentStore";
 import { useUnitStore } from "../stores/unitStore";
 import { useStationStore } from "../stores/stationStore";
-import { useRelocationStore } from "../stores/relocationStore";
+import { useRelocationStore, relocationCurrentPoint, type RelocationRecord } from "../stores/relocationStore";
 import { haversineMeters, type LngLat } from "../utils/geo";
 import {
   REQUIREMENT_KEYS,
@@ -15,7 +16,9 @@ import {
   effectiveNeed,
 } from "../utils/assignment";
 import { GAME_CONFIG } from "../config/gameConfig";
-import type { Unit } from "../models";
+import { usePatrolStore } from "../stores/patrolStore";
+import type { Unit, Station } from "../models";
+import type { AssignmentRequirements } from "../models";
 
 const CHECK_INTERVAL_MS = GAME_CONFIG.autoDispatch.checkIntervalMs;
 
@@ -37,69 +40,107 @@ export function useAutoDispatcher(): void {
       const units = useUnitStore.getState().units;
       const stations = useStationStore.getState().stations;
       const relocations = useRelocationStore.getState().relocations;
-      const simSpeed = dispatchStore.simSpeed;
+      const { dispatches, simSpeed } = dispatchStore;
+
+      // ── Pre-build lookup maps (O(n) once per tick) ──────────────────────────
+
+      const dispatchByUnit = new Map<string, DispatchRecord>();
+      for (const d of dispatches) dispatchByUnit.set(d.unitId, d);
+
+      const relocationByUnit = new Map<string, RelocationRecord>();
+      for (const r of relocations) relocationByUnit.set(r.unitId, r);
+
+      const stationById = new Map<string, Station>();
+      for (const s of stations) stationById.set(s.id, s);
+
+      const assignmentById = new Map(
+        incidentStore.assignments.map((a) => [a.id, a])
+      );
+
+      // Dispatches committed to a call (counting toward staffing).
+      const committedByCall = new Map<string, DispatchRecord[]>();
+      for (const d of dispatches) {
+        if (
+          d.phase === "dispatched" ||
+          d.phase === "enroute" ||
+          d.phase === "onScene"
+        ) {
+          const list = committedByCall.get(d.callId);
+          if (list) list.push(d);
+          else committedByCall.set(d.callId, [d]);
+        }
+      }
+
+      // Compute every unit's dispatchable origin once.
+      const origins = new Map<string, LngLat>();
+      for (const unit of units) {
+        const dispatch = dispatchByUnit.get(unit.id);
+        if (dispatch) {
+          // Only units returning to quarters can be re-dispatched.
+          if (dispatch.phase === "returning") {
+            origins.set(unit.id, dispatchCurrentPoint(dispatch, simSpeed));
+          }
+          continue;
+        }
+        const relocation = relocationByUnit.get(unit.id);
+        if (relocation) {
+          origins.set(unit.id, relocationCurrentPoint(relocation, simSpeed));
+          continue;
+        }
+        if (unit.status === "Available") {
+          const patrolPos = usePatrolStore.getState().getCurrentPoint(unit.id, simSpeed);
+          if (patrolPos) {
+            origins.set(unit.id, patrolPos);
+          } else {
+            const station = stationById.get(unit.currentStationId);
+            if (station) origins.set(unit.id, [station.longitude, station.latitude]);
+          }
+        }
+      }
+
+      // Group available units by requirement category.
+      const byCategory = new Map<keyof AssignmentRequirements, Unit[]>();
+      for (const unit of units) {
+        if (!origins.has(unit.id)) continue;
+        const key = UNIT_TYPE_CATEGORY[unit.type] as keyof AssignmentRequirements | undefined;
+        if (!key) continue;
+        const list = byCategory.get(key);
+        if (list) list.push(unit);
+        else byCategory.set(key, [unit]);
+      }
+
+      // ── Per-incident dispatch loop ───────────────────────────────────────────
 
       for (const incident of incidentStore.incidents) {
-        if (incident.status === "Resolved") {
-          continue;
-        }
-        const assignment = incidentStore.assignments.find(
-          (a) => a.id === incident.assignmentId
-        );
-        if (!assignment) {
-          continue;
-        }
+        if (incident.status === "Resolved") continue;
 
-        const committed = dispatchStore.dispatches.filter(
-          (d) =>
-            d.callId === incident.id &&
-            (d.phase === "dispatched" ||
-              d.phase === "enroute" ||
-              d.phase === "onScene")
-        );
+        const assignment = assignmentById.get(incident.assignmentId);
+        if (!assignment) continue;
+
+        const committed = committedByCall.get(incident.id) ?? [];
         const counts = countOnSceneByCategory(committed);
-
         const target: LngLat = [incident.longitude, incident.latitude];
         const toDispatch: Unit[] = [];
+        const pickedIds = new Set<string>();
 
         for (const key of REQUIREMENT_KEYS) {
-          let need = effectiveNeed(assignment, key, incident.extraRequirements, incident.requiredUnits) - (counts[key] ?? 0);
-          if (need <= 0) {
-            continue;
-          }
+          let need =
+            effectiveNeed(assignment, key, incident.extraRequirements, incident.requiredUnits) -
+            (counts[key] ?? 0);
+          if (need <= 0) continue;
 
-          const candidates = units
-            .filter(
-              (u) =>
-                UNIT_TYPE_CATEGORY[u.type] === key &&
-                !toDispatch.some((picked) => picked.id === u.id)
-            )
-            .map((u) => {
-              // Includes idle units plus those relocating or returning home;
-              // null means the unit is busy working a call.
-              const from = dispatchableOrigin(
-                u,
-                dispatchStore.dispatches,
-                relocations,
-                stations,
-                simSpeed
-              );
-              return { unit: u, from };
-            })
-            .filter(
-              (c): c is { unit: Unit; from: LngLat } => c.from !== null
-            )
-            .map((c) => ({
-              unit: c.unit,
-              distance: haversineMeters(c.from, target),
+          const candidates = (byCategory.get(key) ?? [])
+            .filter((u) => !pickedIds.has(u.id))
+            .map((u) => ({
+              unit: u,
+              distance: haversineMeters(origins.get(u.id)!, target),
             }))
             .sort((a, b) => a.distance - b.distance);
 
           for (const { unit } of candidates) {
-            if (need <= 0) {
-              break;
-            }
+            if (need <= 0) break;
             toDispatch.push(unit);
+            pickedIds.add(unit.id);
             need--;
           }
         }

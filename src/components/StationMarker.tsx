@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Marker, Popup, type Map as MapLibreMap } from "maplibre-gl";
 import type { Station, Unit } from "../models";
 import type { RelocationRecord } from "../stores/relocationStore";
@@ -84,15 +84,17 @@ export default function StationMarker({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map, station, showChiefQuarters, showUnitIcons]);
 
-  // Update the house glyph color whenever unit availability changes, without
-  // recreating the marker (which would close any open popup).
+  // Derived boolean: true only when this specific station has an available unit.
+  // Using useMemo means the effect below only fires when the value actually
+  // changes for THIS station — not every time any unit anywhere changes status.
+  const hasAvailableUnit = useMemo(
+    () => allUnits.some((u) => u.currentStationId === station.id && u.status === "Available"),
+    [allUnits, station.id]
+  );
+
   useEffect(() => {
-    if (!elementRef.current) return;
-    const active = allUnits.some(
-      (u) => u.currentStationId === station.id && u.status === "Available"
-    );
-    updateStationElementActive(elementRef.current, active);
-  }, [allUnits, station.id]);
+    if (elementRef.current) updateStationElementActive(elementRef.current, hasAvailableUnit);
+  }, [hasAvailableUnit]);
 
   return null;
 }

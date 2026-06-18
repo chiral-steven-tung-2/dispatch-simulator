@@ -25,6 +25,7 @@ export interface AssignmentRequirements {
   imt: number;
   highrise: number;
   thawing: number;
+  patrolCar: number;
 }
 
 /**

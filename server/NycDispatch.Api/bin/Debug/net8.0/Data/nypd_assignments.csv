@@ -1,0 +1,4 @@
+assignment_id,name,upgrade_probability,upgrade_to,min_resolve_s,max_resolve_s,patrol_car
+nypd_one_car,1 Patrol Car,0,,120,360,1
+nypd_two_cars,2 Patrol Cars,0,,120,360,2
+nypd_three_cars,3 Patrol Cars,0,,180,480,3

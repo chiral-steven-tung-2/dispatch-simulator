@@ -41,4 +41,5 @@ public class Modifier
     public int Imt { get; set; }
     public int Highrise { get; set; }
     public int Thawing { get; set; }
+    public int PatrolCar { get; set; }
 }

@@ -43,4 +43,5 @@ public record Assignment
     public required int Imt { get; init; }
     public required int Highrise { get; init; }
     public required int Thawing { get; init; }
+    public required int PatrolCar { get; init; }
 }

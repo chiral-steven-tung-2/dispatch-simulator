@@ -30,6 +30,15 @@ export function relocationCurrentPoint(
   return pointAlong(record.route, record.progression, fraction);
 }
 
+export interface RelocationLogEntry {
+  id: string;
+  unitCallsign: string;
+  unitType: string;
+  fromStationName: string;
+  toStationName: string;
+  at: number;
+}
+
 export interface RelocationRecord {
   id: string;
   unitId: string;
@@ -52,6 +61,8 @@ export interface RelocationRecord {
 interface RelocationStore {
   relocations: RelocationRecord[];
   relocating: boolean;
+  relocationLog: RelocationLogEntry[];
+  addRelocationLog: (entry: RelocationLogEntry) => void;
   relocateUnit: (unit: Unit, toStationId: string) => Promise<void>;
   arriveRelocation: (id: string) => void;
   /** Drops an in-flight relocation (e.g. the unit is being dispatched to a call). */
@@ -76,6 +87,12 @@ interface RelocationStore {
 export const useRelocationStore = create<RelocationStore>((set, get) => ({
   relocations: [],
   relocating: false,
+  relocationLog: [],
+
+  addRelocationLog: (entry) =>
+    set((state) => ({
+      relocationLog: [entry, ...state.relocationLog].slice(0, 50),
+    })),
 
   relocateUnit: async (unit, toStationId) => {
     if (unit.currentStationId === toStationId) {

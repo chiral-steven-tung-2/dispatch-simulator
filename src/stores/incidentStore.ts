@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { Assignment, AssignmentRequirements, CallSpawnCategory, CallType, Incident, IncidentStatus, Modifier } from "../models";
+import type { Assignment, CallSpawnCategory, CallType, Incident, IncidentStatus, Modifier } from "../models";
 import { fetchAssignments, fetchCallSpawnCategories, fetchCallTypes, fetchModifiers } from "../data/dispatchApi";
 import { makeRandomCall } from "../utils/spawn";
 import { REQUIREMENT_KEYS } from "../utils/assignment";
@@ -12,6 +12,8 @@ interface IncidentStore {
   /** Live calls — generated at runtime, not loaded from the backend. */
   incidents: Incident[];
   notifications: CallNotification[];
+  /** Resolved calls this session — used by the history panel. */
+  callHistory: CallHistoryEntry[];
   /** Catalog of call types loaded from the backend. */
   callTypes: CallType[];
   /** Spawn-category probabilities loaded from the backend. */
@@ -50,17 +52,28 @@ interface IncidentStore {
   rebaseTimers: (ratio: number) => void;
   /** Apply a modifier to an incident, adding its extra unit requirements and notifying the dispatcher. */
   applyModifier: (incidentId: string, modifierId: string) => void;
+  /** Record a resolved call in the session history. */
+  addCallToHistory: (entry: CallHistoryEntry) => void;
 }
 
-interface CallNotification {
+export interface CallNotification {
   id: string;
   callId: string;
   title: string;
   status: IncidentStatus;
-  kind: "new" | "upgrade";
+  kind: "new" | "upgrade" | "modifier";
   latitude: number;
   longitude: number;
   createdAt: number;
+}
+
+export interface CallHistoryEntry {
+  id: string;
+  name: string;
+  finalAssignmentId: string;
+  spawnedAt: number;
+  resolvedAt: number;
+  totalUnits: number;
 }
 
 export const useIncidentStore = create<IncidentStore>()(
@@ -68,6 +81,7 @@ export const useIncidentStore = create<IncidentStore>()(
     (set, get) => ({
   incidents: [],
   notifications: [],
+  callHistory: [],
   callTypes: [],
   callSpawnCategories: [],
   assignments: [],
@@ -260,7 +274,7 @@ export const useIncidentStore = create<IncidentStore>()(
       callId: incidentId,
       title: `${incident.name}: ${modifier.name}`,
       status: incident.status,
-      kind: "upgrade",
+      kind: "modifier",
       latitude: incident.latitude,
       longitude: incident.longitude,
       createdAt: performance.now(),
@@ -291,6 +305,11 @@ export const useIncidentStore = create<IncidentStore>()(
       notifications: [notification, ...s.notifications].slice(0, 5),
     }));
   },
+  addCallToHistory: (entry) =>
+    set((state) => ({
+      callHistory: [entry, ...state.callHistory].slice(0, 100),
+    })),
+
     }),
     {
       name: "nyc-dispatch:incidents",

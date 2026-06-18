@@ -4,6 +4,7 @@ import type { Incident, Station, Unit } from "../models";
 import { fetchRoute, snapToRoad } from "../data/routing";
 import {
   buildProgressionFromSegments,
+  haversineMeters,
   pointAlong,
   offsetPoint,
   clampToCircle,
@@ -20,7 +21,16 @@ import {
   relocationCurrentPoint,
   type RelocationRecord,
 } from "./relocationStore";
-import { isAssignmentStaffed, upgradeCheckDelayMs } from "../utils/assignment";
+import { usePatrolStore } from "./patrolStore";
+import {
+  isAssignmentStaffed,
+  upgradeCheckDelayMs,
+  REQUIREMENT_KEYS,
+  UNIT_TYPE_CATEGORY,
+  effectiveNeed,
+  countOnSceneByCategory,
+} from "../utils/assignment";
+import type { AssignmentRequirements } from "../models";
 
 const START_CALL_RADIUS = GAME_CONFIG.callArea.startRadiusMeters;
 const CALL_RADIUS_STEP = GAME_CONFIG.callArea.radiusStepMeters;
@@ -82,6 +92,13 @@ interface DispatchStore {
   returnToQuarters: (dispatchId: string) => Promise<void>;
   arriveHome: (dispatchId: string) => void;
   resolveCall: (callId: string) => void;
+  /**
+   * One-shot "quick staff": finds the nearest available units for each unmet
+   * requirement of the call's current assignment (including modifier extras/floors)
+   * and dispatches them immediately — same logic as the auto-dispatcher but
+   * scoped to a single call.
+   */
+  dispatchForCall: (callId: string) => Promise<void>;
   /** Reposition an on-scene unit within its call's perimeter. */
   moveUnit: (dispatchId: string, point: LngLat) => void;
   /**
@@ -166,6 +183,8 @@ export function dispatchableOrigin(
     return relocationCurrentPoint(relocation, simSpeed);
   }
   if (unit.status === "Available") {
+    const patrolPos = usePatrolStore.getState().getCurrentPoint(unit.id, simSpeed);
+    if (patrolPos) return patrolPos;
     const station = stations.find((s) => s.id === unit.currentStationId);
     return station ? [station.longitude, station.latitude] : null;
   }
@@ -278,13 +297,22 @@ export const useDispatchStore = create<DispatchStore>()(
           returnStationId = relocation.fromStationId;
           moving = true;
         } else {
-          const station = stations.find((s) => s.id === unit.currentStationId);
-          if (!station) {
-            return null;
+          const patrolPos = usePatrolStore.getState().getCurrentPoint(unit.id, simSpeed);
+          usePatrolStore.getState().removePatrol(unit.id);
+          if (patrolPos) {
+            from = patrolPos;
+            returnStationId = unit.currentStationId;
+            // Already on the street — skip turnout and go straight to enroute.
+            moving = unit.type === "Patrol Car" ? true : false;
+          } else {
+            const station = stations.find((s) => s.id === unit.currentStationId);
+            if (!station) {
+              return null;
+            }
+            from = [station.longitude, station.latitude];
+            returnStationId = unit.currentStationId;
+            moving = false;
           }
-          from = [station.longitude, station.latitude];
-          returnStationId = unit.currentStationId;
-          moving = false;
         }
 
         // Route to the scene; the exact parking spot is assigned on arrival so
@@ -519,11 +547,99 @@ export const useDispatchStore = create<DispatchStore>()(
       void get().returnToQuarters(d.id);
     }
 
+    // Record in call history before the incident is removed.
+    const totalUnits = get().dispatches.filter((d) => d.callId === callId).length;
+    useIncidentStore.getState().addCallToHistory({
+      id: callId,
+      name: incident.name,
+      finalAssignmentId: incident.assignmentId,
+      spawnedAt: incident.spawnedAt,
+      resolvedAt: performance.now(),
+      totalUnits,
+    });
+
     // Clear the resolved call from the map after a short linger.
     window.setTimeout(
       () => useIncidentStore.getState().removeIncident(callId),
       RESOLVED_LINGER_MS
     );
+  },
+
+  dispatchForCall: async (callId) => {
+    if (get().dispatching) return;
+    const incidentStore = useIncidentStore.getState();
+    const incident = incidentStore.incidents.find((i) => i.id === callId);
+    if (!incident || incident.status === "Resolved") return;
+    const assignment = incidentStore.assignments.find((a) => a.id === incident.assignmentId);
+    if (!assignment) return;
+
+    const units = useUnitStore.getState().units;
+    const stations = useStationStore.getState().stations;
+    const relocations = useRelocationStore.getState().relocations;
+    const { dispatches, simSpeed } = get();
+
+    // Pre-build lookup maps.
+    const dispatchByUnit = new Map(dispatches.map((d) => [d.unitId, d]));
+    const relocationByUnit = new Map(relocations.map((r) => [r.unitId, r]));
+    const stationById = new Map(stations.map((s) => [s.id, s]));
+
+    // Compute origins for all available units.
+    const origins = new Map<string, LngLat>();
+    for (const unit of units) {
+      const dispatch = dispatchByUnit.get(unit.id);
+      if (dispatch) {
+        if (dispatch.phase === "returning") origins.set(unit.id, dispatchCurrentPoint(dispatch, simSpeed));
+        continue;
+      }
+      const relocation = relocationByUnit.get(unit.id);
+      if (relocation) { origins.set(unit.id, relocationCurrentPoint(relocation, simSpeed)); continue; }
+      if (unit.status === "Available") {
+        const patrolPos = usePatrolStore.getState().getCurrentPoint(unit.id, simSpeed);
+        if (patrolPos) {
+          origins.set(unit.id, patrolPos);
+        } else {
+          const s = stationById.get(unit.currentStationId);
+          if (s) origins.set(unit.id, [s.longitude, s.latitude]);
+        }
+      }
+    }
+
+    // Group available units by category.
+    const byCategory = new Map<keyof AssignmentRequirements, Unit[]>();
+    for (const unit of units) {
+      if (!origins.has(unit.id)) continue;
+      const key = UNIT_TYPE_CATEGORY[unit.type] as keyof AssignmentRequirements | undefined;
+      if (!key) continue;
+      (byCategory.get(key) ?? (byCategory.set(key, []), byCategory.get(key)!)).push(unit);
+    }
+
+    // Committed units already working this call.
+    const committed = dispatches.filter(
+      (d) => d.callId === callId && (d.phase === "dispatched" || d.phase === "enroute" || d.phase === "onScene")
+    );
+    const counts = countOnSceneByCategory(committed);
+    const target: LngLat = [incident.longitude, incident.latitude];
+    const toDispatch: Unit[] = [];
+    const pickedIds = new Set<string>();
+
+    for (const key of REQUIREMENT_KEYS) {
+      let need = effectiveNeed(assignment, key, incident.extraRequirements, incident.requiredUnits) - (counts[key] ?? 0);
+      if (need <= 0) continue;
+      const candidates = (byCategory.get(key) ?? [])
+        .filter((u) => !pickedIds.has(u.id))
+        .map((u) => ({ unit: u, distance: haversineMeters(origins.get(u.id)!, target) }))
+        .sort((a, b) => a.distance - b.distance);
+      for (const { unit } of candidates) {
+        if (need <= 0) break;
+        toDispatch.push(unit);
+        pickedIds.add(unit.id);
+        need--;
+      }
+    }
+
+    if (toDispatch.length > 0) {
+      await get().dispatchUnits(incident, toDispatch);
+    }
   },
 
   moveUnit: (dispatchId, point) => {

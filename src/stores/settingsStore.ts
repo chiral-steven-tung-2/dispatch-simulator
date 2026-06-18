@@ -16,10 +16,10 @@ interface SettingsStore {
   showPrecinctBoundaries: boolean;
   showFireVehicles: boolean;
   showPoliceVehicles: boolean;
-  /** Global target % (0-100) of each precinct's patrol fleet that should be on patrol. */
-  patrolPercent: number;
   /** Scale multiplier for station / precinct map markers (0.5 – 2.0). */
   markerScale: number;
+  /** Fraction of each precinct's assigned patrol cars that actively patrol (0–1). */
+  patrolRatio: number;
   toggleFdnyStations: () => void;
   toggleNypdStations: () => void;
   toggleChiefQuarters: () => void;
@@ -28,8 +28,8 @@ interface SettingsStore {
   togglePrecinctBoundaries: () => void;
   toggleFireVehicles: () => void;
   togglePoliceVehicles: () => void;
-  setPatrolPercent: (percent: number) => void;
   setMarkerScale: (scale: number) => void;
+  setPatrolRatio: (ratio: number) => void;
 }
 
 export const useSettingsStore = create<SettingsStore>()(
@@ -43,8 +43,8 @@ export const useSettingsStore = create<SettingsStore>()(
       showPrecinctBoundaries: true,
       showFireVehicles: true,
       showPoliceVehicles: true,
-      patrolPercent: 50,
       markerScale: 1,
+      patrolRatio: 0.2,
       toggleFdnyStations: () =>
         set((s) => ({ showFdnyStations: !s.showFdnyStations })),
       toggleNypdStations: () =>
@@ -60,10 +60,10 @@ export const useSettingsStore = create<SettingsStore>()(
         set((s) => ({ showFireVehicles: !s.showFireVehicles })),
       togglePoliceVehicles: () =>
         set((s) => ({ showPoliceVehicles: !s.showPoliceVehicles })),
-      setPatrolPercent: (percent) =>
-        set({ patrolPercent: Math.min(100, Math.max(0, percent)) }),
       setMarkerScale: (scale) =>
         set({ markerScale: Math.min(2, Math.max(0.5, scale)) }),
+      setPatrolRatio: (ratio) =>
+        set({ patrolRatio: Math.min(1, Math.max(0, ratio)) }),
     }),
     { name: "nyc-dispatch:display" }
   )

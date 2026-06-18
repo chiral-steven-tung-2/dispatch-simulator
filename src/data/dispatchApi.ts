@@ -1,5 +1,15 @@
 import type { Station, NypdStation, Unit, CallType, CallSpawnCategory, Assignment, Modifier } from "../models";
 
+/** Wire shape returned by /api/nypd-vehicles before mapping to Unit. */
+export interface NypdApiVehicle {
+  id: string;
+  callsign: string;
+  type: string;
+  status: string;
+  stationId: string;
+  ffCount: number;
+}
+
 // Base URL of the C# backend. Override via VITE_API_BASE_URL if needed.
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5174";
@@ -38,3 +48,8 @@ export const fetchAssignments = (): Promise<Assignment[]> =>
 // Scene modifiers — extra units that can be special-called as a fire escalates.
 export const fetchModifiers = (): Promise<Modifier[]> =>
   getJson<Modifier[]>("/api/modifiers");
+
+// NYPD patrol cars — generated server-side from precinct assigned_patrol_cars counts.
+// All start at their precinct; the frontend patrol movement system drives them out on patrol.
+export const fetchNypdVehicles = (): Promise<NypdApiVehicle[]> =>
+  getJson<NypdApiVehicle[]>("/api/nypd-vehicles");

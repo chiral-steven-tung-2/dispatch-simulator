@@ -14,6 +14,12 @@ public class DispatchData
     public IReadOnlyList<Station> Stations { get; }
     public IReadOnlyList<NycDispatch.Api.Models.NypdStation> NypdStations { get; }
     public IReadOnlyList<Vehicle> Vehicles { get; }
+    /// <summary>
+    /// Patrol car units generated dynamically from nypd_stations.csv.
+    /// Each precinct's assigned_patrol_cars count determines how many are created;
+    /// roughly half are positioned on patrol (random offset), the rest at the precinct.
+    /// </summary>
+    public IReadOnlyList<NypdVehicle> NypdVehicles { get; }
     public IReadOnlyList<CallType> CallTypes { get; }
     public IReadOnlyList<CallSpawnCategory> CallSpawnCategories { get; }
     public IReadOnlyList<Assignment> Assignments { get; }
@@ -54,7 +60,9 @@ public class DispatchData
             FfCount = ParseInt(row["ff_count"]),
         });
 
-        CallTypes = LoadCsv(Path.Combine(dir, "fdny_calls.csv"), row => new CallType
+        NypdVehicles = GeneratePatrolCars(NypdStations);
+
+        var fdnyCallTypes = LoadCsv(Path.Combine(dir, "fdny_calls.csv"), row => new CallType
         {
             Id = row["id"],
             Name = row["name"],
@@ -64,47 +72,37 @@ public class DispatchData
             SpawnBorough = row["spawn_borough"],
         });
 
-        CallSpawnCategories = LoadCsv(Path.Combine(dir, "fdny_call_spawn.csv"), row => new CallSpawnCategory
+        var nypdCallTypes = LoadCsv(Path.Combine(dir, "nypd_calls.csv"), row => new CallType
+        {
+            Id = row["id"],
+            Name = row["name"],
+            Category = row["category"],
+            Radius = ParseDouble(row["radius"]),
+            AssignmentId = row["base_assignment"],
+            SpawnBorough = row["spawn_borough"],
+        });
+
+        CallTypes = [.. fdnyCallTypes, .. nypdCallTypes];
+
+        var fdnySpawnCategories = LoadCsv(Path.Combine(dir, "fdny_call_spawn.csv"), row => new CallSpawnCategory
         {
             Id = row["id"],
             Category = row["category"],
             Probability = ParseDouble(row["probability"]),
         });
 
-        Assignments = LoadCsv(Path.Combine(dir, "fdny_assignments.csv"), row => new Assignment
+        var nypdSpawnCategories = LoadCsv(Path.Combine(dir, "nypd_call_spawn.csv"), row => new CallSpawnCategory
         {
-            Id = row["assignment_id"],
-            Name = row["name"],
-            UpgradeProbability = ParseDouble(row["upgrade_probability"]),
-            UpgradeTo = ParseUpgradeTo(row["upgrade_to"]),
-            MinResolveS = ParseInt(row["min_resolve_s"]),
-            MaxResolveS = ParseInt(row["max_resolve_s"]),
-            Engine = ParseIntSafe(row, "engine"),
-            Ladder = ParseIntSafe(row, "ladder"),
-            Rescue = ParseIntSafe(row, "rescue"),
-            Squad = ParseIntSafe(row, "squad"),
-            Squad2piece = ParseIntSafe(row, "squad2piece"),
-            Battalion = ParseIntSafe(row, "battalion"),
-            Division = ParseIntSafe(row, "division"),
-            Rac = ParseIntSafe(row, "rac"),
-            Satellite = ParseIntSafe(row, "satellite"),
-            Tsu = ParseIntSafe(row, "tsu"),
-            Msu = ParseIntSafe(row, "msu"),
-            Fieldcomm = ParseIntSafe(row, "fieldcomm"),
-            Mcp = ParseIntSafe(row, "mcp"),
-            Hazmat = ParseIntSafe(row, "hazmat"),
-            Htmu = ParseIntSafe(row, "HTMU"),
-            Hazmatsupport = ParseIntSafe(row, "hazmatsupport"),
-            Hazmatbattalion = ParseIntSafe(row, "hazmatbattalion"),
-            Rescuebattalion = ParseIntSafe(row, "rescuebattalion"),
-            Safetybattalion = ParseIntSafe(row, "safetybattalion"),
-            Brush = ParseIntSafe(row, "brush"),
-            Collapse = ParseIntSafe(row, "collapse"),
-            Purplek = ParseIntSafe(row, "purplek"),
-            Imt = ParseIntSafe(row, "imt"),
-            Highrise = ParseIntSafe(row, "highrise"),
-            Thawing = ParseIntSafe(row, "thawing"),
+            Id = row["id"],
+            Category = row["category"],
+            Probability = ParseDouble(row["probability"]),
         });
+
+        CallSpawnCategories = [.. fdnySpawnCategories, .. nypdSpawnCategories];
+
+        var fdnyAssignments = LoadCsv(Path.Combine(dir, "fdny_assignments.csv"), ParseAssignment);
+        var nypdAssignments = LoadCsv(Path.Combine(dir, "nypd_assignments.csv"), ParseAssignment);
+        Assignments = [.. fdnyAssignments, .. nypdAssignments];
 
         Modifiers = LoadCsv(Path.Combine(dir, "fdny_modifiers.csv"), row => new Modifier
         {
@@ -141,8 +139,76 @@ public class DispatchData
             Imt = ParseIntSafe(row, "imt"),
             Highrise = ParseIntSafe(row, "highrise"),
             Thawing = ParseIntSafe(row, "thawing"),
+            PatrolCar = ParseIntSafe(row, "patrol_car"),
         });
     }
+
+    /// <summary>
+    /// Generates patrol car units from NYPD precinct data. Each precinct creates
+    /// assigned_patrol_cars vehicles, all starting at the precinct. The frontend
+    /// patrol movement system drives them out to wander their beat.
+    /// </summary>
+    private static List<NypdVehicle> GeneratePatrolCars(IReadOnlyList<NycDispatch.Api.Models.NypdStation> stations)
+    {
+        var vehicles = new List<NypdVehicle>();
+
+        foreach (var station in stations)
+        {
+            // "1st-precinct" → "1ST", "midtown-south-precinct" → "MIDTOWN-SOUTH"
+            var shortName = station.Id.Replace("-precinct", "").ToUpperInvariant();
+
+            for (var i = 0; i < station.AssignedPatrolCars; i++)
+            {
+                vehicles.Add(new NypdVehicle
+                {
+                    Id = $"{station.Id}-unit-{i + 1}",
+                    Callsign = $"{shortName} PCT Unit {i + 1}",
+                    Type = "Patrol Car",
+                    Status = "Available",
+                    StationId = station.Id,
+                    FfCount = 2,
+                });
+            }
+        }
+
+        return vehicles;
+    }
+
+    private static Assignment ParseAssignment(IReadOnlyDictionary<string, string> row) => new Assignment
+    {
+        Id = row["assignment_id"],
+        Name = row["name"],
+        UpgradeProbability = ParseDouble(row["upgrade_probability"]),
+        UpgradeTo = ParseUpgradeTo(row["upgrade_to"]),
+        MinResolveS = ParseInt(row["min_resolve_s"]),
+        MaxResolveS = ParseInt(row["max_resolve_s"]),
+        Engine = ParseIntSafe(row, "engine"),
+        Ladder = ParseIntSafe(row, "ladder"),
+        Rescue = ParseIntSafe(row, "rescue"),
+        Squad = ParseIntSafe(row, "squad"),
+        Squad2piece = ParseIntSafe(row, "squad2piece"),
+        Battalion = ParseIntSafe(row, "battalion"),
+        Division = ParseIntSafe(row, "division"),
+        Rac = ParseIntSafe(row, "rac"),
+        Satellite = ParseIntSafe(row, "satellite"),
+        Tsu = ParseIntSafe(row, "tsu"),
+        Msu = ParseIntSafe(row, "msu"),
+        Fieldcomm = ParseIntSafe(row, "fieldcomm"),
+        Mcp = ParseIntSafe(row, "mcp"),
+        Hazmat = ParseIntSafe(row, "hazmat"),
+        Htmu = ParseIntSafe(row, "HTMU"),
+        Hazmatsupport = ParseIntSafe(row, "hazmatsupport"),
+        Hazmatbattalion = ParseIntSafe(row, "hazmatbattalion"),
+        Rescuebattalion = ParseIntSafe(row, "rescuebattalion"),
+        Safetybattalion = ParseIntSafe(row, "safetybattalion"),
+        Brush = ParseIntSafe(row, "brush"),
+        Collapse = ParseIntSafe(row, "collapse"),
+        Purplek = ParseIntSafe(row, "purplek"),
+        Imt = ParseIntSafe(row, "imt"),
+        Highrise = ParseIntSafe(row, "highrise"),
+        Thawing = ParseIntSafe(row, "thawing"),
+        PatrolCar = ParseIntSafe(row, "patrol_car"),
+    };
 
     private static double ParseDouble(string value) =>
         double.Parse(value.Trim(), CultureInfo.InvariantCulture);
