@@ -218,7 +218,9 @@ public class DispatchData
 
     /// <summary>Returns 0 if the column is absent from this CSV row.</summary>
     private static int ParseIntSafe(IReadOnlyDictionary<string, string> row, string key) =>
-        row.TryGetValue(key, out var value) ? ParseInt(value) : 0;
+        row.TryGetValue(key, out var value) && !string.IsNullOrWhiteSpace(value)
+            ? ParseInt(value)
+            : 0;
 
     /// <summary>The CSV uses "None" or an empty cell to mark the top of the escalation chain.</summary>
     private static string? ParseUpgradeTo(string value)
