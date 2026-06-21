@@ -5,6 +5,7 @@ import { fetchAssignments, fetchCallSpawnCategories, fetchCallTypes, fetchModifi
 import { makeRandomCall } from "../utils/spawn";
 import { REQUIREMENT_KEYS } from "../utils/assignment";
 import { useStationStore } from "./stationStore";
+import { useSettingsStore } from "./settingsStore";
 
 type LoadStatus = "idle" | "loading" | "ready" | "error";
 
@@ -107,11 +108,24 @@ export const useIncidentStore = create<IncidentStore>()(
 
   spawnCall: () => {
     const { callTypes, callSpawnCategories } = get();
+    const callMode = useSettingsStore.getState().callMode;
     const stations = useStationStore.getState().stations;
     if (callTypes.length === 0 || stations.length === 0) {
       return;
     }
-    const call = makeRandomCall(callTypes, callSpawnCategories, stations);
+    const isNypdCall = (type: CallType) => type.assignmentId.startsWith("nypd_");
+    const isEnabledForMode = (type: CallType) =>
+      callMode === "all" ||
+      (callMode === "fdny" && !isNypdCall(type)) ||
+      (callMode === "nypd" && isNypdCall(type));
+    const filteredTypes = callTypes.filter(isEnabledForMode);
+    if (filteredTypes.length === 0) {
+      return;
+    }
+    const filteredCategories = callSpawnCategories.filter((category) =>
+      filteredTypes.some((type) => type.category === category.category)
+    );
+    const call = makeRandomCall(filteredTypes, filteredCategories, stations);
     const notification: CallNotification = {
       id: `call-notification-${call.id}`,
       callId: call.id,

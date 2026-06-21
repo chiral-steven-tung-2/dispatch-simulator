@@ -1,6 +1,6 @@
 modifier_id,name,trigger_assignment,call_categories,probability,modifier_type,engine,ladder,rescue,squad,squad2piece,battalion,division,rac,satellite,tsu,msu,fieldcomm,mcp,hazmat,HTMU,hazmatsupport,hazmatbattalion,rescuebattalion,safetybattalion,brush,collapse,purplek,imt,highrise,thawing
-1,10-80 Code 0,signal_1075,structure-normal-fire,0.4,required,3,2,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-2,10-80 Code 1,signal_1075,structure-normal-fire,0.3,required,3,2,0,0,0,1,0,0,0,0,0,0,0,1,1,0,1,0,0,0,0,0,0,0,0
-3,10-80 Code 2,signal_1076,structure-normal-fire,0.1,required,4,2,1,1,1,2,1,0,0,1,,1,0,1,1,0,1,1,1,0,0,0,0,0,0
-4,10-80 Code 3,signal_1077,structure-normal-fire,0.05,required,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,2,1,0,0,0,0,0,0,0,0
+1,10-80 Code 0,signal_1075,structure-normal-fire,0.2,required,3,2,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2,10-80 Code 1,signal_1075,structure-normal-fire,0.1,required,3,2,0,0,0,1,0,0,0,0,0,0,0,1,1,0,1,0,0,0,0,0,0,0,0
+3,10-80 Code 2,signal_1076,structure-normal-fire,0.05,required,4,2,1,1,1,2,1,0,0,1,,1,0,1,1,0,1,1,1,0,0,0,0,0,0
+4,10-80 Code 3,signal_1077,structure-normal-fire,0.025,required,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,2,1,0,0,0,0,0,0,0,0
 5,Additional Ladders,signal_1075,structure-normal-fire,0.5,additional,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0

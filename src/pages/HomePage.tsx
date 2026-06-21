@@ -34,6 +34,7 @@ export default function HomePage() {
   const openSettings = () => { closeAll(); setSettingsOpen(true); };
   const showFdnyStations = useSettingsStore((s) => s.showFdnyStations);
   const showNypdStations = useSettingsStore((s) => s.showNypdStations);
+  const callMode = useSettingsStore((s) => s.callMode);
   const showChiefQuarters = useSettingsStore((s) => s.showChiefQuarters);
   const showUnitIcons = useSettingsStore((s) => s.showUnitIcons);
   const showNotifications = useSettingsStore((s) => s.showNotifications);
@@ -45,6 +46,7 @@ export default function HomePage() {
   const setPatrolRatio = useSettingsStore((s) => s.setPatrolRatio);
   const toggleFdnyStations = useSettingsStore((s) => s.toggleFdnyStations);
   const toggleNypdStations = useSettingsStore((s) => s.toggleNypdStations);
+  const setCallMode = useSettingsStore((s) => s.setCallMode);
   const toggleChiefQuarters = useSettingsStore((s) => s.toggleChiefQuarters);
   const toggleUnitIcons = useSettingsStore((s) => s.toggleUnitIcons);
   const toggleNotifications = useSettingsStore((s) => s.toggleNotifications);
@@ -185,6 +187,8 @@ export default function HomePage() {
         onToggleFdnyStations={toggleFdnyStations}
         showNypdStations={showNypdStations}
         onToggleNypdStations={toggleNypdStations}
+        callMode={callMode}
+        onCallModeChange={setCallMode}
         showChiefQuarters={showChiefQuarters}
         onToggleChiefQuarters={toggleChiefQuarters}
         showUnitIcons={showUnitIcons}
@@ -361,6 +365,8 @@ function SettingsPanel({
   onClose,
   autoSpawn,
   onToggleAutoSpawn,
+  callMode,
+  onCallModeChange,
   autoDispatch,
   onToggleAutoDispatch,
   autoRelocation,
@@ -392,6 +398,8 @@ function SettingsPanel({
   onClose: () => void;
   autoSpawn: boolean;
   onToggleAutoSpawn: () => void;
+  callMode: "all" | "fdny" | "nypd";
+  onCallModeChange: (mode: "all" | "fdny" | "nypd") => void;
   autoDispatch: boolean;
   onToggleAutoDispatch: () => void;
   autoRelocation: boolean;
@@ -453,6 +461,23 @@ function SettingsPanel({
                   label=""
                   activeColor="red"
                 />
+              </SettingRow>
+              <SettingRow
+                label="Gameplay calls"
+                hint="Limit random calls to one agency or keep both"
+              >
+                <div className="flex items-center gap-1 rounded-full border border-slate-700 bg-slate-950/60 p-1 text-xs font-semibold">
+                  {(["all", "fdny", "nypd"] as const).map((mode) => (
+                    <button
+                      key={mode}
+                      type="button"
+                      onClick={() => onCallModeChange(mode)}
+                      className={`rounded-full px-3 py-1 transition-colors ${callMode === mode ? "bg-red-500 text-white" : "text-slate-400 hover:text-white"}`}
+                    >
+                      {mode === "all" ? "Both" : mode.toUpperCase()}
+                    </button>
+                  ))}
+                </div>
               </SettingRow>
               <SettingRow
                 label="Auto-dispatch"

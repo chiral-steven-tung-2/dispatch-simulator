@@ -10,6 +10,7 @@ import { persist } from "zustand/middleware";
 interface SettingsStore {
   showFdnyStations: boolean;
   showNypdStations: boolean;
+  callMode: "all" | "fdny" | "nypd";
   showChiefQuarters: boolean;
   showUnitIcons: boolean;
   showNotifications: boolean;
@@ -22,6 +23,7 @@ interface SettingsStore {
   patrolRatio: number;
   toggleFdnyStations: () => void;
   toggleNypdStations: () => void;
+  setCallMode: (mode: "all" | "fdny" | "nypd") => void;
   toggleChiefQuarters: () => void;
   toggleUnitIcons: () => void;
   toggleNotifications: () => void;
@@ -37,6 +39,7 @@ export const useSettingsStore = create<SettingsStore>()(
     (set) => ({
       showFdnyStations: true,
       showNypdStations: true,
+      callMode: "all",
       showChiefQuarters: true,
       showUnitIcons: true,
       showNotifications: true,
@@ -49,6 +52,7 @@ export const useSettingsStore = create<SettingsStore>()(
         set((s) => ({ showFdnyStations: !s.showFdnyStations })),
       toggleNypdStations: () =>
         set((s) => ({ showNypdStations: !s.showNypdStations })),
+      setCallMode: (mode) => set({ callMode: mode }),
       toggleChiefQuarters: () =>
         set((s) => ({ showChiefQuarters: !s.showChiefQuarters })),
       toggleUnitIcons: () => set((s) => ({ showUnitIcons: !s.showUnitIcons })),
